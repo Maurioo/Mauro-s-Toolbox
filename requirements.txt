@@ -1,0 +1,6 @@
+pandas
+loguru
+faker
+matplotlib
+sqlalchemy
+psycopg2-binary
