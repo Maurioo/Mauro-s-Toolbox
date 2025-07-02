@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Overzicht Customer – Simulated CRM</title>
+  <link href="https://fonts.googleapis.com/css?family=Oswald:700|Roboto:400&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #17408B 0%, #C9082A 100%);
+      color: #fff;
+      font-family: 'Roboto', Arial, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+    }
+    header {
+      background: #fff;
+      padding: 1.5rem 0 1rem 0;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      margin-bottom: 2rem;
+    }
+    h1 {
+      font-family: 'Oswald', Arial, sans-serif;
+      color: #17408B;
+      font-size: 2.3rem;
+      letter-spacing: 2px;
+      margin: 0;
+      text-transform: uppercase;
+      text-shadow: 2px 2px 0 #C9082A, 4px 4px 0 #fff;
+    }
+    main {
+      max-width: 500px;
+      background: rgba(23, 64, 139, 0.95);
+      margin: 2rem auto;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+      padding: 2rem 2.5rem;
+    }
+    label {
+      font-size: 1.1rem;
+      font-weight: bold;
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #fff;
+      letter-spacing: 1px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 0.7rem;
+      border-radius: 8px;
+      border: 2px solid #C9082A;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      box-sizing: border-box;
+      font-family: 'Roboto', Arial, sans-serif;
+    }
+    button {
+      background: #fff;
+      color: #17408B;
+      font-family: 'Oswald', Arial, sans-serif;
+      font-size: 1.1rem;
+      text-decoration: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 8px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+      transition: background 0.2s, color 0.2s, transform 0.2s;
+      border: 2px solid #C9082A;
+      cursor: pointer;
+      margin-bottom: 1.5rem;
+      margin-top: 0.2rem;
+      display: inline-block;
+    }
+    button:hover {
+      background: #C9082A;
+      color: #fff;
+      transform: translateY(-2px) scale(1.04);
+      border-color: #fff;
+    }
+    h2 {
+      font-family: 'Oswald', Arial, sans-serif;
+      color: #C9082A;
+      font-size: 1.5rem;
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+      letter-spacing: 1px;
+      text-shadow: 1px 1px 0 #fff;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    li {
+      margin-bottom: 1.2rem;
+    }
+    a {
+      display: inline-block;
+      background: #fff;
+      color: #17408B;
+      font-family: 'Oswald', Arial, sans-serif;
+      font-size: 1.1rem;
+      text-decoration: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 8px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+      transition: background 0.2s, color 0.2s, transform 0.2s;
+      border: 2px solid #C9082A;
+      margin-top: 1.5rem;
+    }
+    a:hover {
+      background: #C9082A;
+      color: #fff;
+      transform: translateY(-2px) scale(1.04);
+      border-color: #fff;
+    }
+    @media (max-width: 600px) {
+      main {
+        padding: 1rem;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+      h2 {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Overzicht per CustomerID</h1>
+  </header>
+  <main>
+    <form onsubmit="event.preventDefault(); document.getElementById('searchButton').click();">
+      <label for="searchCustomerId">Voer CustomerID in:</label>
+      <input type="text" id="searchCustomerId" name="searchCustomerId" />
+      <button id="searchButton" type="button">Zoek</button>
+    </form>
+    <div id="resultContainer">
+      <!-- Hier komt straks het resultaat -->
+    </div>
+    <a href="index.html">Terug naar Startpagina</a>
+  </main>
+  <script>
+    document
+      .getElementById("searchButton")
+      .addEventListener("click", function () {
+        const id = document.getElementById("searchCustomerId").value;
+        if (!id) {
+          alert("Vul eerst een CustomerID in.");
+          return;
+        }
+        // Voorlopig: simuleren ophalen van data
+        const fakeData = {
+          customerId: id,
+          firstName: "Jan",
+          lastName: "Jansen",
+          email: "jan.jansen@voorbeeld.nl",
+        };
+        document.getElementById("resultContainer").innerHTML = `
+          <h2>Gegevens voor CustomerID: ${fakeData.customerId}</h2>
+          <ul>
+            <li>Voornaam: ${fakeData.firstName}</li>
+            <li>Achternaam: ${fakeData.lastName}</li>
+            <li>E-mailadres: ${fakeData.email}</li>
+          </ul>
+        `;
+      });
+  </script>
+</body>
+</html>

@@ -1,0 +1,532 @@
+player_name,player_id,player_url,team_url,team_code,team_name
+Jarrett Allen,allenja01,https://www.basketball-reference.com/players/a/allenja01.html,https://www.basketball-reference.com/teams/CLE/2025.html,CLE,Cleveland Cavaliers
+Darius Garland,garlada01,https://www.basketball-reference.com/players/g/garlada01.html,https://www.basketball-reference.com/teams/CLE/2025.html,CLE,Cleveland Cavaliers
+Donovan Mitchell,mitchdo01,https://www.basketball-reference.com/players/m/mitchdo01.html,https://www.basketball-reference.com/teams/CLE/2025.html,CLE,Cleveland Cavaliers
+Evan Mobley,mobleev01,https://www.basketball-reference.com/players/m/mobleev01.html,https://www.basketball-reference.com/teams/CLE/2025.html,CLE,Cleveland Cavaliers
+Sam Merrill,merrisa01,https://www.basketball-reference.com/players/m/merrisa01.html,https://www.basketball-reference.com/teams/CLE/2025.html,CLE,Cleveland Cavaliers
+Ty Jerome,jeromty01,https://www.basketball-reference.com/players/j/jeromty01.html,https://www.basketball-reference.com/teams/CLE/2025.html,CLE,Cleveland Cavaliers
+Dean Wade,wadede01,https://www.basketball-reference.com/players/w/wadede01.html,https://www.basketball-reference.com/teams/CLE/2025.html,CLE,Cleveland Cavaliers
+Isaac Okoro,okorois01,https://www.basketball-reference.com/players/o/okorois01.html,https://www.basketball-reference.com/teams/CLE/2025.html,CLE,Cleveland Cavaliers
+Craig Porter Jr.,portecr01,https://www.basketball-reference.com/players/p/portecr01.html,https://www.basketball-reference.com/teams/CLE/2025.html,CLE,Cleveland Cavaliers
+Max Strus,strusma01,https://www.basketball-reference.com/players/s/strusma01.html,https://www.basketball-reference.com/teams/CLE/2025.html,CLE,Cleveland Cavaliers
+Jaylon Tyson,tysonja01,https://www.basketball-reference.com/players/t/tysonja01.html,https://www.basketball-reference.com/teams/CLE/2025.html,CLE,Cleveland Cavaliers
+Tristan Thompson,thomptr01,https://www.basketball-reference.com/players/t/thomptr01.html,https://www.basketball-reference.com/teams/CLE/2025.html,CLE,Cleveland Cavaliers
+De'Andre Hunter,huntede01,https://www.basketball-reference.com/players/h/huntede01.html,https://www.basketball-reference.com/teams/CLE/2025.html,CLE,Cleveland Cavaliers
+Javonte Green,greenja02,https://www.basketball-reference.com/players/g/greenja02.html,https://www.basketball-reference.com/teams/CLE/2025.html,CLE,Cleveland Cavaliers
+Luke Travers,travelu01,https://www.basketball-reference.com/players/t/travelu01.html,https://www.basketball-reference.com/teams/CLE/2025.html,CLE,Cleveland Cavaliers
+Emoni Bates,batesem01,https://www.basketball-reference.com/players/b/batesem01.html,https://www.basketball-reference.com/teams/CLE/2025.html,CLE,Cleveland Cavaliers
+Nae'Qwan Tomlin,tomlina01,https://www.basketball-reference.com/players/t/tomlina01.html,https://www.basketball-reference.com/teams/CLE/2025.html,CLE,Cleveland Cavaliers
+Chuma Okeke,okekech01,https://www.basketball-reference.com/players/o/okekech01.html,https://www.basketball-reference.com/teams/CLE/2025.html,CLE,Cleveland Cavaliers
+Payton Pritchard,pritcpa01,https://www.basketball-reference.com/players/p/pritcpa01.html,https://www.basketball-reference.com/teams/BOS/2025.html,BOS,Boston Celtics
+Derrick White,whitede01,https://www.basketball-reference.com/players/w/whitede01.html,https://www.basketball-reference.com/teams/BOS/2025.html,BOS,Boston Celtics
+Luke Kornet,kornelu01,https://www.basketball-reference.com/players/k/kornelu01.html,https://www.basketball-reference.com/teams/BOS/2025.html,BOS,Boston Celtics
+Jayson Tatum,tatumja01,https://www.basketball-reference.com/players/t/tatumja01.html,https://www.basketball-reference.com/teams/BOS/2025.html,BOS,Boston Celtics
+Sam Hauser,hausesa01,https://www.basketball-reference.com/players/h/hausesa01.html,https://www.basketball-reference.com/teams/BOS/2025.html,BOS,Boston Celtics
+Jaylen Brown,brownja02,https://www.basketball-reference.com/players/b/brownja02.html,https://www.basketball-reference.com/teams/BOS/2025.html,BOS,Boston Celtics
+Jrue Holiday,holidjr01,https://www.basketball-reference.com/players/h/holidjr01.html,https://www.basketball-reference.com/teams/BOS/2025.html,BOS,Boston Celtics
+Neemias Queta,quetane01,https://www.basketball-reference.com/players/q/quetane01.html,https://www.basketball-reference.com/teams/BOS/2025.html,BOS,Boston Celtics
+Al Horford,horfoal01,https://www.basketball-reference.com/players/h/horfoal01.html,https://www.basketball-reference.com/teams/BOS/2025.html,BOS,Boston Celtics
+Jordan Walsh,walshjo01,https://www.basketball-reference.com/players/w/walshjo01.html,https://www.basketball-reference.com/teams/BOS/2025.html,BOS,Boston Celtics
+Kristaps Porziņģis,porzikr01,https://www.basketball-reference.com/players/p/porzikr01.html,https://www.basketball-reference.com/teams/BOS/2025.html,BOS,Boston Celtics
+Xavier Tillman Sr.,tillmxa01,https://www.basketball-reference.com/players/t/tillmxa01.html,https://www.basketball-reference.com/teams/BOS/2025.html,BOS,Boston Celtics
+Baylor Scheierman,scheiba01,https://www.basketball-reference.com/players/s/scheiba01.html,https://www.basketball-reference.com/teams/BOS/2025.html,BOS,Boston Celtics
+Drew Peterson,peterdr01,https://www.basketball-reference.com/players/p/peterdr01.html,https://www.basketball-reference.com/teams/BOS/2025.html,BOS,Boston Celtics
+Torrey Craig,craigto01,https://www.basketball-reference.com/players/c/craigto01.html,https://www.basketball-reference.com/teams/BOS/2025.html,BOS,Boston Celtics
+JD Davison,davisjd01,https://www.basketball-reference.com/players/d/davisjd01.html,https://www.basketball-reference.com/teams/BOS/2025.html,BOS,Boston Celtics
+Miles Norris,norrimi01,https://www.basketball-reference.com/players/n/norrimi01.html,https://www.basketball-reference.com/teams/BOS/2025.html,BOS,Boston Celtics
+Mikal Bridges,bridgmi01,https://www.basketball-reference.com/players/b/bridgmi01.html,https://www.basketball-reference.com/teams/NYK/2025.html,NYK,New York Knicks
+Josh Hart,hartjo01,https://www.basketball-reference.com/players/h/hartjo01.html,https://www.basketball-reference.com/teams/NYK/2025.html,NYK,New York Knicks
+OG Anunoby,anunoog01,https://www.basketball-reference.com/players/a/anunoog01.html,https://www.basketball-reference.com/teams/NYK/2025.html,NYK,New York Knicks
+Karl-Anthony Towns,townska01,https://www.basketball-reference.com/players/t/townska01.html,https://www.basketball-reference.com/teams/NYK/2025.html,NYK,New York Knicks
+Cameron Payne,payneca01,https://www.basketball-reference.com/players/p/payneca01.html,https://www.basketball-reference.com/teams/NYK/2025.html,NYK,New York Knicks
+Jalen Brunson,brunsja01,https://www.basketball-reference.com/players/b/brunsja01.html,https://www.basketball-reference.com/teams/NYK/2025.html,NYK,New York Knicks
+Miles McBride,mcbrimi01,https://www.basketball-reference.com/players/m/mcbrimi01.html,https://www.basketball-reference.com/teams/NYK/2025.html,NYK,New York Knicks
+Precious Achiuwa,achiupr01,https://www.basketball-reference.com/players/a/achiupr01.html,https://www.basketball-reference.com/teams/NYK/2025.html,NYK,New York Knicks
+Landry Shamet,shamela01,https://www.basketball-reference.com/players/s/shamela01.html,https://www.basketball-reference.com/teams/NYK/2025.html,NYK,New York Knicks
+Tyler Kolek,kolekty01,https://www.basketball-reference.com/players/k/kolekty01.html,https://www.basketball-reference.com/teams/NYK/2025.html,NYK,New York Knicks
+Ariel Hukporti,hukpoar01,https://www.basketball-reference.com/players/h/hukpoar01.html,https://www.basketball-reference.com/teams/NYK/2025.html,NYK,New York Knicks
+Pacome Dadiet,dadiepa01,https://www.basketball-reference.com/players/d/dadiepa01.html,https://www.basketball-reference.com/teams/NYK/2025.html,NYK,New York Knicks
+Mitchell Robinson,robinmi01,https://www.basketball-reference.com/players/r/robinmi01.html,https://www.basketball-reference.com/teams/NYK/2025.html,NYK,New York Knicks
+Delon Wright,wrighde01,https://www.basketball-reference.com/players/w/wrighde01.html,https://www.basketball-reference.com/teams/NYK/2025.html,NYK,New York Knicks
+Anton Watson,watsoan02,https://www.basketball-reference.com/players/w/watsoan02.html,https://www.basketball-reference.com/teams/NYK/2025.html,NYK,New York Knicks
+MarJon Beauchamp,beaucma01,https://www.basketball-reference.com/players/b/beaucma01.html,https://www.basketball-reference.com/teams/NYK/2025.html,NYK,New York Knicks
+Kevin McCullar Jr.,mcculke01,https://www.basketball-reference.com/players/m/mcculke01.html,https://www.basketball-reference.com/teams/NYK/2025.html,NYK,New York Knicks
+P.J. Tucker,tuckepj01,https://www.basketball-reference.com/players/t/tuckepj01.html,https://www.basketball-reference.com/teams/NYK/2025.html,NYK,New York Knicks
+Obi Toppin,toppiob01,https://www.basketball-reference.com/players/t/toppiob01.html,https://www.basketball-reference.com/teams/IND/2025.html,IND,Indiana Pacers
+T.J. McConnell,mccontj01,https://www.basketball-reference.com/players/m/mccontj01.html,https://www.basketball-reference.com/teams/IND/2025.html,IND,Indiana Pacers
+Pascal Siakam,siakapa01,https://www.basketball-reference.com/players/s/siakapa01.html,https://www.basketball-reference.com/teams/IND/2025.html,IND,Indiana Pacers
+Jarace Walker,walkeja02,https://www.basketball-reference.com/players/w/walkeja02.html,https://www.basketball-reference.com/teams/IND/2025.html,IND,Indiana Pacers
+Tyrese Haliburton,halibty01,https://www.basketball-reference.com/players/h/halibty01.html,https://www.basketball-reference.com/teams/IND/2025.html,IND,Indiana Pacers
+Bennedict Mathurin,mathube01,https://www.basketball-reference.com/players/m/mathube01.html,https://www.basketball-reference.com/teams/IND/2025.html,IND,Indiana Pacers
+Myles Turner,turnemy01,https://www.basketball-reference.com/players/t/turnemy01.html,https://www.basketball-reference.com/teams/IND/2025.html,IND,Indiana Pacers
+Andrew Nembhard,nembhan01,https://www.basketball-reference.com/players/n/nembhan01.html,https://www.basketball-reference.com/teams/IND/2025.html,IND,Indiana Pacers
+Ben Sheppard,sheppbe01,https://www.basketball-reference.com/players/s/sheppbe01.html,https://www.basketball-reference.com/teams/IND/2025.html,IND,Indiana Pacers
+Thomas Bryant,bryanth01,https://www.basketball-reference.com/players/b/bryanth01.html,https://www.basketball-reference.com/teams/IND/2025.html,IND,Indiana Pacers
+Johnny Furphy,furphjo01,https://www.basketball-reference.com/players/f/furphjo01.html,https://www.basketball-reference.com/teams/IND/2025.html,IND,Indiana Pacers
+Aaron Nesmith,nesmiaa01,https://www.basketball-reference.com/players/n/nesmiaa01.html,https://www.basketball-reference.com/teams/IND/2025.html,IND,Indiana Pacers
+Quenton Jackson,jacksqu01,https://www.basketball-reference.com/players/j/jacksqu01.html,https://www.basketball-reference.com/teams/IND/2025.html,IND,Indiana Pacers
+Enrique Freeman,freemen01,https://www.basketball-reference.com/players/f/freemen01.html,https://www.basketball-reference.com/teams/IND/2025.html,IND,Indiana Pacers
+Tony Bradley,bradlto01,https://www.basketball-reference.com/players/b/bradlto01.html,https://www.basketball-reference.com/teams/IND/2025.html,IND,Indiana Pacers
+James Johnson,johnsja01,https://www.basketball-reference.com/players/j/johnsja01.html,https://www.basketball-reference.com/teams/IND/2025.html,IND,Indiana Pacers
+RayJ Dennis,dennira01,https://www.basketball-reference.com/players/d/dennira01.html,https://www.basketball-reference.com/teams/IND/2025.html,IND,Indiana Pacers
+Isaiah Jackson,jacksis01,https://www.basketball-reference.com/players/j/jacksis01.html,https://www.basketball-reference.com/teams/IND/2025.html,IND,Indiana Pacers
+Brook Lopez,lopezbr01,https://www.basketball-reference.com/players/l/lopezbr01.html,https://www.basketball-reference.com/teams/MIL/2025.html,MIL,Milwaukee Bucks
+Taurean Prince,princta02,https://www.basketball-reference.com/players/p/princta02.html,https://www.basketball-reference.com/teams/MIL/2025.html,MIL,Milwaukee Bucks
+Gary Trent Jr.,trentga02,https://www.basketball-reference.com/players/t/trentga02.html,https://www.basketball-reference.com/teams/MIL/2025.html,MIL,Milwaukee Bucks
+A.J. Green,greenaj01,https://www.basketball-reference.com/players/g/greenaj01.html,https://www.basketball-reference.com/teams/MIL/2025.html,MIL,Milwaukee Bucks
+Giannis Antetokounmpo,antetgi01,https://www.basketball-reference.com/players/a/antetgi01.html,https://www.basketball-reference.com/teams/MIL/2025.html,MIL,Milwaukee Bucks
+Andre Jackson Jr.,jacksan01,https://www.basketball-reference.com/players/j/jacksan01.html,https://www.basketball-reference.com/teams/MIL/2025.html,MIL,Milwaukee Bucks
+Damian Lillard,lillada01,https://www.basketball-reference.com/players/l/lillada01.html,https://www.basketball-reference.com/teams/MIL/2025.html,MIL,Milwaukee Bucks
+Ryan Rollins,rolliry01,https://www.basketball-reference.com/players/r/rolliry01.html,https://www.basketball-reference.com/teams/MIL/2025.html,MIL,Milwaukee Bucks
+Bobby Portis,portibo01,https://www.basketball-reference.com/players/p/portibo01.html,https://www.basketball-reference.com/teams/MIL/2025.html,MIL,Milwaukee Bucks
+Pat Connaughton,connapa01,https://www.basketball-reference.com/players/c/connapa01.html,https://www.basketball-reference.com/teams/MIL/2025.html,MIL,Milwaukee Bucks
+Kyle Kuzma,kuzmaky01,https://www.basketball-reference.com/players/k/kuzmaky01.html,https://www.basketball-reference.com/teams/MIL/2025.html,MIL,Milwaukee Bucks
+Kevin Porter Jr.,porteke02,https://www.basketball-reference.com/players/p/porteke02.html,https://www.basketball-reference.com/teams/MIL/2025.html,MIL,Milwaukee Bucks
+Tyler Smith,smithty02,https://www.basketball-reference.com/players/s/smithty02.html,https://www.basketball-reference.com/teams/MIL/2025.html,MIL,Milwaukee Bucks
+Stanley Umude,umudest01,https://www.basketball-reference.com/players/u/umudest01.html,https://www.basketball-reference.com/teams/MIL/2025.html,MIL,Milwaukee Bucks
+Chris Livingston,livinch01,https://www.basketball-reference.com/players/l/livinch01.html,https://www.basketball-reference.com/teams/MIL/2025.html,MIL,Milwaukee Bucks
+Jericho Sims,simsje01,https://www.basketball-reference.com/players/s/simsje01.html,https://www.basketball-reference.com/teams/MIL/2025.html,MIL,Milwaukee Bucks
+Pete Nance,nancepe01,https://www.basketball-reference.com/players/n/nancepe01.html,https://www.basketball-reference.com/teams/MIL/2025.html,MIL,Milwaukee Bucks
+Jamaree Bouyea,bouyeja01,https://www.basketball-reference.com/players/b/bouyeja01.html,https://www.basketball-reference.com/teams/MIL/2025.html,MIL,Milwaukee Bucks
+Malik Beasley,beaslma01,https://www.basketball-reference.com/players/b/beaslma01.html,https://www.basketball-reference.com/teams/DET/2025.html,DET,Detroit Pistons
+Ron Holland,hollaro01,https://www.basketball-reference.com/players/h/hollaro01.html,https://www.basketball-reference.com/teams/DET/2025.html,DET,Detroit Pistons
+Jalen Duren,durenja01,https://www.basketball-reference.com/players/d/durenja01.html,https://www.basketball-reference.com/teams/DET/2025.html,DET,Detroit Pistons
+Tim Hardaway Jr.,hardati02,https://www.basketball-reference.com/players/h/hardati02.html,https://www.basketball-reference.com/teams/DET/2025.html,DET,Detroit Pistons
+Simone Fontecchio,fontesi01,https://www.basketball-reference.com/players/f/fontesi01.html,https://www.basketball-reference.com/teams/DET/2025.html,DET,Detroit Pistons
+Tobias Harris,harrito02,https://www.basketball-reference.com/players/h/harrito02.html,https://www.basketball-reference.com/teams/DET/2025.html,DET,Detroit Pistons
+Isaiah Stewart,stewais01,https://www.basketball-reference.com/players/s/stewais01.html,https://www.basketball-reference.com/teams/DET/2025.html,DET,Detroit Pistons
+Cade Cunningham,cunnica01,https://www.basketball-reference.com/players/c/cunnica01.html,https://www.basketball-reference.com/teams/DET/2025.html,DET,Detroit Pistons
+Ausar Thompson,thompau01,https://www.basketball-reference.com/players/t/thompau01.html,https://www.basketball-reference.com/teams/DET/2025.html,DET,Detroit Pistons
+Marcus Sasser,sassema01,https://www.basketball-reference.com/players/s/sassema01.html,https://www.basketball-reference.com/teams/DET/2025.html,DET,Detroit Pistons
+Paul Reed,reedpa01,https://www.basketball-reference.com/players/r/reedpa01.html,https://www.basketball-reference.com/teams/DET/2025.html,DET,Detroit Pistons
+Jaden Ivey,iveyja01,https://www.basketball-reference.com/players/i/iveyja01.html,https://www.basketball-reference.com/teams/DET/2025.html,DET,Detroit Pistons
+Dennis Schröder,schrode01,https://www.basketball-reference.com/players/s/schrode01.html,https://www.basketball-reference.com/teams/DET/2025.html,DET,Detroit Pistons
+Lindy Waters III,waterli01,https://www.basketball-reference.com/players/w/waterli01.html,https://www.basketball-reference.com/teams/DET/2025.html,DET,Detroit Pistons
+Bobi Klintman,klintbo01,https://www.basketball-reference.com/players/k/klintbo01.html,https://www.basketball-reference.com/teams/DET/2025.html,DET,Detroit Pistons
+Daniss Jenkins,jenkida01,https://www.basketball-reference.com/players/j/jenkida01.html,https://www.basketball-reference.com/teams/DET/2025.html,DET,Detroit Pistons
+Tolu Smith,smithto05,https://www.basketball-reference.com/players/s/smithto05.html,https://www.basketball-reference.com/teams/DET/2025.html,DET,Detroit Pistons
+Ron Harper Jr.,harpero02,https://www.basketball-reference.com/players/h/harpero02.html,https://www.basketball-reference.com/teams/DET/2025.html,DET,Detroit Pistons
+Anthony Black,blackan01,https://www.basketball-reference.com/players/b/blackan01.html,https://www.basketball-reference.com/teams/ORL/2025.html,ORL,Orlando Magic
+Tristan Da Silva,dasiltr01,https://www.basketball-reference.com/players/d/dasiltr01.html,https://www.basketball-reference.com/teams/ORL/2025.html,ORL,Orlando Magic
+Jonathan Isaac,isaacjo01,https://www.basketball-reference.com/players/i/isaacjo01.html,https://www.basketball-reference.com/teams/ORL/2025.html,ORL,Orlando Magic
+Goga Bitadze,bitadgo01,https://www.basketball-reference.com/players/b/bitadgo01.html,https://www.basketball-reference.com/teams/ORL/2025.html,ORL,Orlando Magic
+Wendell Carter Jr.,cartewe01,https://www.basketball-reference.com/players/c/cartewe01.html,https://www.basketball-reference.com/teams/ORL/2025.html,ORL,Orlando Magic
+Franz Wagner,wagnefr01,https://www.basketball-reference.com/players/w/wagnefr01.html,https://www.basketball-reference.com/teams/ORL/2025.html,ORL,Orlando Magic
+Jett Howard,howarje01,https://www.basketball-reference.com/players/h/howarje01.html,https://www.basketball-reference.com/teams/ORL/2025.html,ORL,Orlando Magic
+Caleb Houstan,houstca01,https://www.basketball-reference.com/players/h/houstca01.html,https://www.basketball-reference.com/teams/ORL/2025.html,ORL,Orlando Magic
+Cory Joseph,josepco01,https://www.basketball-reference.com/players/j/josepco01.html,https://www.basketball-reference.com/teams/ORL/2025.html,ORL,Orlando Magic
+Gary Harris,harriga01,https://www.basketball-reference.com/players/h/harriga01.html,https://www.basketball-reference.com/teams/ORL/2025.html,ORL,Orlando Magic
+Paolo Banchero,banchpa01,https://www.basketball-reference.com/players/b/banchpa01.html,https://www.basketball-reference.com/teams/ORL/2025.html,ORL,Orlando Magic
+Jalen Suggs,suggsja01,https://www.basketball-reference.com/players/s/suggsja01.html,https://www.basketball-reference.com/teams/ORL/2025.html,ORL,Orlando Magic
+Trevelin Queen,queentr01,https://www.basketball-reference.com/players/q/queentr01.html,https://www.basketball-reference.com/teams/ORL/2025.html,ORL,Orlando Magic
+Moritz Wagner,wagnemo01,https://www.basketball-reference.com/players/w/wagnemo01.html,https://www.basketball-reference.com/teams/ORL/2025.html,ORL,Orlando Magic
+Mac McClung,mccluma01,https://www.basketball-reference.com/players/m/mccluma01.html,https://www.basketball-reference.com/teams/ORL/2025.html,ORL,Orlando Magic
+Ethan Thompson,thompet01,https://www.basketball-reference.com/players/t/thompet01.html,https://www.basketball-reference.com/teams/ORL/2025.html,ORL,Orlando Magic
+Trae Young,youngtr01,https://www.basketball-reference.com/players/y/youngtr01.html,https://www.basketball-reference.com/teams/ATL/2025.html,ATL,Atlanta Hawks
+Dyson Daniels,daniedy01,https://www.basketball-reference.com/players/d/daniedy01.html,https://www.basketball-reference.com/teams/ATL/2025.html,ATL,Atlanta Hawks
+Zaccharie Risacher,risacza01,https://www.basketball-reference.com/players/r/risacza01.html,https://www.basketball-reference.com/teams/ATL/2025.html,ATL,Atlanta Hawks
+Onyeka Okongwu,okongon01,https://www.basketball-reference.com/players/o/okongon01.html,https://www.basketball-reference.com/teams/ATL/2025.html,ATL,Atlanta Hawks
+Vit Krejci,krejcvi01,https://www.basketball-reference.com/players/k/krejcvi01.html,https://www.basketball-reference.com/teams/ATL/2025.html,ATL,Atlanta Hawks
+Clint Capela,capelca01,https://www.basketball-reference.com/players/c/capelca01.html,https://www.basketball-reference.com/teams/ATL/2025.html,ATL,Atlanta Hawks
+Garrison Mathews,mathega01,https://www.basketball-reference.com/players/m/mathega01.html,https://www.basketball-reference.com/teams/ATL/2025.html,ATL,Atlanta Hawks
+Jalen Johnson,johnsja05,https://www.basketball-reference.com/players/j/johnsja05.html,https://www.basketball-reference.com/teams/ATL/2025.html,ATL,Atlanta Hawks
+Dominick Barlow,barlodo01,https://www.basketball-reference.com/players/b/barlodo01.html,https://www.basketball-reference.com/teams/ATL/2025.html,ATL,Atlanta Hawks
+Mouhamed Gueye,gueyemo02,https://www.basketball-reference.com/players/g/gueyemo02.html,https://www.basketball-reference.com/teams/ATL/2025.html,ATL,Atlanta Hawks
+Keaton Wallace,wallake01,https://www.basketball-reference.com/players/w/wallake01.html,https://www.basketball-reference.com/teams/ATL/2025.html,ATL,Atlanta Hawks
+Terance Mann,mannte01,https://www.basketball-reference.com/players/m/mannte01.html,https://www.basketball-reference.com/teams/ATL/2025.html,ATL,Atlanta Hawks
+Georges Niang,niangge01,https://www.basketball-reference.com/players/n/niangge01.html,https://www.basketball-reference.com/teams/ATL/2025.html,ATL,Atlanta Hawks
+Caris LeVert,leverca01,https://www.basketball-reference.com/players/l/leverca01.html,https://www.basketball-reference.com/teams/ATL/2025.html,ATL,Atlanta Hawks
+Larry Nance Jr.,nancela02,https://www.basketball-reference.com/players/n/nancela02.html,https://www.basketball-reference.com/teams/ATL/2025.html,ATL,Atlanta Hawks
+Kobe Bufkin,bufkiko01,https://www.basketball-reference.com/players/b/bufkiko01.html,https://www.basketball-reference.com/teams/ATL/2025.html,ATL,Atlanta Hawks
+Daeqwon Plowden,plowdda01,https://www.basketball-reference.com/players/p/plowdda01.html,https://www.basketball-reference.com/teams/ATL/2025.html,ATL,Atlanta Hawks
+Jacob Toppin,toppija01,https://www.basketball-reference.com/players/t/toppija01.html,https://www.basketball-reference.com/teams/ATL/2025.html,ATL,Atlanta Hawks
+Matas Buzelis,buzelma01,https://www.basketball-reference.com/players/b/buzelma01.html,https://www.basketball-reference.com/teams/CHI/2025.html,CHI,Chicago Bulls
+Julian Phillips,phillju01,https://www.basketball-reference.com/players/p/phillju01.html,https://www.basketball-reference.com/teams/CHI/2025.html,CHI,Chicago Bulls
+Coby White,whiteco01,https://www.basketball-reference.com/players/w/whiteco01.html,https://www.basketball-reference.com/teams/CHI/2025.html,CHI,Chicago Bulls
+Nikola Vučević,vucevni01,https://www.basketball-reference.com/players/v/vucevni01.html,https://www.basketball-reference.com/teams/CHI/2025.html,CHI,Chicago Bulls
+Dalen Terry,terryda01,https://www.basketball-reference.com/players/t/terryda01.html,https://www.basketball-reference.com/teams/CHI/2025.html,CHI,Chicago Bulls
+Josh Giddey,giddejo01,https://www.basketball-reference.com/players/g/giddejo01.html,https://www.basketball-reference.com/teams/CHI/2025.html,CHI,Chicago Bulls
+Jalen Smith,smithja04,https://www.basketball-reference.com/players/s/smithja04.html,https://www.basketball-reference.com/teams/CHI/2025.html,CHI,Chicago Bulls
+Patrick Williams,willipa01,https://www.basketball-reference.com/players/w/willipa01.html,https://www.basketball-reference.com/teams/CHI/2025.html,CHI,Chicago Bulls
+Talen Horton-Tucker,hortota01,https://www.basketball-reference.com/players/h/hortota01.html,https://www.basketball-reference.com/teams/CHI/2025.html,CHI,Chicago Bulls
+Ayo Dosunmu,dosunay01,https://www.basketball-reference.com/players/d/dosunay01.html,https://www.basketball-reference.com/teams/CHI/2025.html,CHI,Chicago Bulls
+Jevon Carter,carteje01,https://www.basketball-reference.com/players/c/carteje01.html,https://www.basketball-reference.com/teams/CHI/2025.html,CHI,Chicago Bulls
+Lonzo Ball,balllo01,https://www.basketball-reference.com/players/b/balllo01.html,https://www.basketball-reference.com/teams/CHI/2025.html,CHI,Chicago Bulls
+Zach Collins,colliza01,https://www.basketball-reference.com/players/c/colliza01.html,https://www.basketball-reference.com/teams/CHI/2025.html,CHI,Chicago Bulls
+Kevin Huerter,huertke01,https://www.basketball-reference.com/players/h/huertke01.html,https://www.basketball-reference.com/teams/CHI/2025.html,CHI,Chicago Bulls
+Tre Jones,jonestr01,https://www.basketball-reference.com/players/j/jonestr01.html,https://www.basketball-reference.com/teams/CHI/2025.html,CHI,Chicago Bulls
+E.J. Liddell,liddeej01,https://www.basketball-reference.com/players/l/liddeej01.html,https://www.basketball-reference.com/teams/CHI/2025.html,CHI,Chicago Bulls
+Jahmir Young,youngja05,https://www.basketball-reference.com/players/y/youngja05.html,https://www.basketball-reference.com/teams/CHI/2025.html,CHI,Chicago Bulls
+Emanuel Miller,milleem01,https://www.basketball-reference.com/players/m/milleem01.html,https://www.basketball-reference.com/teams/CHI/2025.html,CHI,Chicago Bulls
+Bam Adebayo,adebaba01,https://www.basketball-reference.com/players/a/adebaba01.html,https://www.basketball-reference.com/teams/MIA/2025.html,MIA,Miami Heat
+Tyler Herro,herroty01,https://www.basketball-reference.com/players/h/herroty01.html,https://www.basketball-reference.com/teams/MIA/2025.html,MIA,Miami Heat
+Duncan Robinson,robindu01,https://www.basketball-reference.com/players/r/robindu01.html,https://www.basketball-reference.com/teams/MIA/2025.html,MIA,Miami Heat
+Haywood Highsmith,highsha01,https://www.basketball-reference.com/players/h/highsha01.html,https://www.basketball-reference.com/teams/MIA/2025.html,MIA,Miami Heat
+Jaime Jaquez Jr.,jaqueja01,https://www.basketball-reference.com/players/j/jaqueja01.html,https://www.basketball-reference.com/teams/MIA/2025.html,MIA,Miami Heat
+Terry Rozier,roziete01,https://www.basketball-reference.com/players/r/roziete01.html,https://www.basketball-reference.com/teams/MIA/2025.html,MIA,Miami Heat
+Kel'el Ware,wareke01,https://www.basketball-reference.com/players/w/wareke01.html,https://www.basketball-reference.com/teams/MIA/2025.html,MIA,Miami Heat
+Pelle Larsson,larsspe01,https://www.basketball-reference.com/players/l/larsspe01.html,https://www.basketball-reference.com/teams/MIA/2025.html,MIA,Miami Heat
+Alec Burks,burksal01,https://www.basketball-reference.com/players/b/burksal01.html,https://www.basketball-reference.com/teams/MIA/2025.html,MIA,Miami Heat
+Nikola Jović,jovicni01,https://www.basketball-reference.com/players/j/jovicni01.html,https://www.basketball-reference.com/teams/MIA/2025.html,MIA,Miami Heat
+Davion Mitchell,mitchda01,https://www.basketball-reference.com/players/m/mitchda01.html,https://www.basketball-reference.com/teams/MIA/2025.html,MIA,Miami Heat
+Kyle Anderson,anderky01,https://www.basketball-reference.com/players/a/anderky01.html,https://www.basketball-reference.com/teams/MIA/2025.html,MIA,Miami Heat
+Kevin Love,loveke01,https://www.basketball-reference.com/players/l/loveke01.html,https://www.basketball-reference.com/teams/MIA/2025.html,MIA,Miami Heat
+Andrew Wiggins,wiggian01,https://www.basketball-reference.com/players/w/wiggian01.html,https://www.basketball-reference.com/teams/MIA/2025.html,MIA,Miami Heat
+Keshad Johnson,johnske10,https://www.basketball-reference.com/players/j/johnske10.html,https://www.basketball-reference.com/teams/MIA/2025.html,MIA,Miami Heat
+Dru Smith,smithdr01,https://www.basketball-reference.com/players/s/smithdr01.html,https://www.basketball-reference.com/teams/MIA/2025.html,MIA,Miami Heat
+Josh Christopher,chrisjo01,https://www.basketball-reference.com/players/c/chrisjo01.html,https://www.basketball-reference.com/teams/MIA/2025.html,MIA,Miami Heat
+Isaiah Stevens,steveis01,https://www.basketball-reference.com/players/s/steveis01.html,https://www.basketball-reference.com/teams/MIA/2025.html,MIA,Miami Heat
+Jamal Shead,sheadja01,https://www.basketball-reference.com/players/s/sheadja01.html,https://www.basketball-reference.com/teams/TOR/2025.html,TOR,Toronto Raptors
+Scottie Barnes,barnesc01,https://www.basketball-reference.com/players/b/barnesc01.html,https://www.basketball-reference.com/teams/TOR/2025.html,TOR,Toronto Raptors
+Ochai Agbaji,agbajoc01,https://www.basketball-reference.com/players/a/agbajoc01.html,https://www.basketball-reference.com/teams/TOR/2025.html,TOR,Toronto Raptors
+Jonathan Mogbo,mogbojo01,https://www.basketball-reference.com/players/m/mogbojo01.html,https://www.basketball-reference.com/teams/TOR/2025.html,TOR,Toronto Raptors
+Jamison Battle,battlja01,https://www.basketball-reference.com/players/b/battlja01.html,https://www.basketball-reference.com/teams/TOR/2025.html,TOR,Toronto Raptors
+RJ Barrett,barrerj01,https://www.basketball-reference.com/players/b/barrerj01.html,https://www.basketball-reference.com/teams/TOR/2025.html,TOR,Toronto Raptors
+Jakob Poeltl,poeltja01,https://www.basketball-reference.com/players/p/poeltja01.html,https://www.basketball-reference.com/teams/TOR/2025.html,TOR,Toronto Raptors
+Gradey Dick,dickgr01,https://www.basketball-reference.com/players/d/dickgr01.html,https://www.basketball-reference.com/teams/TOR/2025.html,TOR,Toronto Raptors
+Ja'Kobe Walter,walteja01,https://www.basketball-reference.com/players/w/walteja01.html,https://www.basketball-reference.com/teams/TOR/2025.html,TOR,Toronto Raptors
+Chris Boucher,bouchch01,https://www.basketball-reference.com/players/b/bouchch01.html,https://www.basketball-reference.com/teams/TOR/2025.html,TOR,Toronto Raptors
+Immanuel Quickley,quickim01,https://www.basketball-reference.com/players/q/quickim01.html,https://www.basketball-reference.com/teams/TOR/2025.html,TOR,Toronto Raptors
+Garrett Temple,templga01,https://www.basketball-reference.com/players/t/templga01.html,https://www.basketball-reference.com/teams/TOR/2025.html,TOR,Toronto Raptors
+A.J. Lawson,lawsoaj01,https://www.basketball-reference.com/players/l/lawsoaj01.html,https://www.basketball-reference.com/teams/TOR/2025.html,TOR,Toronto Raptors
+Colin Castleton,castlco01,https://www.basketball-reference.com/players/c/castlco01.html,https://www.basketball-reference.com/teams/TOR/2025.html,TOR,Toronto Raptors
+Jared Rhoden,rhodeja01,https://www.basketball-reference.com/players/r/rhodeja01.html,https://www.basketball-reference.com/teams/TOR/2025.html,TOR,Toronto Raptors
+Ulrich Chomche,chomcul01,https://www.basketball-reference.com/players/c/chomcul01.html,https://www.basketball-reference.com/teams/TOR/2025.html,TOR,Toronto Raptors
+Brandon Ingram,ingrabr01,https://www.basketball-reference.com/players/i/ingrabr01.html,https://www.basketball-reference.com/teams/TOR/2025.html,TOR,Toronto Raptors
+Keon Johnson,johnske07,https://www.basketball-reference.com/players/j/johnske07.html,https://www.basketball-reference.com/teams/BRK/2025.html,BRK,Brooklyn Nets
+Jalen Wilson,wilsoja03,https://www.basketball-reference.com/players/w/wilsoja03.html,https://www.basketball-reference.com/teams/BRK/2025.html,BRK,Brooklyn Nets
+Nic Claxton,claxtni01,https://www.basketball-reference.com/players/c/claxtni01.html,https://www.basketball-reference.com/teams/BRK/2025.html,BRK,Brooklyn Nets
+Ziaire Williams,willizi02,https://www.basketball-reference.com/players/w/willizi02.html,https://www.basketball-reference.com/teams/BRK/2025.html,BRK,Brooklyn Nets
+Tyrese Martin,martity01,https://www.basketball-reference.com/players/m/martity01.html,https://www.basketball-reference.com/teams/BRK/2025.html,BRK,Brooklyn Nets
+Cameron Johnson,johnsca02,https://www.basketball-reference.com/players/j/johnsca02.html,https://www.basketball-reference.com/teams/BRK/2025.html,BRK,Brooklyn Nets
+Day'Ron Sharpe,sharpda01,https://www.basketball-reference.com/players/s/sharpda01.html,https://www.basketball-reference.com/teams/BRK/2025.html,BRK,Brooklyn Nets
+Noah Clowney,clownno01,https://www.basketball-reference.com/players/c/clownno01.html,https://www.basketball-reference.com/teams/BRK/2025.html,BRK,Brooklyn Nets
+Trendon Watford,watfotr01,https://www.basketball-reference.com/players/w/watfotr01.html,https://www.basketball-reference.com/teams/BRK/2025.html,BRK,Brooklyn Nets
+Reece Beekman,beekmre01,https://www.basketball-reference.com/players/b/beekmre01.html,https://www.basketball-reference.com/teams/BRK/2025.html,BRK,Brooklyn Nets
+D'Angelo Russell,russeda01,https://www.basketball-reference.com/players/r/russeda01.html,https://www.basketball-reference.com/teams/BRK/2025.html,BRK,Brooklyn Nets
+Tosan Evbuomwan,evbuoto01,https://www.basketball-reference.com/players/e/evbuoto01.html,https://www.basketball-reference.com/teams/BRK/2025.html,BRK,Brooklyn Nets
+Cam Thomas,thomaca02,https://www.basketball-reference.com/players/t/thomaca02.html,https://www.basketball-reference.com/teams/BRK/2025.html,BRK,Brooklyn Nets
+Maxwell Lewis,lewisma05,https://www.basketball-reference.com/players/l/lewisma05.html,https://www.basketball-reference.com/teams/BRK/2025.html,BRK,Brooklyn Nets
+Dariq Whitehead,whiteda01,https://www.basketball-reference.com/players/w/whiteda01.html,https://www.basketball-reference.com/teams/BRK/2025.html,BRK,Brooklyn Nets
+Drew Timme,timmedr01,https://www.basketball-reference.com/players/t/timmedr01.html,https://www.basketball-reference.com/teams/BRK/2025.html,BRK,Brooklyn Nets
+Tyson Etienne,etienty01,https://www.basketball-reference.com/players/e/etienty01.html,https://www.basketball-reference.com/teams/BRK/2025.html,BRK,Brooklyn Nets
+De'Anthony Melton,meltode01,https://www.basketball-reference.com/players/m/meltode01.html,https://www.basketball-reference.com/teams/BRK/2025.html,BRK,Brooklyn Nets
+Ricky Council IV,councri01,https://www.basketball-reference.com/players/c/councri01.html,https://www.basketball-reference.com/teams/PHI/2025.html,PHI,Philadelphia 76ers
+Guerschon Yabusele,yabusgu01,https://www.basketball-reference.com/players/y/yabusgu01.html,https://www.basketball-reference.com/teams/PHI/2025.html,PHI,Philadelphia 76ers
+Kelly Oubre Jr.,oubreke01,https://www.basketball-reference.com/players/o/oubreke01.html,https://www.basketball-reference.com/teams/PHI/2025.html,PHI,Philadelphia 76ers
+Adem Bona,bonaad01,https://www.basketball-reference.com/players/b/bonaad01.html,https://www.basketball-reference.com/teams/PHI/2025.html,PHI,Philadelphia 76ers
+Tyrese Maxey,maxeyty01,https://www.basketball-reference.com/players/m/maxeyty01.html,https://www.basketball-reference.com/teams/PHI/2025.html,PHI,Philadelphia 76ers
+Justin Edwards,edwarju01,https://www.basketball-reference.com/players/e/edwarju01.html,https://www.basketball-reference.com/teams/PHI/2025.html,PHI,Philadelphia 76ers
+Paul George,georgpa01,https://www.basketball-reference.com/players/g/georgpa01.html,https://www.basketball-reference.com/teams/PHI/2025.html,PHI,Philadelphia 76ers
+Jeff Dowtin Jr.,dowtije01,https://www.basketball-reference.com/players/d/dowtije01.html,https://www.basketball-reference.com/teams/PHI/2025.html,PHI,Philadelphia 76ers
+Andre Drummond,drumman01,https://www.basketball-reference.com/players/d/drumman01.html,https://www.basketball-reference.com/teams/PHI/2025.html,PHI,Philadelphia 76ers
+Eric Gordon,gordoer01,https://www.basketball-reference.com/players/g/gordoer01.html,https://www.basketball-reference.com/teams/PHI/2025.html,PHI,Philadelphia 76ers
+Kyle Lowry,lowryky01,https://www.basketball-reference.com/players/l/lowryky01.html,https://www.basketball-reference.com/teams/PHI/2025.html,PHI,Philadelphia 76ers
+Quentin Grimes,grimequ01,https://www.basketball-reference.com/players/g/grimequ01.html,https://www.basketball-reference.com/teams/PHI/2025.html,PHI,Philadelphia 76ers
+Jared Butler,butleja02,https://www.basketball-reference.com/players/b/butleja02.html,https://www.basketball-reference.com/teams/PHI/2025.html,PHI,Philadelphia 76ers
+Jared McCain,mccaija01,https://www.basketball-reference.com/players/m/mccaija01.html,https://www.basketball-reference.com/teams/PHI/2025.html,PHI,Philadelphia 76ers
+Lonnie Walker IV,walkelo01,https://www.basketball-reference.com/players/w/walkelo01.html,https://www.basketball-reference.com/teams/PHI/2025.html,PHI,Philadelphia 76ers
+Joel Embiid,embiijo01,https://www.basketball-reference.com/players/e/embiijo01.html,https://www.basketball-reference.com/teams/PHI/2025.html,PHI,Philadelphia 76ers
+Alex Reese,reeseal01,https://www.basketball-reference.com/players/r/reeseal01.html,https://www.basketball-reference.com/teams/PHI/2025.html,PHI,Philadelphia 76ers
+Jalen Hood-Schifino,hoodsja01,https://www.basketball-reference.com/players/h/hoodsja01.html,https://www.basketball-reference.com/teams/PHI/2025.html,PHI,Philadelphia 76ers
+Isaiah Mobley,mobleis01,https://www.basketball-reference.com/players/m/mobleis01.html,https://www.basketball-reference.com/teams/PHI/2025.html,PHI,Philadelphia 76ers
+Moussa Diabaté,diabamo01,https://www.basketball-reference.com/players/d/diabamo01.html,https://www.basketball-reference.com/teams/CHO/2025.html,CHO,Charlotte Hornets
+Josh Green,greenjo02,https://www.basketball-reference.com/players/g/greenjo02.html,https://www.basketball-reference.com/teams/CHO/2025.html,CHO,Charlotte Hornets
+Seth Curry,curryse01,https://www.basketball-reference.com/players/c/curryse01.html,https://www.basketball-reference.com/teams/CHO/2025.html,CHO,Charlotte Hornets
+Miles Bridges,bridgmi02,https://www.basketball-reference.com/players/b/bridgmi02.html,https://www.basketball-reference.com/teams/CHO/2025.html,CHO,Charlotte Hornets
+Nick Smith Jr.,smithni01,https://www.basketball-reference.com/players/s/smithni01.html,https://www.basketball-reference.com/teams/CHO/2025.html,CHO,Charlotte Hornets
+Tidjane Salaün,salauti01,https://www.basketball-reference.com/players/s/salauti01.html,https://www.basketball-reference.com/teams/CHO/2025.html,CHO,Charlotte Hornets
+LaMelo Ball,ballla01,https://www.basketball-reference.com/players/b/ballla01.html,https://www.basketball-reference.com/teams/CHO/2025.html,CHO,Charlotte Hornets
+DaQuan Jeffries,jeffrda01,https://www.basketball-reference.com/players/j/jeffrda01.html,https://www.basketball-reference.com/teams/CHO/2025.html,CHO,Charlotte Hornets
+Taj Gibson,gibsota01,https://www.basketball-reference.com/players/g/gibsota01.html,https://www.basketball-reference.com/teams/CHO/2025.html,CHO,Charlotte Hornets
+KJ Simpson,simpskj01,https://www.basketball-reference.com/players/s/simpskj01.html,https://www.basketball-reference.com/teams/CHO/2025.html,CHO,Charlotte Hornets
+Brandon Miller,millebr02,https://www.basketball-reference.com/players/m/millebr02.html,https://www.basketball-reference.com/teams/CHO/2025.html,CHO,Charlotte Hornets
+Jusuf Nurkić,nurkiju01,https://www.basketball-reference.com/players/n/nurkiju01.html,https://www.basketball-reference.com/teams/CHO/2025.html,CHO,Charlotte Hornets
+Grant Williams,willigr01,https://www.basketball-reference.com/players/w/willigr01.html,https://www.basketball-reference.com/teams/CHO/2025.html,CHO,Charlotte Hornets
+Wendell Moore Jr.,moorewe01,https://www.basketball-reference.com/players/m/moorewe01.html,https://www.basketball-reference.com/teams/CHO/2025.html,CHO,Charlotte Hornets
+Josh Okogie,okogijo01,https://www.basketball-reference.com/players/o/okogijo01.html,https://www.basketball-reference.com/teams/CHO/2025.html,CHO,Charlotte Hornets
+Damion Baugh,baughda01,https://www.basketball-reference.com/players/b/baughda01.html,https://www.basketball-reference.com/teams/CHO/2025.html,CHO,Charlotte Hornets
+Tre Mann,manntr01,https://www.basketball-reference.com/players/m/manntr01.html,https://www.basketball-reference.com/teams/CHO/2025.html,CHO,Charlotte Hornets
+Jaylen Sims,simsja01,https://www.basketball-reference.com/players/s/simsja01.html,https://www.basketball-reference.com/teams/CHO/2025.html,CHO,Charlotte Hornets
+Bub Carrington,carrica01,https://www.basketball-reference.com/players/c/carrica01.html,https://www.basketball-reference.com/teams/WAS/2025.html,WAS,Washington Wizards
+Jordan Poole,poolejo01,https://www.basketball-reference.com/players/p/poolejo01.html,https://www.basketball-reference.com/teams/WAS/2025.html,WAS,Washington Wizards
+Kyshawn George,georgky01,https://www.basketball-reference.com/players/g/georgky01.html,https://www.basketball-reference.com/teams/WAS/2025.html,WAS,Washington Wizards
+Alex Sarr,sarral01,https://www.basketball-reference.com/players/s/sarral01.html,https://www.basketball-reference.com/teams/WAS/2025.html,WAS,Washington Wizards
+Justin Champagnie,champju01,https://www.basketball-reference.com/players/c/champju01.html,https://www.basketball-reference.com/teams/WAS/2025.html,WAS,Washington Wizards
+Corey Kispert,kispeco01,https://www.basketball-reference.com/players/k/kispeco01.html,https://www.basketball-reference.com/teams/WAS/2025.html,WAS,Washington Wizards
+Bilal Coulibaly,coulibi01,https://www.basketball-reference.com/players/c/coulibi01.html,https://www.basketball-reference.com/teams/WAS/2025.html,WAS,Washington Wizards
+Anthony Gill,gillan01,https://www.basketball-reference.com/players/g/gillan01.html,https://www.basketball-reference.com/teams/WAS/2025.html,WAS,Washington Wizards
+Tristan Vukcevic,vukcetr01,https://www.basketball-reference.com/players/v/vukcetr01.html,https://www.basketball-reference.com/teams/WAS/2025.html,WAS,Washington Wizards
+Richaun Holmes,holmeri01,https://www.basketball-reference.com/players/h/holmeri01.html,https://www.basketball-reference.com/teams/WAS/2025.html,WAS,Washington Wizards
+Malcolm Brogdon,brogdma01,https://www.basketball-reference.com/players/b/brogdma01.html,https://www.basketball-reference.com/teams/WAS/2025.html,WAS,Washington Wizards
+AJ Johnson,johnsaj01,https://www.basketball-reference.com/players/j/johnsaj01.html,https://www.basketball-reference.com/teams/WAS/2025.html,WAS,Washington Wizards
+Marcus Smart,smartma01,https://www.basketball-reference.com/players/s/smartma01.html,https://www.basketball-reference.com/teams/WAS/2025.html,WAS,Washington Wizards
+Khris Middleton,middlkh01,https://www.basketball-reference.com/players/m/middlkh01.html,https://www.basketball-reference.com/teams/WAS/2025.html,WAS,Washington Wizards
+Jaylen Martin,martija02,https://www.basketball-reference.com/players/m/martija02.html,https://www.basketball-reference.com/teams/WAS/2025.html,WAS,Washington Wizards
+JT Thor,thorjt01,https://www.basketball-reference.com/players/t/thorjt01.html,https://www.basketball-reference.com/teams/WAS/2025.html,WAS,Washington Wizards
+Saddiq Bey,beysa01,https://www.basketball-reference.com/players/b/beysa01.html,https://www.basketball-reference.com/teams/WAS/2025.html,WAS,Washington Wizards
+Shai Gilgeous-Alexander,gilgesh01,https://www.basketball-reference.com/players/g/gilgesh01.html,https://www.basketball-reference.com/teams/OKC/2025.html,OKC,Oklahoma City Thunder
+Aaron Wiggins,wiggiaa01,https://www.basketball-reference.com/players/w/wiggiaa01.html,https://www.basketball-reference.com/teams/OKC/2025.html,OKC,Oklahoma City Thunder
+Isaiah Joe,joeis01,https://www.basketball-reference.com/players/j/joeis01.html,https://www.basketball-reference.com/teams/OKC/2025.html,OKC,Oklahoma City Thunder
+Luguentz Dort,dortlu01,https://www.basketball-reference.com/players/d/dortlu01.html,https://www.basketball-reference.com/teams/OKC/2025.html,OKC,Oklahoma City Thunder
+Jalen Williams,willija06,https://www.basketball-reference.com/players/w/willija06.html,https://www.basketball-reference.com/teams/OKC/2025.html,OKC,Oklahoma City Thunder
+Kenrich Williams,willike04,https://www.basketball-reference.com/players/w/willike04.html,https://www.basketball-reference.com/teams/OKC/2025.html,OKC,Oklahoma City Thunder
+Cason Wallace,wallaca01,https://www.basketball-reference.com/players/w/wallaca01.html,https://www.basketball-reference.com/teams/OKC/2025.html,OKC,Oklahoma City Thunder
+Isaiah Hartenstein,harteis01,https://www.basketball-reference.com/players/h/harteis01.html,https://www.basketball-reference.com/teams/OKC/2025.html,OKC,Oklahoma City Thunder
+Alex Caruso,carusal01,https://www.basketball-reference.com/players/c/carusal01.html,https://www.basketball-reference.com/teams/OKC/2025.html,OKC,Oklahoma City Thunder
+Dillon Jones,jonesdi01,https://www.basketball-reference.com/players/j/jonesdi01.html,https://www.basketball-reference.com/teams/OKC/2025.html,OKC,Oklahoma City Thunder
+Jaylin Williams,willija07,https://www.basketball-reference.com/players/w/willija07.html,https://www.basketball-reference.com/teams/OKC/2025.html,OKC,Oklahoma City Thunder
+Ousmane Dieng,diengou01,https://www.basketball-reference.com/players/d/diengou01.html,https://www.basketball-reference.com/teams/OKC/2025.html,OKC,Oklahoma City Thunder
+Adam Flagler,flaglad01,https://www.basketball-reference.com/players/f/flaglad01.html,https://www.basketball-reference.com/teams/OKC/2025.html,OKC,Oklahoma City Thunder
+Ajay Mitchell,mitchaj01,https://www.basketball-reference.com/players/m/mitchaj01.html,https://www.basketball-reference.com/teams/OKC/2025.html,OKC,Oklahoma City Thunder
+Chet Holmgren,holmgch01,https://www.basketball-reference.com/players/h/holmgch01.html,https://www.basketball-reference.com/teams/OKC/2025.html,OKC,Oklahoma City Thunder
+Branden Carlson,carlsbr01,https://www.basketball-reference.com/players/c/carlsbr01.html,https://www.basketball-reference.com/teams/OKC/2025.html,OKC,Oklahoma City Thunder
+Alex Ducas,ducasal01,https://www.basketball-reference.com/players/d/ducasal01.html,https://www.basketball-reference.com/teams/OKC/2025.html,OKC,Oklahoma City Thunder
+Nikola Topić,topicni01,https://www.basketball-reference.com/players/t/topicni01.html,https://www.basketball-reference.com/teams/OKC/2025.html,OKC,Oklahoma City Thunder
+Jalen Green,greenja05,https://www.basketball-reference.com/players/g/greenja05.html,https://www.basketball-reference.com/teams/HOU/2025.html,HOU,Houston Rockets
+Alperen Şengün,sengual01,https://www.basketball-reference.com/players/s/sengual01.html,https://www.basketball-reference.com/teams/HOU/2025.html,HOU,Houston Rockets
+Dillon Brooks,brookdi01,https://www.basketball-reference.com/players/b/brookdi01.html,https://www.basketball-reference.com/teams/HOU/2025.html,HOU,Houston Rockets
+Amen Thompson,thompam01,https://www.basketball-reference.com/players/t/thompam01.html,https://www.basketball-reference.com/teams/HOU/2025.html,HOU,Houston Rockets
+Aaron Holiday,holidaa01,https://www.basketball-reference.com/players/h/holidaa01.html,https://www.basketball-reference.com/teams/HOU/2025.html,HOU,Houston Rockets
+Fred VanVleet,vanvlfr01,https://www.basketball-reference.com/players/v/vanvlfr01.html,https://www.basketball-reference.com/teams/HOU/2025.html,HOU,Houston Rockets
+Steven Adams,adamsst01,https://www.basketball-reference.com/players/a/adamsst01.html,https://www.basketball-reference.com/teams/HOU/2025.html,HOU,Houston Rockets
+Jabari Smith Jr.,smithja05,https://www.basketball-reference.com/players/s/smithja05.html,https://www.basketball-reference.com/teams/HOU/2025.html,HOU,Houston Rockets
+Tari Eason,easonta01,https://www.basketball-reference.com/players/e/easonta01.html,https://www.basketball-reference.com/teams/HOU/2025.html,HOU,Houston Rockets
+Reed Sheppard,sheppre01,https://www.basketball-reference.com/players/s/sheppre01.html,https://www.basketball-reference.com/teams/HOU/2025.html,HOU,Houston Rockets
+Jae'Sean Tate,tateja01,https://www.basketball-reference.com/players/t/tateja01.html,https://www.basketball-reference.com/teams/HOU/2025.html,HOU,Houston Rockets
+Cam Whitmore,whitmca01,https://www.basketball-reference.com/players/w/whitmca01.html,https://www.basketball-reference.com/teams/HOU/2025.html,HOU,Houston Rockets
+Jock Landale,landajo01,https://www.basketball-reference.com/players/l/landajo01.html,https://www.basketball-reference.com/teams/HOU/2025.html,HOU,Houston Rockets
+Jeff Green,greenje02,https://www.basketball-reference.com/players/g/greenje02.html,https://www.basketball-reference.com/teams/HOU/2025.html,HOU,Houston Rockets
+Jeenathan Williams,willije02,https://www.basketball-reference.com/players/w/willije02.html,https://www.basketball-reference.com/teams/HOU/2025.html,HOU,Houston Rockets
+Jack McVeigh,mcveija01,https://www.basketball-reference.com/players/m/mcveija01.html,https://www.basketball-reference.com/teams/HOU/2025.html,HOU,Houston Rockets
+N'Faly Dante,nfalyda01,https://www.basketball-reference.com/players/n/nfalyda01.html,https://www.basketball-reference.com/teams/HOU/2025.html,HOU,Houston Rockets
+David Roddy,roddyda01,https://www.basketball-reference.com/players/r/roddyda01.html,https://www.basketball-reference.com/teams/HOU/2025.html,HOU,Houston Rockets
+Dalton Knecht,knechda01,https://www.basketball-reference.com/players/k/knechda01.html,https://www.basketball-reference.com/teams/LAL/2025.html,LAL,Los Angeles Lakers
+Austin Reaves,reaveau01,https://www.basketball-reference.com/players/r/reaveau01.html,https://www.basketball-reference.com/teams/LAL/2025.html,LAL,Los Angeles Lakers
+Gabe Vincent,vincega01,https://www.basketball-reference.com/players/v/vincega01.html,https://www.basketball-reference.com/teams/LAL/2025.html,LAL,Los Angeles Lakers
+LeBron James,jamesle01,https://www.basketball-reference.com/players/j/jamesle01.html,https://www.basketball-reference.com/teams/LAL/2025.html,LAL,Los Angeles Lakers
+Rui Hachimura,hachiru01,https://www.basketball-reference.com/players/h/hachiru01.html,https://www.basketball-reference.com/teams/LAL/2025.html,LAL,Los Angeles Lakers
+Jaxson Hayes,hayesja02,https://www.basketball-reference.com/players/h/hayesja02.html,https://www.basketball-reference.com/teams/LAL/2025.html,LAL,Los Angeles Lakers
+Dorian Finney-Smith,finnedo01,https://www.basketball-reference.com/players/f/finnedo01.html,https://www.basketball-reference.com/teams/LAL/2025.html,LAL,Los Angeles Lakers
+Christian Koloko,kolokch01,https://www.basketball-reference.com/players/k/kolokch01.html,https://www.basketball-reference.com/teams/LAL/2025.html,LAL,Los Angeles Lakers
+Jarred Vanderbilt,vandeja01,https://www.basketball-reference.com/players/v/vandeja01.html,https://www.basketball-reference.com/teams/LAL/2025.html,LAL,Los Angeles Lakers
+Shake Milton,miltosh01,https://www.basketball-reference.com/players/m/miltosh01.html,https://www.basketball-reference.com/teams/LAL/2025.html,LAL,Los Angeles Lakers
+Jordan Goodwin,goodwjo01,https://www.basketball-reference.com/players/g/goodwjo01.html,https://www.basketball-reference.com/teams/LAL/2025.html,LAL,Los Angeles Lakers
+Luka Dončić,doncilu01,https://www.basketball-reference.com/players/d/doncilu01.html,https://www.basketball-reference.com/teams/LAL/2025.html,LAL,Los Angeles Lakers
+Bronny James,jamesbr02,https://www.basketball-reference.com/players/j/jamesbr02.html,https://www.basketball-reference.com/teams/LAL/2025.html,LAL,Los Angeles Lakers
+Trey Jemison,jemistr01,https://www.basketball-reference.com/players/j/jemistr01.html,https://www.basketball-reference.com/teams/LAL/2025.html,LAL,Los Angeles Lakers
+Alex Len,lenal01,https://www.basketball-reference.com/players/l/lenal01.html,https://www.basketball-reference.com/teams/LAL/2025.html,LAL,Los Angeles Lakers
+Markieff Morris,morrima02,https://www.basketball-reference.com/players/m/morrima02.html,https://www.basketball-reference.com/teams/LAL/2025.html,LAL,Los Angeles Lakers
+Maxi Kleber,klebima01,https://www.basketball-reference.com/players/k/klebima01.html,https://www.basketball-reference.com/teams/LAL/2025.html,LAL,Los Angeles Lakers
+Christian Braun,braunch01,https://www.basketball-reference.com/players/b/braunch01.html,https://www.basketball-reference.com/teams/DEN/2025.html,DEN,Denver Nuggets
+Michael Porter Jr.,portemi01,https://www.basketball-reference.com/players/p/portemi01.html,https://www.basketball-reference.com/teams/DEN/2025.html,DEN,Denver Nuggets
+Russell Westbrook,westbru01,https://www.basketball-reference.com/players/w/westbru01.html,https://www.basketball-reference.com/teams/DEN/2025.html,DEN,Denver Nuggets
+Nikola Jokić,jokicni01,https://www.basketball-reference.com/players/j/jokicni01.html,https://www.basketball-reference.com/teams/DEN/2025.html,DEN,Denver Nuggets
+Peyton Watson,watsope01,https://www.basketball-reference.com/players/w/watsope01.html,https://www.basketball-reference.com/teams/DEN/2025.html,DEN,Denver Nuggets
+Jamal Murray,murraja01,https://www.basketball-reference.com/players/m/murraja01.html,https://www.basketball-reference.com/teams/DEN/2025.html,DEN,Denver Nuggets
+Julian Strawther,strawju01,https://www.basketball-reference.com/players/s/strawju01.html,https://www.basketball-reference.com/teams/DEN/2025.html,DEN,Denver Nuggets
+Zeke Nnaji,nnajize01,https://www.basketball-reference.com/players/n/nnajize01.html,https://www.basketball-reference.com/teams/DEN/2025.html,DEN,Denver Nuggets
+DeAndre Jordan,jordade01,https://www.basketball-reference.com/players/j/jordade01.html,https://www.basketball-reference.com/teams/DEN/2025.html,DEN,Denver Nuggets
+Aaron Gordon,gordoaa01,https://www.basketball-reference.com/players/g/gordoaa01.html,https://www.basketball-reference.com/teams/DEN/2025.html,DEN,Denver Nuggets
+Hunter Tyson,tysonhu01,https://www.basketball-reference.com/players/t/tysonhu01.html,https://www.basketball-reference.com/teams/DEN/2025.html,DEN,Denver Nuggets
+Jalen Pickett,pickeja02,https://www.basketball-reference.com/players/p/pickeja02.html,https://www.basketball-reference.com/teams/DEN/2025.html,DEN,Denver Nuggets
+Trey Alexander,alexatr01,https://www.basketball-reference.com/players/a/alexatr01.html,https://www.basketball-reference.com/teams/DEN/2025.html,DEN,Denver Nuggets
+Spencer Jones,jonessp01,https://www.basketball-reference.com/players/j/jonessp01.html,https://www.basketball-reference.com/teams/DEN/2025.html,DEN,Denver Nuggets
+PJ Hall,hallpj01,https://www.basketball-reference.com/players/h/hallpj01.html,https://www.basketball-reference.com/teams/DEN/2025.html,DEN,Denver Nuggets
+Dario Šarić,saricda01,https://www.basketball-reference.com/players/s/saricda01.html,https://www.basketball-reference.com/teams/DEN/2025.html,DEN,Denver Nuggets
+Vlatko Čančar,cancavl01,https://www.basketball-reference.com/players/c/cancavl01.html,https://www.basketball-reference.com/teams/DEN/2025.html,DEN,Denver Nuggets
+DaRon Holmes,holmeda01,https://www.basketball-reference.com/players/h/holmeda01.html,https://www.basketball-reference.com/teams/DEN/2025.html,DEN,Denver Nuggets
+Ivica Zubac,zubaciv01,https://www.basketball-reference.com/players/z/zubaciv01.html,https://www.basketball-reference.com/teams/LAC/2025.html,LAC,Los Angeles Clippers
+James Harden,hardeja01,https://www.basketball-reference.com/players/h/hardeja01.html,https://www.basketball-reference.com/teams/LAC/2025.html,LAC,Los Angeles Clippers
+Nicolas Batum,batumni01,https://www.basketball-reference.com/players/b/batumni01.html,https://www.basketball-reference.com/teams/LAC/2025.html,LAC,Los Angeles Clippers
+Derrick Jones Jr.,jonesde02,https://www.basketball-reference.com/players/j/jonesde02.html,https://www.basketball-reference.com/teams/LAC/2025.html,LAC,Los Angeles Clippers
+Kris Dunn,dunnkr01,https://www.basketball-reference.com/players/d/dunnkr01.html,https://www.basketball-reference.com/teams/LAC/2025.html,LAC,Los Angeles Clippers
+Amir Coffey,coffeam01,https://www.basketball-reference.com/players/c/coffeam01.html,https://www.basketball-reference.com/teams/LAC/2025.html,LAC,Los Angeles Clippers
+Norman Powell,powelno01,https://www.basketball-reference.com/players/p/powelno01.html,https://www.basketball-reference.com/teams/LAC/2025.html,LAC,Los Angeles Clippers
+Kobe Brown,brownko01,https://www.basketball-reference.com/players/b/brownko01.html,https://www.basketball-reference.com/teams/LAC/2025.html,LAC,Los Angeles Clippers
+Kawhi Leonard,leonaka01,https://www.basketball-reference.com/players/l/leonaka01.html,https://www.basketball-reference.com/teams/LAC/2025.html,LAC,Los Angeles Clippers
+Jordan Miller,millejo02,https://www.basketball-reference.com/players/m/millejo02.html,https://www.basketball-reference.com/teams/LAC/2025.html,LAC,Los Angeles Clippers
+Bogdan Bogdanović,bogdabo01,https://www.basketball-reference.com/players/b/bogdabo01.html,https://www.basketball-reference.com/teams/LAC/2025.html,LAC,Los Angeles Clippers
+Drew Eubanks,eubandr01,https://www.basketball-reference.com/players/e/eubandr01.html,https://www.basketball-reference.com/teams/LAC/2025.html,LAC,Los Angeles Clippers
+Ben Simmons,simmobe01,https://www.basketball-reference.com/players/s/simmobe01.html,https://www.basketball-reference.com/teams/LAC/2025.html,LAC,Los Angeles Clippers
+Cam Christie,chrisca02,https://www.basketball-reference.com/players/c/chrisca02.html,https://www.basketball-reference.com/teams/LAC/2025.html,LAC,Los Angeles Clippers
+Patty Mills,millspa02,https://www.basketball-reference.com/players/m/millspa02.html,https://www.basketball-reference.com/teams/LAC/2025.html,LAC,Los Angeles Clippers
+Trentyn Flowers,flowetr01,https://www.basketball-reference.com/players/f/flowetr01.html,https://www.basketball-reference.com/teams/LAC/2025.html,LAC,Los Angeles Clippers
+Patrick Baldwin Jr.,baldwpa01,https://www.basketball-reference.com/players/b/baldwpa01.html,https://www.basketball-reference.com/teams/LAC/2025.html,LAC,Los Angeles Clippers
+Seth Lundy,lundyse01,https://www.basketball-reference.com/players/l/lundyse01.html,https://www.basketball-reference.com/teams/LAC/2025.html,LAC,Los Angeles Clippers
+Jaden McDaniels,mcdanja02,https://www.basketball-reference.com/players/m/mcdanja02.html,https://www.basketball-reference.com/teams/MIN/2025.html,MIN,Minnesota Timberwolves
+Nickeil Alexander-Walker,alexani01,https://www.basketball-reference.com/players/a/alexani01.html,https://www.basketball-reference.com/teams/MIN/2025.html,MIN,Minnesota Timberwolves
+Naz Reid,reidna01,https://www.basketball-reference.com/players/r/reidna01.html,https://www.basketball-reference.com/teams/MIN/2025.html,MIN,Minnesota Timberwolves
+Anthony Edwards,edwaran01,https://www.basketball-reference.com/players/e/edwaran01.html,https://www.basketball-reference.com/teams/MIN/2025.html,MIN,Minnesota Timberwolves
+Rudy Gobert,goberru01,https://www.basketball-reference.com/players/g/goberru01.html,https://www.basketball-reference.com/teams/MIN/2025.html,MIN,Minnesota Timberwolves
+Mike Conley,conlemi01,https://www.basketball-reference.com/players/c/conlemi01.html,https://www.basketball-reference.com/teams/MIN/2025.html,MIN,Minnesota Timberwolves
+Julius Randle,randlju01,https://www.basketball-reference.com/players/r/randlju01.html,https://www.basketball-reference.com/teams/MIN/2025.html,MIN,Minnesota Timberwolves
+Donte DiVincenzo,divindo01,https://www.basketball-reference.com/players/d/divindo01.html,https://www.basketball-reference.com/teams/MIN/2025.html,MIN,Minnesota Timberwolves
+Rob Dillingham,dilliro01,https://www.basketball-reference.com/players/d/dilliro01.html,https://www.basketball-reference.com/teams/MIN/2025.html,MIN,Minnesota Timberwolves
+Josh Minott,minotjo01,https://www.basketball-reference.com/players/m/minotjo01.html,https://www.basketball-reference.com/teams/MIN/2025.html,MIN,Minnesota Timberwolves
+Jaylen Clark,clarkja02,https://www.basketball-reference.com/players/c/clarkja02.html,https://www.basketball-reference.com/teams/MIN/2025.html,MIN,Minnesota Timberwolves
+Luka Garza,garzalu01,https://www.basketball-reference.com/players/g/garzalu01.html,https://www.basketball-reference.com/teams/MIN/2025.html,MIN,Minnesota Timberwolves
+Terrence Shannon Jr.,shannte01,https://www.basketball-reference.com/players/s/shannte01.html,https://www.basketball-reference.com/teams/MIN/2025.html,MIN,Minnesota Timberwolves
+Joe Ingles,inglejo01,https://www.basketball-reference.com/players/i/inglejo01.html,https://www.basketball-reference.com/teams/MIN/2025.html,MIN,Minnesota Timberwolves
+Leonard Miller,millele01,https://www.basketball-reference.com/players/m/millele01.html,https://www.basketball-reference.com/teams/MIN/2025.html,MIN,Minnesota Timberwolves
+Bones Hyland,hylanbo01,https://www.basketball-reference.com/players/h/hylanbo01.html,https://www.basketball-reference.com/teams/MIN/2025.html,MIN,Minnesota Timberwolves
+Tristen Newton,newtotr01,https://www.basketball-reference.com/players/n/newtotr01.html,https://www.basketball-reference.com/teams/MIN/2025.html,MIN,Minnesota Timberwolves
+Jesse Edwards,edwarje01,https://www.basketball-reference.com/players/e/edwarje01.html,https://www.basketball-reference.com/teams/MIN/2025.html,MIN,Minnesota Timberwolves
+Buddy Hield,hieldbu01,https://www.basketball-reference.com/players/h/hieldbu01.html,https://www.basketball-reference.com/teams/GSW/2025.html,GSW,Golden State Warriors
+Kevon Looney,looneke01,https://www.basketball-reference.com/players/l/looneke01.html,https://www.basketball-reference.com/teams/GSW/2025.html,GSW,Golden State Warriors
+Moses Moody,moodymo01,https://www.basketball-reference.com/players/m/moodymo01.html,https://www.basketball-reference.com/teams/GSW/2025.html,GSW,Golden State Warriors
+Stephen Curry,curryst01,https://www.basketball-reference.com/players/c/curryst01.html,https://www.basketball-reference.com/teams/GSW/2025.html,GSW,Golden State Warriors
+Draymond Green,greendr01,https://www.basketball-reference.com/players/g/greendr01.html,https://www.basketball-reference.com/teams/GSW/2025.html,GSW,Golden State Warriors
+Brandin Podziemski,podzibr01,https://www.basketball-reference.com/players/p/podzibr01.html,https://www.basketball-reference.com/teams/GSW/2025.html,GSW,Golden State Warriors
+Trayce Jackson-Davis,jackstr02,https://www.basketball-reference.com/players/j/jackstr02.html,https://www.basketball-reference.com/teams/GSW/2025.html,GSW,Golden State Warriors
+Gary Payton II,paytoga02,https://www.basketball-reference.com/players/p/paytoga02.html,https://www.basketball-reference.com/teams/GSW/2025.html,GSW,Golden State Warriors
+Gui Santos,santogu01,https://www.basketball-reference.com/players/s/santogu01.html,https://www.basketball-reference.com/teams/GSW/2025.html,GSW,Golden State Warriors
+Jonathan Kuminga,kuminjo01,https://www.basketball-reference.com/players/k/kuminjo01.html,https://www.basketball-reference.com/teams/GSW/2025.html,GSW,Golden State Warriors
+Quinten Post,postqu01,https://www.basketball-reference.com/players/p/postqu01.html,https://www.basketball-reference.com/teams/GSW/2025.html,GSW,Golden State Warriors
+Pat Spencer,spencpa01,https://www.basketball-reference.com/players/s/spencpa01.html,https://www.basketball-reference.com/teams/GSW/2025.html,GSW,Golden State Warriors
+Jimmy Butler,butleji01,https://www.basketball-reference.com/players/b/butleji01.html,https://www.basketball-reference.com/teams/GSW/2025.html,GSW,Golden State Warriors
+Kevin Knox,knoxke01,https://www.basketball-reference.com/players/k/knoxke01.html,https://www.basketball-reference.com/teams/GSW/2025.html,GSW,Golden State Warriors
+Jackson Rowe,roweja01,https://www.basketball-reference.com/players/r/roweja01.html,https://www.basketball-reference.com/teams/GSW/2025.html,GSW,Golden State Warriors
+Braxton Key,keybr01,https://www.basketball-reference.com/players/k/keybr01.html,https://www.basketball-reference.com/teams/GSW/2025.html,GSW,Golden State Warriors
+Taran Armstrong,armstta02,https://www.basketball-reference.com/players/a/armstta02.html,https://www.basketball-reference.com/teams/GSW/2025.html,GSW,Golden State Warriors
+Jaylen Wells,wellsja01,https://www.basketball-reference.com/players/w/wellsja01.html,https://www.basketball-reference.com/teams/MEM/2025.html,MEM,Memphis Grizzlies
+Scotty Pippen Jr.,pippesc02,https://www.basketball-reference.com/players/p/pippesc02.html,https://www.basketball-reference.com/teams/MEM/2025.html,MEM,Memphis Grizzlies
+Jaren Jackson Jr.,jacksja02,https://www.basketball-reference.com/players/j/jacksja02.html,https://www.basketball-reference.com/teams/MEM/2025.html,MEM,Memphis Grizzlies
+Zach Edey,edeyza01,https://www.basketball-reference.com/players/e/edeyza01.html,https://www.basketball-reference.com/teams/MEM/2025.html,MEM,Memphis Grizzlies
+Santi Aldama,aldamsa01,https://www.basketball-reference.com/players/a/aldamsa01.html,https://www.basketball-reference.com/teams/MEM/2025.html,MEM,Memphis Grizzlies
+Luke Kennard,kennalu01,https://www.basketball-reference.com/players/k/kennalu01.html,https://www.basketball-reference.com/teams/MEM/2025.html,MEM,Memphis Grizzlies
+Brandon Clarke,clarkbr01,https://www.basketball-reference.com/players/c/clarkbr01.html,https://www.basketball-reference.com/teams/MEM/2025.html,MEM,Memphis Grizzlies
+Jay Huff,huffja01,https://www.basketball-reference.com/players/h/huffja01.html,https://www.basketball-reference.com/teams/MEM/2025.html,MEM,Memphis Grizzlies
+Ja Morant,moranja01,https://www.basketball-reference.com/players/m/moranja01.html,https://www.basketball-reference.com/teams/MEM/2025.html,MEM,Memphis Grizzlies
+John Konchar,konchjo01,https://www.basketball-reference.com/players/k/konchjo01.html,https://www.basketball-reference.com/teams/MEM/2025.html,MEM,Memphis Grizzlies
+GG Jackson II,jacksgg01,https://www.basketball-reference.com/players/j/jacksgg01.html,https://www.basketball-reference.com/teams/MEM/2025.html,MEM,Memphis Grizzlies
+Vince Williams Jr.,willivi01,https://www.basketball-reference.com/players/w/willivi01.html,https://www.basketball-reference.com/teams/MEM/2025.html,MEM,Memphis Grizzlies
+Cam Spencer,spencca01,https://www.basketball-reference.com/players/s/spencca01.html,https://www.basketball-reference.com/teams/MEM/2025.html,MEM,Memphis Grizzlies
+Yuki Kawamura,kawamyu01,https://www.basketball-reference.com/players/k/kawamyu01.html,https://www.basketball-reference.com/teams/MEM/2025.html,MEM,Memphis Grizzlies
+Lamar Stevens,stevela01,https://www.basketball-reference.com/players/s/stevela01.html,https://www.basketball-reference.com/teams/MEM/2025.html,MEM,Memphis Grizzlies
+Marvin Bagley III,baglema01,https://www.basketball-reference.com/players/b/baglema01.html,https://www.basketball-reference.com/teams/MEM/2025.html,MEM,Memphis Grizzlies
+Zyon Pullin,pullizy01,https://www.basketball-reference.com/players/p/pullizy01.html,https://www.basketball-reference.com/teams/MEM/2025.html,MEM,Memphis Grizzlies
+Keon Ellis,elliske01,https://www.basketball-reference.com/players/e/elliske01.html,https://www.basketball-reference.com/teams/SAC/2025.html,SAC,Sacramento Kings
+DeMar DeRozan,derozde01,https://www.basketball-reference.com/players/d/derozde01.html,https://www.basketball-reference.com/teams/SAC/2025.html,SAC,Sacramento Kings
+Keegan Murray,murrake02,https://www.basketball-reference.com/players/m/murrake02.html,https://www.basketball-reference.com/teams/SAC/2025.html,SAC,Sacramento Kings
+Domantas Sabonis,sabondo01,https://www.basketball-reference.com/players/s/sabondo01.html,https://www.basketball-reference.com/teams/SAC/2025.html,SAC,Sacramento Kings
+Trey Lyles,lylestr01,https://www.basketball-reference.com/players/l/lylestr01.html,https://www.basketball-reference.com/teams/SAC/2025.html,SAC,Sacramento Kings
+Malik Monk,monkma01,https://www.basketball-reference.com/players/m/monkma01.html,https://www.basketball-reference.com/teams/SAC/2025.html,SAC,Sacramento Kings
+Doug McDermott,mcderdo01,https://www.basketball-reference.com/players/m/mcderdo01.html,https://www.basketball-reference.com/teams/SAC/2025.html,SAC,Sacramento Kings
+Isaac Jones,jonesis01,https://www.basketball-reference.com/players/j/jonesis01.html,https://www.basketball-reference.com/teams/SAC/2025.html,SAC,Sacramento Kings
+Devin Carter,cartede02,https://www.basketball-reference.com/players/c/cartede02.html,https://www.basketball-reference.com/teams/SAC/2025.html,SAC,Sacramento Kings
+Zach LaVine,lavinza01,https://www.basketball-reference.com/players/l/lavinza01.html,https://www.basketball-reference.com/teams/SAC/2025.html,SAC,Sacramento Kings
+Jonas Valančiūnas,valanjo01,https://www.basketball-reference.com/players/v/valanjo01.html,https://www.basketball-reference.com/teams/SAC/2025.html,SAC,Sacramento Kings
+Markelle Fultz,fultzma01,https://www.basketball-reference.com/players/f/fultzma01.html,https://www.basketball-reference.com/teams/SAC/2025.html,SAC,Sacramento Kings
+Jake LaRavia,laravja01,https://www.basketball-reference.com/players/l/laravja01.html,https://www.basketball-reference.com/teams/SAC/2025.html,SAC,Sacramento Kings
+Isaiah Crawford,crawfis01,https://www.basketball-reference.com/players/c/crawfis01.html,https://www.basketball-reference.com/teams/SAC/2025.html,SAC,Sacramento Kings
+Mason Jones,jonesma05,https://www.basketball-reference.com/players/j/jonesma05.html,https://www.basketball-reference.com/teams/SAC/2025.html,SAC,Sacramento Kings
+Jae Crowder,crowdja01,https://www.basketball-reference.com/players/c/crowdja01.html,https://www.basketball-reference.com/teams/SAC/2025.html,SAC,Sacramento Kings
+Terence Davis,daviste02,https://www.basketball-reference.com/players/d/daviste02.html,https://www.basketball-reference.com/teams/SAC/2025.html,SAC,Sacramento Kings
+Spencer Dinwiddie,dinwisp01,https://www.basketball-reference.com/players/d/dinwisp01.html,https://www.basketball-reference.com/teams/DAL/2025.html,DAL,Dallas Mavericks
+Klay Thompson,thompkl01,https://www.basketball-reference.com/players/t/thompkl01.html,https://www.basketball-reference.com/teams/DAL/2025.html,DAL,Dallas Mavericks
+Naji Marshall,marshna01,https://www.basketball-reference.com/players/m/marshna01.html,https://www.basketball-reference.com/teams/DAL/2025.html,DAL,Dallas Mavericks
+P.J. Washington,washipj01,https://www.basketball-reference.com/players/w/washipj01.html,https://www.basketball-reference.com/teams/DAL/2025.html,DAL,Dallas Mavericks
+Daniel Gafford,gaffoda01,https://www.basketball-reference.com/players/g/gaffoda01.html,https://www.basketball-reference.com/teams/DAL/2025.html,DAL,Dallas Mavericks
+Jaden Hardy,hardyja02,https://www.basketball-reference.com/players/h/hardyja02.html,https://www.basketball-reference.com/teams/DAL/2025.html,DAL,Dallas Mavericks
+Dwight Powell,poweldw01,https://www.basketball-reference.com/players/p/poweldw01.html,https://www.basketball-reference.com/teams/DAL/2025.html,DAL,Dallas Mavericks
+Olivier-Maxence Prosper,prospol01,https://www.basketball-reference.com/players/p/prospol01.html,https://www.basketball-reference.com/teams/DAL/2025.html,DAL,Dallas Mavericks
+Kyrie Irving,irvinky01,https://www.basketball-reference.com/players/i/irvinky01.html,https://www.basketball-reference.com/teams/DAL/2025.html,DAL,Dallas Mavericks
+Kessler Edwards,edwarke02,https://www.basketball-reference.com/players/e/edwarke02.html,https://www.basketball-reference.com/teams/DAL/2025.html,DAL,Dallas Mavericks
+Dereck Lively II,livelde01,https://www.basketball-reference.com/players/l/livelde01.html,https://www.basketball-reference.com/teams/DAL/2025.html,DAL,Dallas Mavericks
+Brandon Williams,willibr03,https://www.basketball-reference.com/players/w/willibr03.html,https://www.basketball-reference.com/teams/DAL/2025.html,DAL,Dallas Mavericks
+Max Christie,chrisma02,https://www.basketball-reference.com/players/c/chrisma02.html,https://www.basketball-reference.com/teams/DAL/2025.html,DAL,Dallas Mavericks
+Dante Exum,exumda01,https://www.basketball-reference.com/players/e/exumda01.html,https://www.basketball-reference.com/teams/DAL/2025.html,DAL,Dallas Mavericks
+Caleb Martin,martica02,https://www.basketball-reference.com/players/m/martica02.html,https://www.basketball-reference.com/teams/DAL/2025.html,DAL,Dallas Mavericks
+Kai Jones,joneska01,https://www.basketball-reference.com/players/j/joneska01.html,https://www.basketball-reference.com/teams/DAL/2025.html,DAL,Dallas Mavericks
+Anthony Davis,davisan02,https://www.basketball-reference.com/players/d/davisan02.html,https://www.basketball-reference.com/teams/DAL/2025.html,DAL,Dallas Mavericks
+Tyus Jones,jonesty01,https://www.basketball-reference.com/players/j/jonesty01.html,https://www.basketball-reference.com/teams/PHO/2025.html,PHO,Phoenix Suns
+Devin Booker,bookede01,https://www.basketball-reference.com/players/b/bookede01.html,https://www.basketball-reference.com/teams/PHO/2025.html,PHO,Phoenix Suns
+Royce O'Neale,onealro01,https://www.basketball-reference.com/players/o/onealro01.html,https://www.basketball-reference.com/teams/PHO/2025.html,PHO,Phoenix Suns
+Ryan Dunn,dunnry01,https://www.basketball-reference.com/players/d/dunnry01.html,https://www.basketball-reference.com/teams/PHO/2025.html,PHO,Phoenix Suns
+Mason Plumlee,plumlma01,https://www.basketball-reference.com/players/p/plumlma01.html,https://www.basketball-reference.com/teams/PHO/2025.html,PHO,Phoenix Suns
+Grayson Allen,allengr01,https://www.basketball-reference.com/players/a/allengr01.html,https://www.basketball-reference.com/teams/PHO/2025.html,PHO,Phoenix Suns
+Kevin Durant,duranke01,https://www.basketball-reference.com/players/d/duranke01.html,https://www.basketball-reference.com/teams/PHO/2025.html,PHO,Phoenix Suns
+Oso Ighodaro,ighodos01,https://www.basketball-reference.com/players/i/ighodos01.html,https://www.basketball-reference.com/teams/PHO/2025.html,PHO,Phoenix Suns
+Bradley Beal,bealbr01,https://www.basketball-reference.com/players/b/bealbr01.html,https://www.basketball-reference.com/teams/PHO/2025.html,PHO,Phoenix Suns
+Monte Morris,morrimo01,https://www.basketball-reference.com/players/m/morrimo01.html,https://www.basketball-reference.com/teams/PHO/2025.html,PHO,Phoenix Suns
+Nick Richards,richani01,https://www.basketball-reference.com/players/r/richani01.html,https://www.basketball-reference.com/teams/PHO/2025.html,PHO,Phoenix Suns
+Bol Bol,bolbo01,https://www.basketball-reference.com/players/b/bolbo01.html,https://www.basketball-reference.com/teams/PHO/2025.html,PHO,Phoenix Suns
+Collin Gillespie,gilleco01,https://www.basketball-reference.com/players/g/gilleco01.html,https://www.basketball-reference.com/teams/PHO/2025.html,PHO,Phoenix Suns
+Damion Lee,leeda03,https://www.basketball-reference.com/players/l/leeda03.html,https://www.basketball-reference.com/teams/PHO/2025.html,PHO,Phoenix Suns
+TyTy Washington Jr.,washity02,https://www.basketball-reference.com/players/w/washity02.html,https://www.basketball-reference.com/teams/PHO/2025.html,PHO,Phoenix Suns
+Cody Martin,martico01,https://www.basketball-reference.com/players/m/martico01.html,https://www.basketball-reference.com/teams/PHO/2025.html,PHO,Phoenix Suns
+Jalen Bridges,bridgja01,https://www.basketball-reference.com/players/b/bridgja01.html,https://www.basketball-reference.com/teams/PHO/2025.html,PHO,Phoenix Suns
+Toumani Camara,camarto01,https://www.basketball-reference.com/players/c/camarto01.html,https://www.basketball-reference.com/teams/POR/2025.html,POR,Portland Trail Blazers
+Shaedon Sharpe,sharpsh01,https://www.basketball-reference.com/players/s/sharpsh01.html,https://www.basketball-reference.com/teams/POR/2025.html,POR,Portland Trail Blazers
+Deni Avdija,avdijde01,https://www.basketball-reference.com/players/a/avdijde01.html,https://www.basketball-reference.com/teams/POR/2025.html,POR,Portland Trail Blazers
+Anfernee Simons,simonan01,https://www.basketball-reference.com/players/s/simonan01.html,https://www.basketball-reference.com/teams/POR/2025.html,POR,Portland Trail Blazers
+Kris Murray,murrakr01,https://www.basketball-reference.com/players/m/murrakr01.html,https://www.basketball-reference.com/teams/POR/2025.html,POR,Portland Trail Blazers
+Dalano Banton,bantoda01,https://www.basketball-reference.com/players/b/bantoda01.html,https://www.basketball-reference.com/teams/POR/2025.html,POR,Portland Trail Blazers
+Donovan Clingan,clingdo01,https://www.basketball-reference.com/players/c/clingdo01.html,https://www.basketball-reference.com/teams/POR/2025.html,POR,Portland Trail Blazers
+Scoot Henderson,hendesc01,https://www.basketball-reference.com/players/h/hendesc01.html,https://www.basketball-reference.com/teams/POR/2025.html,POR,Portland Trail Blazers
+Jabari Walker,walkeja01,https://www.basketball-reference.com/players/w/walkeja01.html,https://www.basketball-reference.com/teams/POR/2025.html,POR,Portland Trail Blazers
+Rayan Rupert,ruperra01,https://www.basketball-reference.com/players/r/ruperra01.html,https://www.basketball-reference.com/teams/POR/2025.html,POR,Portland Trail Blazers
+Jerami Grant,grantje01,https://www.basketball-reference.com/players/g/grantje01.html,https://www.basketball-reference.com/teams/POR/2025.html,POR,Portland Trail Blazers
+Duop Reath,reathdu01,https://www.basketball-reference.com/players/r/reathdu01.html,https://www.basketball-reference.com/teams/POR/2025.html,POR,Portland Trail Blazers
+Deandre Ayton,aytonde01,https://www.basketball-reference.com/players/a/aytonde01.html,https://www.basketball-reference.com/teams/POR/2025.html,POR,Portland Trail Blazers
+Robert Williams,williro04,https://www.basketball-reference.com/players/w/williro04.html,https://www.basketball-reference.com/teams/POR/2025.html,POR,Portland Trail Blazers
+Justin Minaya,minayju01,https://www.basketball-reference.com/players/m/minayju01.html,https://www.basketball-reference.com/teams/POR/2025.html,POR,Portland Trail Blazers
+Matisse Thybulle,thybuma01,https://www.basketball-reference.com/players/t/thybuma01.html,https://www.basketball-reference.com/teams/POR/2025.html,POR,Portland Trail Blazers
+Bryce McGowens,mcgowbr01,https://www.basketball-reference.com/players/m/mcgowbr01.html,https://www.basketball-reference.com/teams/POR/2025.html,POR,Portland Trail Blazers
+Sidy Cissoko,cissosi01,https://www.basketball-reference.com/players/c/cissosi01.html,https://www.basketball-reference.com/teams/POR/2025.html,POR,Portland Trail Blazers
+Harrison Barnes,barneha02,https://www.basketball-reference.com/players/b/barneha02.html,https://www.basketball-reference.com/teams/SAS/2025.html,SAS,San Antonio Spurs
+Julian Champagnie,champju02,https://www.basketball-reference.com/players/c/champju02.html,https://www.basketball-reference.com/teams/SAS/2025.html,SAS,San Antonio Spurs
+Chris Paul,paulch01,https://www.basketball-reference.com/players/p/paulch01.html,https://www.basketball-reference.com/teams/SAS/2025.html,SAS,San Antonio Spurs
+Stephon Castle,castlst01,https://www.basketball-reference.com/players/c/castlst01.html,https://www.basketball-reference.com/teams/SAS/2025.html,SAS,San Antonio Spurs
+Keldon Johnson,johnske04,https://www.basketball-reference.com/players/j/johnske04.html,https://www.basketball-reference.com/teams/SAS/2025.html,SAS,San Antonio Spurs
+Devin Vassell,vassede01,https://www.basketball-reference.com/players/v/vassede01.html,https://www.basketball-reference.com/teams/SAS/2025.html,SAS,San Antonio Spurs
+Sandro Mamukelashvili,mamuksa01,https://www.basketball-reference.com/players/m/mamuksa01.html,https://www.basketball-reference.com/teams/SAS/2025.html,SAS,San Antonio Spurs
+Blake Wesley,weslebl01,https://www.basketball-reference.com/players/w/weslebl01.html,https://www.basketball-reference.com/teams/SAS/2025.html,SAS,San Antonio Spurs
+Jeremy Sochan,sochaje01,https://www.basketball-reference.com/players/s/sochaje01.html,https://www.basketball-reference.com/teams/SAS/2025.html,SAS,San Antonio Spurs
+Malaki Branham,branhma01,https://www.basketball-reference.com/players/b/branhma01.html,https://www.basketball-reference.com/teams/SAS/2025.html,SAS,San Antonio Spurs
+Victor Wembanyama,wembavi01,https://www.basketball-reference.com/players/w/wembavi01.html,https://www.basketball-reference.com/teams/SAS/2025.html,SAS,San Antonio Spurs
+Charles Bassey,bassech01,https://www.basketball-reference.com/players/b/bassech01.html,https://www.basketball-reference.com/teams/SAS/2025.html,SAS,San Antonio Spurs
+Bismack Biyombo,biyombi01,https://www.basketball-reference.com/players/b/biyombi01.html,https://www.basketball-reference.com/teams/SAS/2025.html,SAS,San Antonio Spurs
+Jordan McLaughlin,mclaujo01,https://www.basketball-reference.com/players/m/mclaujo01.html,https://www.basketball-reference.com/teams/SAS/2025.html,SAS,San Antonio Spurs
+De'Aaron Fox,foxde01,https://www.basketball-reference.com/players/f/foxde01.html,https://www.basketball-reference.com/teams/SAS/2025.html,SAS,San Antonio Spurs
+David Duke Jr.,dukeda01,https://www.basketball-reference.com/players/d/dukeda01.html,https://www.basketball-reference.com/teams/SAS/2025.html,SAS,San Antonio Spurs
+Harrison Ingram,ingraha01,https://www.basketball-reference.com/players/i/ingraha01.html,https://www.basketball-reference.com/teams/SAS/2025.html,SAS,San Antonio Spurs
+Riley Minix,minixri01,https://www.basketball-reference.com/players/m/minixri01.html,https://www.basketball-reference.com/teams/SAS/2025.html,SAS,San Antonio Spurs
+Yves Missi,missiyv01,https://www.basketball-reference.com/players/m/missiyv01.html,https://www.basketball-reference.com/teams/NOP/2025.html,NOP,New Orleans Pelicans
+Jeremiah Robinson-Earl,robinje02,https://www.basketball-reference.com/players/r/robinje02.html,https://www.basketball-reference.com/teams/NOP/2025.html,NOP,New Orleans Pelicans
+CJ McCollum,mccolcj01,https://www.basketball-reference.com/players/m/mccolcj01.html,https://www.basketball-reference.com/teams/NOP/2025.html,NOP,New Orleans Pelicans
+Jordan Hawkins,hawkijo01,https://www.basketball-reference.com/players/h/hawkijo01.html,https://www.basketball-reference.com/teams/NOP/2025.html,NOP,New Orleans Pelicans
+Jose Alvarado,alvarjo01,https://www.basketball-reference.com/players/a/alvarjo01.html,https://www.basketball-reference.com/teams/NOP/2025.html,NOP,New Orleans Pelicans
+Trey Murphy III,murphtr02,https://www.basketball-reference.com/players/m/murphtr02.html,https://www.basketball-reference.com/teams/NOP/2025.html,NOP,New Orleans Pelicans
+Antonio Reeves,reevean01,https://www.basketball-reference.com/players/r/reevean01.html,https://www.basketball-reference.com/teams/NOP/2025.html,NOP,New Orleans Pelicans
+Brandon Boston Jr.,bostobr01,https://www.basketball-reference.com/players/b/bostobr01.html,https://www.basketball-reference.com/teams/NOP/2025.html,NOP,New Orleans Pelicans
+Karlo Matković,matkoka01,https://www.basketball-reference.com/players/m/matkoka01.html,https://www.basketball-reference.com/teams/NOP/2025.html,NOP,New Orleans Pelicans
+Jamal Cain,cainja01,https://www.basketball-reference.com/players/c/cainja01.html,https://www.basketball-reference.com/teams/NOP/2025.html,NOP,New Orleans Pelicans
+Dejounte Murray,murrade01,https://www.basketball-reference.com/players/m/murrade01.html,https://www.basketball-reference.com/teams/NOP/2025.html,NOP,New Orleans Pelicans
+Zion Williamson,willizi01,https://www.basketball-reference.com/players/w/willizi01.html,https://www.basketball-reference.com/teams/NOP/2025.html,NOP,New Orleans Pelicans
+Bruce Brown,brownbr01,https://www.basketball-reference.com/players/b/brownbr01.html,https://www.basketball-reference.com/teams/NOP/2025.html,NOP,New Orleans Pelicans
+Kelly Olynyk,olynyke01,https://www.basketball-reference.com/players/o/olynyke01.html,https://www.basketball-reference.com/teams/NOP/2025.html,NOP,New Orleans Pelicans
+Herbert Jones,joneshe01,https://www.basketball-reference.com/players/j/joneshe01.html,https://www.basketball-reference.com/teams/NOP/2025.html,NOP,New Orleans Pelicans
+Elfrid Payton,paytoel01,https://www.basketball-reference.com/players/p/paytoel01.html,https://www.basketball-reference.com/teams/NOP/2025.html,NOP,New Orleans Pelicans
+Keion Brooks Jr.,brookke02,https://www.basketball-reference.com/players/b/brookke02.html,https://www.basketball-reference.com/teams/NOP/2025.html,NOP,New Orleans Pelicans
+Lester Quiñones,quinole01,https://www.basketball-reference.com/players/q/quinole01.html,https://www.basketball-reference.com/teams/NOP/2025.html,NOP,New Orleans Pelicans
+Kylor Kelley,kelleky01,https://www.basketball-reference.com/players/k/kelleky01.html,https://www.basketball-reference.com/teams/NOP/2025.html,NOP,New Orleans Pelicans
+Kyle Filipowski,filipky01,https://www.basketball-reference.com/players/f/filipky01.html,https://www.basketball-reference.com/teams/UTA/2025.html,UTA,Utah Jazz
+Brice Sensabaugh,sensabr01,https://www.basketball-reference.com/players/s/sensabr01.html,https://www.basketball-reference.com/teams/UTA/2025.html,UTA,Utah Jazz
+Isaiah Collier,colliis01,https://www.basketball-reference.com/players/c/colliis01.html,https://www.basketball-reference.com/teams/UTA/2025.html,UTA,Utah Jazz
+Keyonte George,georgke01,https://www.basketball-reference.com/players/g/georgke01.html,https://www.basketball-reference.com/teams/UTA/2025.html,UTA,Utah Jazz
+Johnny Juzang,juzanjo01,https://www.basketball-reference.com/players/j/juzanjo01.html,https://www.basketball-reference.com/teams/UTA/2025.html,UTA,Utah Jazz
+Collin Sexton,sextoco01,https://www.basketball-reference.com/players/s/sextoco01.html,https://www.basketball-reference.com/teams/UTA/2025.html,UTA,Utah Jazz
+Walker Kessler,kesslwa01,https://www.basketball-reference.com/players/k/kesslwa01.html,https://www.basketball-reference.com/teams/UTA/2025.html,UTA,Utah Jazz
+Cody Williams,willico04,https://www.basketball-reference.com/players/w/willico04.html,https://www.basketball-reference.com/teams/UTA/2025.html,UTA,Utah Jazz
+Lauri Markkanen,markkla01,https://www.basketball-reference.com/players/m/markkla01.html,https://www.basketball-reference.com/teams/UTA/2025.html,UTA,Utah Jazz
+John Collins,collijo01,https://www.basketball-reference.com/players/c/collijo01.html,https://www.basketball-reference.com/teams/UTA/2025.html,UTA,Utah Jazz
+Svi Mykhailiuk,mykhasv01,https://www.basketball-reference.com/players/m/mykhasv01.html,https://www.basketball-reference.com/teams/UTA/2025.html,UTA,Utah Jazz
+Micah Potter,pottemi01,https://www.basketball-reference.com/players/p/pottemi01.html,https://www.basketball-reference.com/teams/UTA/2025.html,UTA,Utah Jazz
+Jordan Clarkson,clarkjo01,https://www.basketball-reference.com/players/c/clarkjo01.html,https://www.basketball-reference.com/teams/UTA/2025.html,UTA,Utah Jazz
+KJ Martin,martike04,https://www.basketball-reference.com/players/m/martike04.html,https://www.basketball-reference.com/teams/UTA/2025.html,UTA,Utah Jazz
+Jaden Springer,sprinja01,https://www.basketball-reference.com/players/s/sprinja01.html,https://www.basketball-reference.com/teams/UTA/2025.html,UTA,Utah Jazz
+Oscar Tshiebwe,tshieos01,https://www.basketball-reference.com/players/t/tshieos01.html,https://www.basketball-reference.com/teams/UTA/2025.html,UTA,Utah Jazz
+Elijah Harkless,harklej01,https://www.basketball-reference.com/players/h/harklej01.html,https://www.basketball-reference.com/teams/UTA/2025.html,UTA,Utah Jazz
+Taylor Hendricks,hendrta01,https://www.basketball-reference.com/players/h/hendrta01.html,https://www.basketball-reference.com/teams/UTA/2025.html,UTA,Utah Jazz

@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres-crm
+    environment:
+      POSTGRES_USER: crm_user
+      POSTGRES_PASSWORD: crm_pass
+      POSTGRES_DB: crm_db
+    ports:
+      - "3000:3000"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

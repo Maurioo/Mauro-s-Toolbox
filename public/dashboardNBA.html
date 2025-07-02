@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NBA Dashboard – Simulated CRM</title>
+    <link href="https://fonts.googleapis.com/css?family=Oswald:700|Roboto:400&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #17408B 0%, #C9082A 100%);
+            color: #fff;
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+        }
+        header {
+            background: #fff;
+            padding: 1.5rem 0 1rem 0;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        .basketball-icon {
+            position: absolute;
+            left: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px;
+            height: 60px;
+        }
+        h1 {
+            font-family: 'Oswald', Arial, sans-serif;
+            color: #17408B;
+            font-size: 2.8rem;
+            letter-spacing: 2px;
+            margin: 0;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 0 #C9082A, 4px 4px 0 #fff;
+        }
+        main {
+            width: 100vw;
+            max-width: 100vw;
+            background: rgba(23, 64, 139, 0.95);
+            margin: 0;
+            border-radius: 0;
+            box-shadow: none;
+            padding: 2rem 2vw;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: space-between;
+        }
+        section {
+            flex: 1 1 400px;
+            min-width: 350px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 2rem 2rem 2.5rem 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+            margin-bottom: 2rem;
+        }
+        h2 {
+            font-family: 'Oswald', Arial, sans-serif;
+            text-transform: uppercase;
+            font-size: 2rem;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 0 #fff;
+            background: #C9082A;
+            color: #fff;
+            padding: 0.7rem 2rem;
+            border-radius: 8px;
+            display: inline-block;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(23,64,139,0.10);
+        }
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            align-items: center;
+        }
+        .filter-input {
+            font-family: 'Oswald', Arial, sans-serif;
+            font-size: 1.1rem;
+            background: #fff;
+            color: #17408B;
+            border: none;
+            border-radius: 6px;
+            padding: 0.6rem 1.2rem;
+            min-width: 180px;
+            box-shadow: 0 2px 8px rgba(23,64,139,0.10);
+            position: relative;
+        }
+        .autocomplete-list {
+            position: absolute;
+            z-index: 10;
+            background: #fff;
+            color: #17408B;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 4px 16px rgba(23,64,139,0.15);
+            width: 100%;
+            max-height: 220px;
+            overflow-y: auto;
+            margin-top: -2px;
+        }
+        .autocomplete-item {
+            padding: 0.6rem 1.2rem;
+            cursor: pointer;
+            font-family: 'Oswald', Arial, sans-serif;
+            font-size: 1.05rem;
+        }
+        .autocomplete-item:hover, .autocomplete-item.active {
+            background: #C9082A;
+            color: #fff;
+        }
+        .filter-group {
+            position: relative;
+            display: inline-block;
+        }
+        .filter-btn, .filter-select {
+            font-family: 'Oswald', Arial, sans-serif;
+            font-size: 1.1rem;
+            background: #fff;
+            color: #17408B;
+            border: none;
+            border-radius: 6px;
+            padding: 0.6rem 1.2rem;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(23,64,139,0.10);
+        }
+        .filter-btn.active, .filter-btn:hover {
+            background: #C9082A;
+            color: #fff;
+        }
+        .filter-select {
+            padding: 0.6rem 1.2rem;
+            min-width: 120px;
+        }
+        .stats-list, .trends-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .stats-list li, .trends-list li {
+            display: grid;
+            grid-template-columns: 2.5fr 1.5fr 1fr;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            background: rgba(255,255,255,0.13);
+            padding: 0.9rem 1.2rem;
+            border-radius: 8px;
+            font-family: 'Roboto', Arial, sans-serif;
+            box-shadow: 0 1px 4px rgba(23,64,139,0.08);
+            cursor: pointer;
+            transition: background 0.15s, box-shadow 0.15s;
+        }
+        .stats-list li:hover, .stats-list li.active {
+            background: #C9082A;
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(23,64,139,0.18);
+        }
+        .player-name {
+            font-weight: bold;
+            color: #fff;
+            font-family: 'Oswald', Arial, sans-serif;
+            font-size: 1.1em;
+        }
+        .player-value {
+            color: #FFD700;
+            font-family: 'Oswald', Arial, sans-serif;
+            font-size: 1.1em;
+        }
+        .player-team {
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+            min-width: 120px;
+            justify-content: flex-start;
+            max-width: 220px;
+            flex-shrink: 0;
+        }
+        .team-emblem {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-block;
+            border: 2px solid #fff;
+            margin-right: 0.3em;
+            box-shadow: 0 1px 4px rgba(23,64,139,0.10);
+            min-width: 24px;
+            min-height: 24px;
+        }
+        .ai-note {
+            font-size: 1rem;
+            color: #fff;
+            margin-top: 1rem;
+            background: rgba(23,64,139,0.15);
+            padding: 0.7rem 1.2rem;
+            border-radius: 6px;
+            line-height: 1.5;
+        }
+        #statChart {
+            flex: 1 1 500px;
+            min-width: 320px;
+            max-width: 900px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(23,64,139,0.10);
+            margin-bottom: 0;
+        }
+        .chart-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            justify-content: flex-start;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .back-btn {
+            background:#C9082A;
+            color:#fff;
+            font-family:'Oswald',Arial,sans-serif;
+            font-size:1.2rem;
+            border:none;
+            padding:0.8rem 2.2rem;
+            border-radius:8px;
+            box-shadow:0 2px 8px rgba(23,64,139,0.10);
+            cursor:pointer;
+            letter-spacing:1px;
+            margin-left:2rem;
+            margin-top:0;
+            align-self: flex-start;
+        }
+        @media (max-width: 1200px) {
+            main {
+                flex-direction: column;
+                padding: 1rem;
+            }
+        }
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+            h2 {
+                font-size: 1.1rem;
+            }
+            section {
+                padding: 1rem;
+            }
+        }
+        .trends-list li {
+            cursor: pointer;
+            transition: background 0.15s, box-shadow 0.15s;
+        }
+        .trends-list li:hover, .trends-list li.active {
+            background: #C9082A;
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(23,64,139,0.18);
+        }
+        .trends-chart-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            justify-content: flex-start;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        #trendsStatChart {
+            flex: 1 1 500px;
+            min-width: 320px;
+            max-width: 900px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(23,64,139,0.10);
+            margin-bottom: 0;
+        }
+        .trends-back-btn {
+            background:#C9082A;
+            color:#fff;
+            font-family:'Oswald',Arial,sans-serif;
+            font-size:1.2rem;
+            border:none;
+            padding:0.8rem 2.2rem;
+            border-radius:8px;
+            box-shadow:0 2px 8px rgba(23,64,139,0.10);
+            cursor:pointer;
+            letter-spacing:1px;
+            margin-left:2rem;
+            margin-top:0;
+            align-self: flex-start;
+        }
+        .trends-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            align-items: center;
+        }
+        .trends-filter-btn {
+            font-family: 'Oswald', Arial, sans-serif;
+            font-size: 1.1rem;
+            background: #fff;
+            color: #17408B;
+            border: none;
+            border-radius: 6px;
+            padding: 0.6rem 1.2rem;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(23,64,139,0.10);
+        }
+        .trends-filter-btn.active, .trends-filter-btn:hover {
+            background: #C9082A;
+            color: #fff;
+        }
+        .trends-back-btn {
+            background:#C9082A;
+            color:#fff;
+            font-family:'Oswald',Arial,sans-serif;
+            font-size:1.5rem;
+            font-weight: bold;
+            border:none;
+            padding:1.2rem 3rem;
+            border-radius:12px;
+            box-shadow:0 4px 16px rgba(23,64,139,0.18);
+            cursor:pointer;
+            letter-spacing:1px;
+            margin-left:2rem;
+            margin-top:0;
+            align-self: flex-start;
+            border: 3px solid #fff;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <!-- Basketball SVG Icon -->
+        <svg class="basketball-icon" viewBox="0 0 64 64">
+            <circle cx="32" cy="32" r="30" fill="#F58220" stroke="#C9082A" stroke-width="4"/>
+            <path d="M32 2 A30 30 0 0 1 32 62" stroke="#C9082A" stroke-width="3" fill="none"/>
+            <path d="M2 32 A30 30 0 0 1 62 32" stroke="#C9082A" stroke-width="3" fill="none"/>
+            <path d="M12 12 Q32 32 52 52" stroke="#C9082A" stroke-width="2" fill="none"/>
+            <path d="M52 12 Q32 32 12 52" stroke="#C9082A" stroke-width="2" fill="none"/>
+        </svg>
+        <h1>NBA Dashboard</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Overzicht Statistieken</h2>
+            <div class="filters">
+                <button class="filter-btn" data-stat="PPG">PPG</button>
+                <button class="filter-btn" data-stat="RPG">RPG</button>
+                <button class="filter-btn" data-stat="APG">APG</button>
+                <button class="filter-btn" data-stat="TP">TP</button>
+                <button class="filter-btn" data-stat="TR">TR</button>
+                <button class="filter-btn" data-stat="TA">TA</button>
+                <button class="filter-btn" data-stat="MPG">MP</button>
+                <div class="filter-group" style="min-width:200px;">
+                    <input class="filter-input" id="team-filter" placeholder="Zoek team..." autocomplete="off" />
+                    <div id="team-autocomplete" class="autocomplete-list" style="display:none;"></div>
+                </div>
+                <div class="filter-group" style="min-width:200px;">
+                    <input class="filter-input" id="player-filter" placeholder="Zoek speler..." autocomplete="off" />
+                    <div id="player-autocomplete" class="autocomplete-list" style="display:none;"></div>
+                </div>
+            </div>
+            <ul class="stats-list" id="stats-list">
+                <li>Bezig met laden...</li>
+            </ul>
+            <div class="chart-row" id="chart-row" style="display:none;">
+                <canvas id="statChart"></canvas>
+                <button class="back-btn" id="back-btn" onclick="hideChart()">Terug</button>
+            </div>
+        </section>
+        <section>
+            <h2>Trends: Top 10 per Stat</h2>
+            <div class="trends-filters">
+                <button class="trends-filter-btn" data-stat="PPG">PPG</button>
+                <button class="trends-filter-btn" data-stat="RPG">RPG</button>
+                <button class="trends-filter-btn" data-stat="APG">APG</button>
+                <button class="trends-filter-btn" data-stat="TP">TP</button>
+                <button class="trends-filter-btn" data-stat="TR">TR</button>
+                <button class="trends-filter-btn" data-stat="TA">TA</button>
+                <button class="trends-filter-btn" data-stat="MPG">MP</button>
+            </div>
+            <ul class="trends-list" id="trends-list">
+                <li>Bezig met laden...</li>
+            </ul>
+            <div class="trends-chart-row" id="trends-chart-row" style="display:none;">
+                <canvas id="trendsStatChart"></canvas>
+                <button class="trends-back-btn" id="trends-back-btn" onclick="hideTrendsChart()">Terug</button>
+            </div>
+            <div class="ai-note" id="ai-note">
+                De AI analyseert de prestaties en trends van spelers op basis van de meest recente wedstrijden.
+            </div>
+        </section>
+    </main>
+    <div style="width:100%;display:flex;justify-content:flex-start;margin:2rem 0 0 2vw;">
+        <button onclick="window.location.href='index.html'" style="background:#C9082A;color:#fff;font-family:'Oswald',Arial,sans-serif;font-size:1.2rem;border:none;padding:0.8rem 2.2rem;border-radius:8px;box-shadow:0 2px 8px rgba(23,64,139,0.10);cursor:pointer;letter-spacing:1px;">Terug</button>
+    </div>
+    <script>
+        // --- Verbeterde NBA Dashboard Logica ---
+        const CSV_URL = '../nba_gamelogs_2025.csv';
+        let playerStats = {};
+        let allPlayers = [];
+        let allTeams = [];
+        let currentStat = 'PPG';
+        let currentTeam = '';
+        let currentPlayer = '';
+        let teamCodeToName = {};
+        let selectedPlayer = null;
+        let selectedTrendsPlayer = null;
+        let currentTrendsStat = 'PPG';
+
+        // NBA teamkleuren mapping (voorbeeld, voeg meer teams toe indien gewenst)
+        const TEAM_COLORS = {
+            ATL: '#E03A3E', BOS: '#007A33', BKN: '#000000', CHA: '#1D1160', CHI: '#CE1141',
+            CLE: '#6F263D', DAL: '#00538C', DEN: '#0E2240', DET: '#C8102E', GSW: '#1D428A',
+            HOU: '#CE1141', IND: '#002D62', LAC: '#C8102E', LAL: '#552583', MEM: '#5D76A9',
+            MIA: '#98002E', MIL: '#00471B', MIN: '#0C2340', NOP: '#0C2340', NYK: '#006BB6',
+            OKC: '#007AC1', ORL: '#0077C0', PHI: '#006BB6', PHO: '#1D1160', POR: '#E03A3E',
+            SAC: '#5A2D81', SAS: '#C4CED4', TOR: '#CE1141', UTA: '#002B5C', WAS: '#002B5C'
+        };
+
+        function parseMinutes(minStr) {
+            if (!minStr) return 0;
+            const [min, sec] = minStr.split(':').map(Number);
+            return min + (sec ? sec/60 : 0);
+        }
+
+        function computeAverages(data) {
+            const stats = {};
+            data.forEach(row => {
+                const name = row['player_name'];
+                const team = row['team_code'];
+                // Per stat apart games tellen
+                const pts = parseFloat(row['PTS']);
+                const trb = parseFloat(row['TRB']);
+                const ast = parseFloat(row['AST']);
+                const mp  = parseMinutes(row['MP']);
+                if (!stats[name]) {
+                    stats[name] = {
+                        games_PTS: 0, PTS: 0,
+                        games_TRB: 0, TRB: 0,
+                        games_AST: 0, AST: 0,
+                        games_MP: 0, MP: 0,
+                        team: team,
+                    };
+                }
+                if (!isNaN(pts)) { stats[name].PTS += pts; stats[name].games_PTS++; }
+                if (!isNaN(trb)) { stats[name].TRB += trb; stats[name].games_TRB++; }
+                if (!isNaN(ast)) { stats[name].AST += ast; stats[name].games_AST++; }
+                if (!isNaN(mp))  { stats[name].MP  += mp;  stats[name].games_MP++; }
+            });
+            Object.keys(stats).forEach(name => {
+                const s = stats[name];
+                s.PPG = s.games_PTS ? +(s.PTS / s.games_PTS).toFixed(1) : 0;
+                s.RPG = s.games_TRB ? +(s.TRB / s.games_TRB).toFixed(1) : 0;
+                s.APG = s.games_AST ? +(s.AST / s.games_AST).toFixed(1) : 0;
+                s.MPG = s.games_MP  ? +(s.MP  / s.games_MP ).toFixed(1) : 0;
+            });
+            return stats;
+        }
+
+        // Stat mapping voor knoppen
+        const STAT_MAP = {
+            TOP10: 'PPG',
+            PPG: 'PPG',
+            RPG: 'RPG',
+            APG: 'APG',
+            TP: 'PTS',
+            TR: 'TRB',
+            TA: 'AST',
+            MPG: 'MPG'
+        };
+
+        function getLeaders(stats, stat, team = '', player = '') {
+            let arr = Object.entries(stats);
+            if (team) arr = arr.filter(([_, s]) => (teamCodeToName[s.team]||'').toLowerCase().includes(team.toLowerCase()));
+            if (player) arr = arr.filter(([name]) => name.toLowerCase().includes(player.toLowerCase()));
+            return arr.sort((a, b) => (b[1][stat] || 0) - (a[1][stat] || 0)).slice(0, 10);
+        }
+
+        function getRank(stats, stat, playerName, team = '') {
+            let arr = Object.entries(stats);
+            if (team) arr = arr.filter(([_, s]) => (teamCodeToName[s.team]||'').toLowerCase().includes(team.toLowerCase()));
+            arr = arr.sort((a, b) => (b[1][stat] || 0) - (a[1][stat] || 0));
+            const idx = arr.findIndex(([name]) => name === playerName);
+            return idx >= 0 ? idx + 1 : null;
+        }
+
+        function renderStatsList(leaders, stat) {
+            const statsList = document.getElementById('stats-list');
+            statsList.innerHTML = '';
+            leaders.forEach(([name, s], i) => {
+                let value = s[stat] !== undefined ? s[stat] : '-';
+                if (stat === 'TP') value = s.PTS !== undefined ? s.PTS : '-';
+                if (stat === 'TR') value = s.TRB !== undefined ? s.TRB : '-';
+                if (stat === 'TA') value = s.AST !== undefined ? s.AST : '-';
+                const team = s.team || '';
+                const color = TEAM_COLORS[team] || '#888';
+                const teamName = teamCodeToName[team] || team;
+                const rank = getRank(playerStats, stat, name, currentTeam);
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span class="player-name">${rank ? rank + '.' : ''} ${name}</span>
+                    <span class="player-team">
+                        <span class='team-emblem' style='background:${color}' title='${teamName}'></span>${teamName}
+                    </span>
+                    <span class="player-value">${value}</span>
+                `;
+                li.onclick = () => {
+                    selectedPlayer = name;
+                    document.querySelectorAll('.stats-list li').forEach(li2 => li2.classList.remove('active'));
+                    li.classList.add('active');
+                    showPlayerChart(name, stat);
+                };
+                statsList.appendChild(li);
+            });
+        }
+
+        function renderChart(leaders, stat) {
+            const ctx = document.getElementById('statChart').getContext('2d');
+            if (window.statChart) window.statChart.destroy();
+            window.statChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: leaders.map(([name]) => name),
+                    datasets: [{
+                        label: stat,
+                        data: leaders.map(([_, s]) => s[stat]),
+                        backgroundColor: '#C9082A',
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: true, text: 'Top 10 spelers (' + stat + ')' }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        function renderTrends(stats) {
+            const trendsList = document.getElementById('trends-list');
+            trendsList.innerHTML = '';
+            let stat = currentTrendsStat;
+            const leaders = getLeaders(stats, stat);
+            leaders.forEach(([name, s], i) => {
+                const team = s.team || '';
+                const color = TEAM_COLORS[team] || '#888';
+                const teamName = teamCodeToName[team] || team;
+                let value = s[stat] !== undefined ? s[stat] : '-';
+                if (stat === 'TP') value = s.PTS !== undefined ? s.PTS : '-';
+                if (stat === 'TR') value = s.TRB !== undefined ? s.TRB : '-';
+                if (stat === 'TA') value = s.AST !== undefined ? s.AST : '-';
+                const rank = getRank(playerStats, stat, name);
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span class=\"player-name\">${rank ? rank + '.' : ''} ${name}</span>
+                    <span class=\"player-team\"><span class='team-emblem' style='background:${color}' title='${teamName}'></span>${teamName}</span>
+                    <span class=\"player-value\">${value}</span>`;
+                li.onclick = () => {
+                    selectedTrendsPlayer = { name, stat };
+                    document.querySelectorAll('.trends-list li').forEach(li2 => li2.classList.remove('active'));
+                    li.classList.add('active');
+                    showTrendsPlayerChart(name, stat);
+                };
+                trendsList.appendChild(li);
+            });
+        }
+
+        function updateDashboard() {
+            const leaders = getLeaders(playerStats, currentStat, currentTeam, currentPlayer);
+            renderStatsList(leaders, currentStat);
+            renderChart(leaders, currentStat);
+            renderTrends(playerStats);
+        }
+
+        function setupFilters() {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.onclick = () => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentStat = btn.getAttribute('data-stat');
+                    updateDashboard();
+                };
+            });
+            // Autocomplete voor teams
+            const teamInput = document.getElementById('team-filter');
+            const teamAuto = document.getElementById('team-autocomplete');
+            teamInput.oninput = function() {
+                currentTeam = this.value;
+                updateDashboard();
+                const matches = Object.values(teamCodeToName).filter(n => n.toLowerCase().includes(this.value.toLowerCase())).slice(0,10);
+                if (this.value && matches.length) {
+                    teamAuto.innerHTML = matches.map(m => `<div class='autocomplete-item'>${m}</div>`).join('');
+                    teamAuto.style.display = '';
+                } else {
+                    teamAuto.style.display = 'none';
+                }
+            };
+            teamAuto.onclick = function(e) {
+                if (e.target.classList.contains('autocomplete-item')) {
+                    teamInput.value = e.target.textContent;
+                    currentTeam = e.target.textContent;
+                    teamAuto.style.display = 'none';
+                    updateDashboard();
+                }
+            };
+            document.addEventListener('click', function(e) {
+                if (!teamInput.contains(e.target) && !teamAuto.contains(e.target)) {
+                    teamAuto.style.display = 'none';
+                }
+            });
+            // Autocomplete voor spelers
+            const playerInput = document.getElementById('player-filter');
+            const playerAuto = document.getElementById('player-autocomplete');
+            playerInput.oninput = function() {
+                currentPlayer = this.value;
+                updateDashboard();
+                const allPlayers = Object.keys(playerStats);
+                const matches = allPlayers.filter(n => n.toLowerCase().includes(this.value.toLowerCase())).slice(0,10);
+                if (this.value && matches.length) {
+                    playerAuto.innerHTML = matches.map(m => `<div class='autocomplete-item'>${m}</div>`).join('');
+                    playerAuto.style.display = '';
+                } else {
+                    playerAuto.style.display = 'none';
+                }
+            };
+            playerAuto.onclick = function(e) {
+                if (e.target.classList.contains('autocomplete-item')) {
+                    playerInput.value = e.target.textContent;
+                    currentPlayer = e.target.textContent;
+                    playerAuto.style.display = 'none';
+                    updateDashboard();
+                }
+            };
+            document.addEventListener('click', function(e) {
+                if (!playerInput.contains(e.target) && !playerAuto.contains(e.target)) {
+                    playerAuto.style.display = 'none';
+                }
+            });
+        }
+
+        function fillFilterOptions(stats) {
+            const teams = Array.from(new Set(Object.values(stats).map(s => s.team))).filter(Boolean).sort();
+            const players = Object.keys(stats).sort();
+            const teamFilter = document.getElementById('team-filter');
+            const playerFilter = document.getElementById('player-filter');
+            teamFilter.innerHTML = '<option value="">Alle teams</option>' + teams.map(t => `<option value="${t}">${t}</option>`).join('');
+            playerFilter.innerHTML = '<option value="">Alle spelers</option>' + players.map(p => `<option value="${p}">${p}</option>`).join('');
+        }
+
+        // Laad teamnamen uit CSV
+        fetch('../nba_2025_teams.csv')
+            .then(r => r.text())
+            .then(text => {
+                const lines = text.trim().split('\n').slice(1);
+                lines.forEach(line => {
+                    const [code, name] = line.split(',');
+                    teamCodeToName[code] = name;
+                });
+            });
+
+        Papa.parse(CSV_URL, {
+            download: true,
+            header: true,
+            complete: function(results) {
+                playerStats = computeAverages(results.data);
+                fillFilterOptions(playerStats);
+                setupFilters();
+                setupTrendsFilters();
+                document.querySelector('.filter-btn[data-stat="PPG"]').classList.add('active');
+                updateDashboard();
+            }
+        });
+
+        function hideChart() {
+            document.getElementById('chart-row').style.display = 'none';
+            selectedPlayer = null;
+            // Verwijder actieve highlight
+            document.querySelectorAll('.stats-list li').forEach(li => li.classList.remove('active'));
+        }
+
+        function showPlayerChart(playerName, stat) {
+            Papa.parse(CSV_URL, {
+                download: true,
+                header: true,
+                complete: function(results) {
+                    const games = results.data.filter(row => row['player_name'] === playerName);
+                    games.sort((a,b) => new Date(a['Date']) - new Date(b['Date']));
+                    let yField = stat;
+                    if (stat === 'TP') yField = 'PTS';
+                    if (stat === 'TR') yField = 'TRB';
+                    if (stat === 'TA') yField = 'AST';
+                    const labels = games.map(g => g['Date']);
+                    const data = games.map(g => parseFloat(g[yField]) || 0);
+                    const ctx = document.getElementById('statChart').getContext('2d');
+                    if (window.statChart) window.statChart.destroy();
+                    if (data.length === 0) {
+                        document.getElementById('chart-row').style.display = '';
+                        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+                        ctx.font = '20px Oswald, Arial, sans-serif';
+                        ctx.fillStyle = '#C9082A';
+                        ctx.fillText('Geen data voor deze speler/stat.', 30, 60);
+                        return;
+                    }
+                    window.statChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: playerName + ' - ' + (yField),
+                                data: data,
+                                borderColor: '#C9082A',
+                                backgroundColor: 'rgba(201,8,42,0.1)',
+                                pointRadius: 3,
+                                pointBackgroundColor: '#17408B',
+                                tension: 0.2
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: { display: true },
+                                title: { display: true, text: playerName + ' - ' + (yField) + ' per game' }
+                            },
+                            scales: {
+                                x: { title: { display: true, text: 'Datum' } },
+                                y: { title: { display: true, text: yField }, beginAtZero: true }
+                            }
+                        }
+                    });
+                    document.getElementById('chart-row').style.display = '';
+                }
+            });
+        }
+
+        function hideTrendsChart() {
+            document.getElementById('trends-chart-row').style.display = 'none';
+            selectedTrendsPlayer = null;
+            document.querySelectorAll('.trends-list li').forEach(li => li.classList.remove('active'));
+        }
+
+        function showTrendsPlayerChart(playerName, stat) {
+            Papa.parse(CSV_URL, {
+                download: true,
+                header: true,
+                complete: function(results) {
+                    const games = results.data.filter(row => row['player_name'] === playerName);
+                    games.sort((a,b) => new Date(a['Date']) - new Date(b['Date']));
+                    let yField = stat;
+                    if (stat === 'TP') yField = 'PTS';
+                    if (stat === 'TR') yField = 'TRB';
+                    if (stat === 'TA') yField = 'AST';
+                    const labels = games.map(g => g['Date']);
+                    const data = games.map(g => parseFloat(g[yField]) || 0);
+                    const ctx = document.getElementById('trendsStatChart').getContext('2d');
+                    if (window.trendsStatChart) window.trendsStatChart.destroy();
+                    if (data.length === 0) {
+                        document.getElementById('trends-chart-row').style.display = '';
+                        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+                        ctx.font = '20px Oswald, Arial, sans-serif';
+                        ctx.fillStyle = '#17408B';
+                        ctx.fillText('Geen data voor deze speler/stat.', 30, 60);
+                        return;
+                    }
+                    window.trendsStatChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: playerName + ' - ' + (yField),
+                                data: data,
+                                borderColor: '#17408B',
+                                backgroundColor: 'rgba(23,64,139,0.1)',
+                                pointRadius: 3,
+                                pointBackgroundColor: '#C9082A',
+                                tension: 0.2
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: { display: true },
+                                title: { display: true, text: playerName + ' - ' + (yField) + ' per game' }
+                            },
+                            scales: {
+                                x: { title: { display: true, text: 'Datum' } },
+                                y: { title: { display: true, text: yField }, beginAtZero: true }
+                            }
+                        }
+                    });
+                    document.getElementById('trends-chart-row').style.display = '';
+                }
+            });
+        }
+
+        function setupTrendsFilters() {
+            document.querySelectorAll('.trends-filter-btn').forEach(btn => {
+                btn.onclick = () => {
+                    document.querySelectorAll('.trends-filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentTrendsStat = btn.getAttribute('data-stat');
+                    renderTrends(playerStats);
+                    hideTrendsChart();
+                };
+            });
+            // Init: active knop
+            document.querySelector('.trends-filter-btn[data-stat="PPG"]').classList.add('active');
+        }
+    </script>
+</body>
+</html>

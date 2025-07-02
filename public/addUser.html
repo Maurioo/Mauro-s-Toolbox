@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nieuwe Gebruiker – Simulated CRM</title>
+  <link href="https://fonts.googleapis.com/css?family=Oswald:700|Roboto:400&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #17408B 0%, #C9082A 100%);
+      color: #fff;
+      font-family: 'Roboto', Arial, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+    }
+    header {
+      background: #fff;
+      padding: 1.5rem 0 1rem 0;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      margin-bottom: 2rem;
+    }
+    h1 {
+      font-family: 'Oswald', Arial, sans-serif;
+      color: #17408B;
+      font-size: 2.2rem;
+      letter-spacing: 2px;
+      margin: 0;
+      text-transform: uppercase;
+      text-shadow: 2px 2px 0 #C9082A, 4px 4px 0 #fff;
+    }
+    main {
+      max-width: 500px;
+      background: rgba(23, 64, 139, 0.95);
+      margin: 2rem auto;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+      padding: 2rem 2.5rem;
+    }
+    label {
+      font-family: 'Oswald', Arial, sans-serif;
+      color: #fff;
+      font-size: 1.1rem;
+      letter-spacing: 1px;
+      margin-bottom: 0.3rem;
+      display: block;
+    }
+    input[type="text"], input[type="email"] {
+      width: 100%;
+      padding: 0.7rem;
+      border-radius: 7px;
+      border: 2px solid #C9082A;
+      margin-bottom: 1.2rem;
+      font-size: 1rem;
+      font-family: 'Roboto', Arial, sans-serif;
+      background: #fff;
+      color: #17408B;
+      box-sizing: border-box;
+      transition: border 0.2s;
+    }
+    input[type="text"]:focus, input[type="email"]:focus {
+      border-color: #17408B;
+      outline: none;
+    }
+    button[type="submit"] {
+      background: #fff;
+      color: #17408B;
+      font-family: 'Oswald', Arial, sans-serif;
+      font-size: 1.1rem;
+      text-decoration: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 8px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+      transition: background 0.2s, color 0.2s, transform 0.2s;
+      border: 2px solid #C9082A;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      margin-bottom: 1.2rem;
+      display: block;
+      width: 100%;
+    }
+    button[type="submit"]:hover {
+      background: #C9082A;
+      color: #fff;
+      transform: translateY(-2px) scale(1.04);
+      border-color: #fff;
+    }
+    a {
+      display: inline-block;
+      background: #fff;
+      color: #17408B;
+      font-family: 'Oswald', Arial, sans-serif;
+      font-size: 1.1rem;
+      text-decoration: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 8px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+      transition: background 0.2s, color 0.2s, transform 0.2s;
+      border: 2px solid #C9082A;
+      margin-top: 1rem;
+    }
+    a:hover {
+      background: #C9082A;
+      color: #fff;
+      transform: translateY(-2px) scale(1.04);
+      border-color: #fff;
+    }
+    @media (max-width: 600px) {
+      main {
+        padding: 1rem;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Voeg een nieuwe gebruiker toe</h1>
+  </header>
+  <main>
+    <form id="addUserForm">
+      <label for="customerId">CustomerID:</label>
+      <input type="text" id="customerId" name="customerId" required />
+      <label for="firstName">Voornaam:</label>
+      <input type="text" id="firstName" name="firstName" required />
+      <label for="lastName">Achternaam:</label>
+      <input type="text" id="lastName" name="lastName" required />
+      <label for="email">E-mailadres:</label>
+      <input type="email" id="email" name="email" required />
+      <button type="submit">Toevoegen</button>
+    </form>
+    <a href="index.html">Terug naar Startpagina</a>
+  </main>
+  <script>
+    document.getElementById("addUserForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const formData = {
+        customerId: document.getElementById("customerId").value,
+        firstName: document.getElementById("firstName").value,
+        lastName: document.getElementById("lastName").value,
+        email: document.getElementById("email").value,
+      };
+      fetch("http://localhost:5000/api/customers", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          alert("Gebruiker opgeslagen!");
+          document.getElementById("addUserForm").reset();
+        })
+        .catch((error) => {
+          alert("Fout bij opslaan!");
+          console.error("Fout bij opslaan:", error);
+        });
+    });
+  </script>
+</body>
+</html>

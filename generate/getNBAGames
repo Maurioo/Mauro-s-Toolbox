@@ -1,0 +1,174 @@
+from playwright.sync_api import sync_playwright
+import pandas as pd
+from bs4 import BeautifulSoup
+import time
+from random import uniform
+
+def extract_teams_from_html(html):
+    soup = BeautifulSoup(html, 'html.parser')
+    teams = []
+
+    for conference_id, conference_name in [
+        ('confs_standings_E', 'East'),
+        ('confs_standings_W', 'West')
+    ]:
+        table = soup.select_one(f'table#{conference_id}')
+        if not table:
+            print(f"⚠️  Tabel '{conference_id}' niet gevonden")
+            continue
+
+        for row in table.select('tbody tr.full_table'):
+            cell = row.select_one('th[data-stat="team_name"]')
+            if cell and cell.a:
+                name = cell.a.text.strip()
+                href = cell.a.get('href')
+                if isinstance(href, str):
+                    code = href.split('/')[2]
+                    teams.append({
+                        'code': code,
+                        'name': name,
+                        'conference': conference_name,
+                        'url': f'https://www.basketball-reference.com{href}'
+                    })
+
+    return teams
+
+def get_nba_teams_playwright():
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
+        page.goto("https://www.basketball-reference.com/leagues/NBA_2025.html")
+
+        try:
+            page.wait_for_selector("table#confs_standings_E", timeout=10000)
+            page.wait_for_selector("table#confs_standings_W", timeout=10000)
+        except:
+            html_error = page.content().lower()
+            if "rate limited" in html_error or "cloudflare" in html_error:
+                print("🚫 Pagina is rate limited of geblokkeerd. Wacht een paar minuten of gebruik een VPN/proxy.")
+            else:
+                print("⚠️ Tabel niet gevonden – check of de structuur veranderd is.")
+            browser.close()
+            return []  # Lege lijst als fallback
+
+        html = page.content()
+        browser.close()
+
+        teams = extract_teams_from_html(html)
+        return teams
+
+
+def get_players_for_team(team_url):
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
+        page.goto(team_url)
+        page.wait_for_selector("table#roster")
+
+        html = page.content()
+        browser.close()
+
+        soup = BeautifulSoup(html, 'html.parser')
+        roster_table = soup.select_one('table#roster')
+        players = []
+
+        if roster_table:
+            for row in roster_table.select('tr'):
+                player_cell = row.select_one('td[data-stat="player"]')
+                if player_cell and player_cell.a:
+                    name = player_cell.a.text.strip()
+                    href = player_cell.a.get('href')
+                    if isinstance(href, str):
+                        player_id = href.split('/')[-1].replace('.html', '')
+                        players.append({
+                            'player_name': name,
+                            'player_id': player_id,
+                            'player_url': f'https://www.basketball-reference.com{href}',
+                            'team_url': team_url
+                        })
+        return players
+
+
+def get_gamelogs_for_player(player_id):
+    first_letter = player_id[0]
+    url = f'https://www.basketball-reference.com/players/{first_letter}/{player_id}/gamelog/2025'
+
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
+
+        try:
+            page.goto(url)
+            page.wait_for_selector("table#player_game_log_reg", timeout=5000)
+            html = page.content()
+        except:
+            print(f"⚠️ Geen gamelog-tabel of timeout voor {player_id}")
+            browser.close()
+            return pd.DataFrame()
+
+        browser.close()
+        
+        # Maximaal 15 calls per minuut => minimaal 4 seconden tussen calls
+        wait_time = max(4, uniform(4, 6))
+        print(f"⏳ Wacht {wait_time:.1f}s voor rate limiting...")
+        time.sleep(wait_time)
+
+        soup = BeautifulSoup(html, 'html.parser')
+        table = soup.select_one('table#player_game_log_reg')
+        if not table:
+            return pd.DataFrame()
+
+        df = pd.read_html(str(table))[0]
+        df = df[df['Rk'] != 'Rk']  # verwijder dubbele header-rijen
+        df['player_id'] = player_id
+        print(f"📊 {len(df)} gamelogs gevonden voor {player_id}")
+        return df
+    
+
+def main():
+    teams = get_nba_teams_playwright()
+    df_teams = pd.DataFrame(teams)
+    df_teams.to_csv("nba_2025_teams.csv", index=False)
+    print("✅ Teams opgeslagen in nba_2025_teams.csv")
+
+    all_players = []
+    for team in teams:
+        print(f"🔍 Spelers scrapen voor {team['code']}")
+        players = get_players_for_team(team['url'])
+        for p in players:
+            p['team_code'] = team['code']
+            p['team_name'] = team['name']
+        all_players.extend(players)
+
+    df_players = pd.DataFrame(all_players)
+    df_players.to_csv("nba_2025_players.csv", index=False)
+    print("✅ Spelers opgeslagen in nba_2025_players.csv")
+    
+    all_logs = []
+
+    for idx, row in df_players.iterrows():
+        pid = row['player_id']
+        print(f"📊 Gamestats ophalen voor {row['player_name']} ({pid})")
+        try:
+            df = get_gamelogs_for_player(pid)
+            if not df.empty:
+                df['player_name'] = row['player_name']
+                df['team_code'] = row['team_code']
+                all_logs.append(df)
+        except Exception as e:
+            print(f"❌ Fout bij {pid}: {e}")
+
+    if all_logs:
+        print(f"📦 Aantal DataFrames in all_logs: {len(all_logs)}")
+
+    for i, log in enumerate(all_logs[:5]):
+        print(f" - Type van item {i}: {type(log)} | aantal rijen: {getattr(log, 'shape', 'geen shape')}")
+
+        df_logs = pd.concat(all_logs, ignore_index=True)
+        df_logs.to_csv("nba_gamelogs_2025.csv", index=False)
+        print("✅ Gamelogs opgeslagen in nba_gamelogs_2025.csv")
+    else:
+        print("⚠️ Geen gamelogs gevonden, geen bestand opgeslagen.")
+
+if __name__ == '__main__':
+    main()
