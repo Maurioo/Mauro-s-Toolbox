@@ -6,7 +6,7 @@ Een moderne NBA dashboard applicatie met React frontend, Flask backend API en SQ
 
 - **Frontend**: React met Recharts voor visualisaties
 - **Backend**: Flask API met SQL Server connectie
-- **Database**: SQL Server met NBA speler statistieken
+- **Database**: SQL Server met NBA speler wedstrijdstatistieken
 
 ## 🚀 Setup
 
@@ -40,9 +40,9 @@ Zorg dat je SQL Server draait met:
 
 ## 📊 Features
 
-- **Real-time data**: Live data uit SQL Server database
-- **Interactieve grafieken**: Bar charts, line charts met Recharts
-- **Statistiek filters**: PPG, RPG, APG, MPG
+- **Real-time data**: Data uit SQL Server database, met Webscraping Script (PlayWright, generate -> getNBAGames)
+- **Interactieve grafieken**: Bar charts, line charts met Recharts, React
+- **Overzicht Totalen en Gemiddelde per Speler** Query op Database met FlashAPI
 - **Responsive design**: Werkt op alle apparaten
 - **Animaties**: Smooth transitions met Framer Motion
 
@@ -57,7 +57,6 @@ Zorg dat je SQL Server draait met:
 ## 🎨 Styling
 
 - Styled Components voor CSS-in-JS
-- NBA kleurenschema (blauw/rood gradient)
 - Glassmorphism effecten
 - Responsive grid layout
 
@@ -102,7 +101,3 @@ SELECT TOP 10 * FROM dbo.nbaPlayerTotals ORDER BY PTS DESC
 2. Deploy Flask API naar je server
 3. Configureer database connectie
 4. Set environment variables
-
-## 📝 Licentie
-
-MIT License
