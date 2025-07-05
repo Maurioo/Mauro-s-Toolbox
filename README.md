@@ -1,5 +1,5 @@
 # NBA Dashboard - React + Flask + SQL Server
-
+- "Public -> 'analytics-dashboard.html'"
 Een moderne NBA dashboard applicatie met React frontend, Flask backend API en SQL Server database.
 
 ## 🏗️ Architectuur
