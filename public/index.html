@@ -174,6 +174,15 @@
         padding: 1.2rem 0.7rem 1rem 0.7rem;
       }
     }
+    .disabled-link {
+      background: #e0e0e0 !important;
+      color: #888 !important;
+      border-color: #bbb !important;
+      cursor: not-allowed !important;
+      pointer-events: none !important;
+      text-decoration: line-through;
+      opacity: 0.7;
+    }
   </style>
 </head>
 <body>
@@ -193,7 +202,7 @@
       <div class="block-icon">👥</div>
       <h2>CRM-Systeem</h2>
       <ul>
-      <li><a class="block-link" href="klantenlijst.html">Klantenlijst</a></li>
+      <li><a class="block-link disabled-link" href="klantenlijst.html">Klantenlijst</a></li>
       <li><a class="block-link" href="addUser.html">Nieuwe gebruiker toevoegen</a></li>
       <li><a class="block-link" href="zoeken.html">Zoeken</a></li>
       </ul>
@@ -205,8 +214,9 @@
       <h2>Analytics &amp; Dashboards</h2>
       <ul>
       <li><a class="block-link" href="dashboardNBA.html">NBA Dashboard</a></li>
-      <li><a class="block-link" href="salesDashboard.html">Sales Dashboard</a></li>
-      <li><a class="block-link" href="rapporten.html">Rapporten</a></li>
+      <li><a class="block-link" href="analytics-dashboard.html">Analytics Dashboard</a></li>
+      <li><a class="block-link disabled-link" href="salesDashboard.html">Sales Dashboard</a></li>
+      <li><a class="block-link disabled-link" href="rapporten.html">Rapporten</a></li>
       </ul>
     </section>
     <style>

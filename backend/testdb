@@ -1,0 +1,22 @@
+const sql = require('mssql');
+const config = {
+  user: 'nbaUser',
+  password: 'test123',
+  server: 'localhost',
+  port: 50810, // bijvoorbeeld 49172
+  database: 'nba',
+  options: {
+    trustServerCertificate: true,
+    enableArithAbort: true
+  }
+};
+
+sql.connect(config).then(pool => {
+  return pool.request().query('SELECT TOP 1 * FROM dbo.nbaPlayerTotals');
+}).then(result => {
+  console.log('Verbinding gelukt! Eerste rij:', result.recordset[0]);
+  sql.close();
+}).catch(err => {
+  console.error('Fout bij verbinden:', err);
+  sql.close();
+});

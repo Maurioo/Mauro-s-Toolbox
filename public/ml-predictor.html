@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NBA ML Predictor</title>
+    <link href="https://fonts.googleapis.com/css?family=Oswald:700|Roboto:400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #17408B 0%, #C9082A 100%);
+            color: #fff;
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 520px;
+            margin: 3rem auto;
+            background: rgba(255,255,255,0.97);
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.07);
+            padding: 2.5rem 2rem 2rem 2rem;
+        }
+        h1 {
+            font-family: 'Oswald', Arial, sans-serif;
+            color: #17408B;
+            font-size: 2.2rem;
+            letter-spacing: 2px;
+            margin: 0 0 1.5rem 0;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 0 #C9082A, 4px 4px 0 #fff;
+        }
+        label {
+            font-weight: bold;
+            color: #17408B;
+            margin-bottom: 0.3rem;
+            display: block;
+        }
+        input, select {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border-radius: 7px;
+            border: 1px solid #ccc;
+            margin-bottom: 1.2rem;
+            font-size: 1.1rem;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        button {
+            background: #C9082A;
+            color: #fff;
+            font-family: 'Oswald', Arial, sans-serif;
+            font-size: 1.2rem;
+            border: none;
+            padding: 0.8rem 2.2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(23,64,139,0.10);
+            cursor: pointer;
+            letter-spacing: 1px;
+            margin-top: 0.5rem;
+        }
+        .result {
+            background: #17408B;
+            color: #fff;
+            border-radius: 8px;
+            padding: 1.2rem 1rem;
+            margin-top: 1.5rem;
+            font-size: 1.3rem;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(23,64,139,0.10);
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border-radius: 8px;
+            padding: 1.2rem 1rem;
+            margin-top: 1.5rem;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+        .info {
+            background: #e7f1ff;
+            color: #17408B;
+            border-radius: 8px;
+            padding: 1rem 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>NBA ML Predictor</h1>
+        <div class="info">
+            Vul speler, team en tegenstander in. De statistieken van de laatste 5 wedstrijden worden automatisch uit de database gehaald.
+        </div>
+        <form id="ml-form">
+            <label for="player">Speler</label>
+            <input type="text" id="player" name="player" placeholder="Bijv. LeBron James" required>
+
+            <label for="team">Team</label>
+            <input type="text" id="team" name="team" placeholder="Bijv. LAL" required>
+
+            <label for="opp">Tegenstander</label>
+            <input type="text" id="opp" name="opp" placeholder="Bijv. BOS" required>
+
+            <button type="submit">Voorspel Punten</button>
+        </form>
+        <div id="result"></div>
+    <script>
+        document.getElementById('ml-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const player = document.getElementById('player').value.trim();
+            const team = document.getElementById('team').value.trim();
+            const opp = document.getElementById('opp').value.trim();
+
+            document.getElementById('result').innerHTML = 'Bezig met voorspellen...';
+            try {
+                const response = await fetch('http://localhost:5000/api/ml/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ player, team, opp })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    document.getElementById('result').innerHTML = `<div class="result">Voorspelde punten: <b>${result.predicted_pts.toFixed(1)}</b></div>`;
+                } else {
+                    document.getElementById('result').innerHTML = `<div class="error">Fout: ${result.error}</div>`;
+                }
+            } catch (err) {
+                document.getElementById('result').innerHTML = `<div class="error">Fout bij voorspellen: ${err.message}</div>`;
+            }
+        });
+    </script>
+    </div>
+</body>
+</html> 

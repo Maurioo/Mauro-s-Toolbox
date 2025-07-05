@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard - Mauro's Toolbox</title>
+    <link href="https://fonts.googleapis.com/css?family=Oswald:700|Roboto:400&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-family: 'Oswald', Arial, sans-serif;
+            color: #333;
+            font-size: 2rem;
+        }
+
+        .back-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Oswald', Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 1800px;
+            margin: 2rem auto;
+            padding: 0 3rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 2.5rem;
+            height: calc(100vh - 160px);
+        }
+
+        .sidebar {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+
+        .main-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow-x: auto;
+            min-width: 0;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .section h3 {
+            font-family: 'Oswald', Arial, sans-serif;
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .query-templates {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .template-btn {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 0.75rem;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+        }
+
+        .template-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .template-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .custom-query {
+            margin-top: 1rem;
+        }
+
+        .custom-query textarea {
+            width: 100%;
+            height: 100px;
+            padding: 0.5rem;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            resize: vertical;
+        }
+
+        .execute-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            width: 100%;
+        }
+
+        .execute-btn:hover {
+            background: #218838;
+        }
+
+        .results-section {
+            margin-top: 2rem;
+        }
+
+        .chart-container {
+            margin-top: 1rem;
+            height: 600px;
+            min-width: 700px;
+            position: relative;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background: white;
+            border-radius: 5px;
+            overflow: auto;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-size: 1.08rem;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .data-table th {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .visualization-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .control-group label {
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .control-group select,
+        .control-group input {
+            padding: 0.5rem;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+        }
+
+        .ml-section {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+        }
+
+        .ml-section h4 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .prediction-result {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #667eea;
+        }
+
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 1200px) {
+            .container {
+                max-width: 98vw;
+                padding: 0 1rem;
+            }
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            .main-content {
+                padding: 1rem;
+            }
+            .chart-container {
+                min-width: 0;
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Analytics Dashboard</h1>
+        <button class="back-btn" onclick="window.location.href='index.html'">Terug naar Home</button>
+    </div>
+
+    <div class="container">
+        <div class="dashboard-grid">
+            <!-- Sidebar met query controls -->
+            <div class="sidebar">
+                <div class="section">
+                    <h3>Query Templates</h3>
+                    <div class="query-templates" id="query-templates">
+                        <!-- Templates worden hier geladen -->
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>Custom Query</h3>
+                    <div style="background:#f8f9fa;padding:1rem;border-radius:6px;margin-bottom:1rem;color:#333;">
+                        <b>Voorbeeldqueries:</b><br>
+                        <ul style="margin:0 0 0 1.2em;padding:0;">
+                            <li>Top 5 spelers: <code>SELECT TOP 5 player_name, team_code, PTS FROM dbo.nbaPlayerTotals ORDER BY PTS DESC</code></li>
+                            <li>Gemiddelde punten per team: <code>SELECT team_code, AVG(CAST(PTS AS FLOAT)) as avg_points FROM dbo.nbaPlayerTotals GROUP BY team_code</code></li>
+                            <li>Efficiëntie: <code>SELECT player_name, PTS, MP, CAST(PTS AS FLOAT)/NULLIF(CAST(MP AS FLOAT),0) as efficiency FROM dbo.nbaPlayerTotals WHERE MP > 0 ORDER BY efficiency DESC</code></li>
+                            <li><b>Aantal gespeelde wedstrijden per speler:</b> <code>SELECT player_name, COUNT(*) as games_played FROM dbo.nbaPlayerStats_Cleaned WHERE player_name IS NOT NULL AND PTS IS NOT NULL GROUP BY player_name ORDER BY games_played DESC</code></li>
+                        </ul>
+                        <div style="margin-top:0.5em;font-size:0.95em;">
+                            Let op: Alleen numerieke kolommen kunnen als Y-as gebruikt worden in grafieken.<br>
+                            <b>GS = Games Started</b> (aantal keer in de basisopstelling). Voor totaal aantal gespeelde wedstrijden, zie de query hierboven.
+                        </div>
+                    </div>
+                    <div class="custom-query">
+                        <textarea id="custom-query" placeholder="Voer je SQL query in..."></textarea>
+                        <button class="execute-btn" onclick="executeCustomQuery()">Uitvoeren</button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>Visualisatie</h3>
+                    <div class="visualization-controls">
+                        <div class="control-group">
+                            <label>Chart Type:</label>
+                            <select id="chart-type">
+                                <option value="bar">Bar Chart</option>
+                                <option value="line">Line Chart</option>
+                                <option value="pie">Pie Chart</option>
+                                <option value="scatter">Scatter Plot</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label>X-Axis:</label>
+                            <select id="x-axis">
+                                <!-- Kolommen worden hier geladen -->
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label>Y-Axis:</label>
+                            <select id="y-axis">
+                                <!-- Kolommen worden hier geladen -->
+                            </select>
+                        </div>
+                    </div>
+                    <button class="execute-btn" onclick="updateChart()">Update Chart</button>
+                </div>
+
+                <div class="section">
+                    <div class="ml-section">
+                        <h4>Machine Learning</h4>
+                        <p>ML features en voorspellingen (toekomstig)</p>
+                        <button class="execute-btn" onclick="loadMLFeatures()">Laad ML Features</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main content met resultaten -->
+            <div class="main-content">
+                <div class="section">
+                    <h3>Resultaten</h3>
+                    <div id="results-container">
+                        <div class="loading">Selecteer een query template of voer een custom query uit</div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>Visualisatie</h3>
+                    <div class="chart-container">
+                        <canvas id="chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>Data Tabel</h3>
+                    <div id="table-container">
+                        <!-- Data tabel wordt hier getoond -->
+                    </div>
+                </div>
+
+                <!-- Voeg boven de resultaten sectie een dropdown toe, alleen zichtbaar bij relevante templates -->
+                <div id="stat-category-dropdown-container" style="display:none;margin-bottom:1rem;">
+                    <label for="stat-category-dropdown"><b>Rangschik op:</b></label>
+                    <select id="stat-category-dropdown">
+                        <option value="avg_pts">Punten (PTS)</option>
+                        <option value="avg_trb">Rebounds (TRB)</option>
+                        <option value="avg_ast">Assists (AST)</option>
+                        <option value="avg_mp">Minuten (MP)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentData = null;
+        let currentChart = null;
+        let currentTemplate = null;
+        let currentStatCategory = 'avg_pts';
+
+        // Laad query templates bij het laden van de pagina
+        document.addEventListener('DOMContentLoaded', function() {
+            loadQueryTemplates();
+        });
+
+        async function loadQueryTemplates() {
+            try {
+                const response = await fetch('http://localhost:5000/api/query-templates');
+                const templates = await response.json();
+                
+                const container = document.getElementById('query-templates');
+                container.innerHTML = '';
+                
+                Object.entries(templates).forEach(([key, template]) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'template-btn';
+                    btn.innerHTML = `
+                        <strong>${template.name}</strong><br>
+                        <small>${template.description}</small>
+                    `;
+                    btn.onclick = () => executeQueryTemplate(key);
+                    container.appendChild(btn);
+                });
+
+                // Voeg handmatig de games played template toe
+                const gamesPlayedBtn = document.createElement('button');
+                gamesPlayedBtn.className = 'template-btn';
+                gamesPlayedBtn.innerHTML = `
+                    <strong>Aantal Gespeelde Wedstrijden</strong><br>
+                    <small>Aantal gespeelde wedstrijden per speler (uit game logs)</small>
+                `;
+                gamesPlayedBtn.onclick = () => executeCustomQueryWithTemplate(`
+                    SELECT player_name, COUNT(*) as games_played 
+                    FROM dbo.nbaPlayerStats_Cleaned 
+                    WHERE player_name IS NOT NULL AND PTS IS NOT NULL 
+                    GROUP BY player_name 
+                    ORDER BY games_played DESC
+                `);
+                container.appendChild(gamesPlayedBtn);
+                
+            } catch (error) {
+                console.error('Error loading templates:', error);
+                // Fallback: toon basis templates
+                loadFallbackTemplates();
+            }
+        }
+
+        function loadFallbackTemplates() {
+            const container = document.getElementById('query-templates');
+            container.innerHTML = '';
+            
+            const fallbackTemplates = [
+                {
+                    name: "Speler Performance Analyse",
+                    description: "Analyseer speler statistieken per team",
+                    query: `SELECT player_name, team_code, 
+                        AVG(CAST(PTS AS FLOAT)) AS avg_pts,
+                        AVG(CAST(AST AS FLOAT)) AS avg_ast,
+                        AVG(CAST(TRB AS FLOAT)) AS avg_trb,
+                        AVG(CAST(STL AS FLOAT)) AS avg_stl,
+                        AVG(CAST(BLK AS FLOAT)) AS avg_blk,
+                        AVG(CAST([FG%] AS FLOAT)) AS avg_fg,
+                        AVG(CAST([3P%] AS FLOAT)) AS avg_3p,
+                        AVG(CAST([FT%] AS FLOAT)) AS avg_ft,
+                        COUNT(*) AS games_played
+                    FROM dbo.nbaPlayerStats_Cleaned
+                    WHERE player_name IS NOT NULL
+                    GROUP BY player_name, team_code
+                    ORDER BY avg_pts DESC`
+                },
+                {
+                    name: "Team Vergelijking",
+                    description: "Vergelijk teams op basis van gemiddelde statistieken",
+                    query: `SELECT team_code,
+                        COUNT(DISTINCT player_name) AS player_count,
+                        AVG(CAST(PTS AS FLOAT)) AS avg_points,
+                        AVG(CAST(TRB AS FLOAT)) AS avg_rebounds,
+                        AVG(CAST(AST AS FLOAT)) AS avg_assists,
+                        AVG(CAST(MP AS FLOAT)) AS avg_minutes
+                    FROM dbo.nbaPlayerStats_Cleaned
+                    WHERE player_name IS NOT NULL
+                    GROUP BY team_code
+                    ORDER BY avg_points DESC`
+                },
+                {
+                    name: "Leiders per Categorie (Gemiddelde per Wedstrijd)",
+                    description: "Spelers met hoogste gemiddelde per wedstrijd: PTS, RBS, AST, MP",
+                    query: `WITH player_avgs AS (
+                        SELECT
+                            player_name,
+                            team_code,
+                            COUNT(*) AS games_played,
+                            AVG(CAST(PTS AS FLOAT)) AS avg_pts,
+                            AVG(CAST(AST AS FLOAT)) AS avg_ast,
+                            AVG(CAST(MP AS FLOAT)) AS avg_mp,
+                            AVG(CAST(ORB AS FLOAT) + CAST(DRB AS FLOAT)) AS avg_rbs
+                        FROM dbo.nbaPlayerStats_Cleaned
+                        WHERE player_name IS NOT NULL
+                        GROUP BY player_name, team_code
+                    )
+                    SELECT 'PTS' AS category, player_name, team_code, games_played, avg_pts AS value
+                    FROM player_avgs WHERE avg_pts = (SELECT MAX(avg_pts) FROM player_avgs)
+                    UNION ALL
+                    SELECT 'RBS', player_name, team_code, games_played, avg_rbs
+                    FROM player_avgs WHERE avg_rbs = (SELECT MAX(avg_rbs) FROM player_avgs)
+                    UNION ALL
+                    SELECT 'AST', player_name, team_code, games_played, avg_ast
+                    FROM player_avgs WHERE avg_ast = (SELECT MAX(avg_ast) FROM player_avgs)
+                    UNION ALL
+                    SELECT 'MP', player_name, team_code, games_played, avg_mp
+                    FROM player_avgs WHERE avg_mp = (SELECT MAX(avg_mp) FROM player_avgs)
+                    ORDER BY category`
+                },
+                {
+                    name: "Aantal Gespeelde Wedstrijden",
+                    description: "Aantal gespeelde wedstrijden per speler",
+                    query: `SELECT player_name, team_code, COUNT(*) as games_played 
+                        FROM dbo.nbaPlayerStats_Cleaned 
+                        WHERE player_name IS NOT NULL 
+                        GROUP BY player_name, team_code 
+                        ORDER BY games_played DESC`
+                }
+            ];
+            
+            fallbackTemplates.forEach((template, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'template-btn';
+                btn.innerHTML = `
+                    <strong>${template.name}</strong><br>
+                    <small>${template.description}</small>
+                `;
+                btn.onclick = () => executeCustomQueryWithTemplate(template.query);
+                container.appendChild(btn);
+            });
+        }
+
+        function executeCustomQueryWithTemplate(query) {
+            document.getElementById('custom-query').value = query;
+            executeCustomQuery();
+        }
+
+        async function executeQueryTemplate(templateName) {
+            try {
+                currentTemplate = templateName;
+                // Toon dropdown alleen bij relevante templates
+                const dropdownContainer = document.getElementById('stat-category-dropdown-container');
+                if (templateName === 'top_performers' || templateName === 'efficiency_analysis') {
+                    dropdownContainer.style.display = '';
+                } else {
+                    dropdownContainer.style.display = 'none';
+                }
+                // Show loading
+                document.getElementById('results-container').innerHTML = '<div class="loading">Laden...</div>';
+                // Bouw dynamische query voor top_performers
+                let query = null;
+                if (templateName === 'top_performers') {
+                    query = `SELECT TOP 10
+                        player_name,
+                        team_code,
+                        AVG(CAST(PTS AS FLOAT)) AS avg_pts,
+                        AVG(CAST(TRB AS FLOAT)) AS avg_trb,
+                        AVG(CAST(AST AS FLOAT)) AS avg_ast,
+                        AVG(CAST(MP AS FLOAT)) AS avg_mp,
+                        COUNT(*) AS games_played
+                    FROM dbo.nbaPlayerStats_Cleaned
+                    WHERE player_name IS NOT NULL
+                    GROUP BY player_name, team_code
+                    ORDER BY ${currentStatCategory} DESC`;
+                } else if (templateName === 'efficiency_analysis') {
+                    query = `SELECT
+                        player_name,
+                        team_code,
+                        SUM(PTS) AS total_pts,
+                        SUM(MP) AS total_mp,
+                        CASE WHEN SUM(MP) > 0 THEN CAST(SUM(PTS) AS FLOAT) / SUM(MP) ELSE NULL END AS efficiency,
+                        COUNT(*) AS games_played
+                    FROM dbo.nbaPlayerStats_Cleaned
+                    WHERE player_name IS NOT NULL
+                    GROUP BY player_name, team_code
+                    HAVING SUM(MP) > 0
+                    ORDER BY efficiency DESC`;
+                }
+                let result;
+                if (query) {
+                    // Custom query voor deze templates
+                    const response = await fetch('http://localhost:5000/api/query', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ query })
+                    });
+                    result = await response.json();
+                } else {
+                    // Standaard: API template
+                    const response = await fetch(`http://localhost:5000/api/query-template/${templateName}`);
+                    result = await response.json();
+                }
+                if (result.success) {
+                    displayResults(result.data, result.columns);
+                } else {
+                    throw new Error(result.error);
+                }
+            } catch (error) {
+                document.getElementById('results-container').innerHTML = `
+                    <div class="error">Fout: ${error.message}</div>
+                `;
+            }
+        }
+
+        async function executeCustomQuery() {
+            try {
+                const query = document.getElementById('custom-query').value.trim();
+                if (!query) {
+                    alert('Voer een query in');
+                    return;
+                }
+                
+                document.getElementById('results-container').innerHTML = '<div class="loading">Uitvoeren...</div>';
+                
+                const response = await fetch('http://localhost:5000/api/query', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ query: query })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    displayResults(result.data, result.columns);
+                } else {
+                    throw new Error(result.error);
+                }
+            } catch (error) {
+                document.getElementById('results-container').innerHTML = `
+                    <div class="error">Fout: ${error.message}</div>
+                `;
+            }
+        }
+
+        function displayResults(data, columns) {
+            currentData = data;
+            
+            // Update results container
+            const resultsContainer = document.getElementById('results-container');
+            resultsContainer.innerHTML = `
+                <div class="prediction-result">
+                    <strong>Query Resultaat:</strong> ${data.length} rijen gevonden
+                </div>
+            `;
+            
+            // Update column selectors
+            updateColumnSelectors(columns);
+            
+            // Display table
+            displayTable(data, columns);
+            
+            // Create default chart
+            if (data.length > 0) {
+                createChart(data, columns);
+            }
+        }
+
+        function updateColumnSelectors(columns) {
+            const xAxis = document.getElementById('x-axis');
+            const yAxis = document.getElementById('y-axis');
+            xAxis.innerHTML = '';
+            yAxis.innerHTML = '';
+            columns.forEach(column => {
+                const xOption = document.createElement('option');
+                xOption.value = column;
+                xOption.textContent = column;
+                xAxis.appendChild(xOption);
+            });
+            // Alleen numerieke kolommen voor Y-as
+            const numericColumns = columns.filter(col => {
+                // Kijk naar de eerste 10 waarden om te bepalen of het numeriek is
+                for (let i = 0; i < Math.min(10, currentData.length); i++) {
+                    const val = currentData[i][col];
+                    if (val !== null && val !== undefined && val !== '' && isNaN(Number(val))) return false;
+                }
+                return true;
+            });
+            numericColumns.forEach(column => {
+                const yOption = document.createElement('option');
+                yOption.value = column;
+                yOption.textContent = column;
+                yAxis.appendChild(yOption);
+            });
+            // Default selectie: eerste kolom voor X, eerste numerieke voor Y
+            if (columns.length > 0) xAxis.value = columns[0];
+            if (numericColumns.length > 0) yAxis.value = numericColumns[0];
+        }
+
+        function displayTable(data, columns) {
+            const container = document.getElementById('table-container');
+            
+            if (data.length === 0) {
+                container.innerHTML = '<p>Geen data gevonden</p>';
+                return;
+            }
+            
+            let tableHTML = '<table class="data-table"><thead><tr>';
+            
+            // Headers
+            columns.forEach(column => {
+                tableHTML += `<th>${column}</th>`;
+            });
+            tableHTML += '</tr></thead><tbody>';
+            
+            // Data rows
+            data.slice(0, 50).forEach(row => { // Limit to 50 rows for performance
+                tableHTML += '<tr>';
+                columns.forEach(column => {
+                    let val = row[column];
+                    if (column.toLowerCase() === 'efficiency' && val !== undefined && val !== null && val !== '') {
+                        val = Number(val).toFixed(2);
+                    }
+                    tableHTML += `<td>${val || ''}</td>`;
+                });
+                tableHTML += '</tr>';
+            });
+            
+            tableHTML += '</tbody></table>';
+            
+            if (data.length > 50) {
+                tableHTML += `<p><em>Toont eerste 50 van ${data.length} rijen</em></p>`;
+            }
+            
+            container.innerHTML = tableHTML;
+        }
+
+        function createChart(data, columns) {
+            const chartType = document.getElementById('chart-type').value;
+            const xAxis = document.getElementById('x-axis').value;
+            const yAxis = document.getElementById('y-axis').value;
+            const ctx = document.getElementById('chart').getContext('2d');
+            if (currentChart) currentChart.destroy();
+            // Check of Y-as numeriek is
+            const isNumeric = data.some(row => !isNaN(Number(row[yAxis])));
+            if (!isNumeric) {
+                ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+                ctx.font = '18px Oswald, Arial, sans-serif';
+                ctx.fillStyle = '#C9082A';
+                ctx.fillText('Geen geschikte numerieke data voor grafiek.', 30, 60);
+                return;
+            }
+            // Voor scatterplot: alle data, anders max 20
+            let chartData = [];
+            if (chartType === 'scatter') {
+                chartData = data
+                    .filter(row => !isNaN(Number(row[xAxis])) && !isNaN(Number(row[yAxis])))
+                    .map(row => ({
+                        x: Number(row[xAxis]),
+                        y: Number(row[yAxis]),
+                        player_name: row.player_name || row.Name || '',
+                        team_code: row.team_code || row.Team || '',
+                        PTS: row.PTS,
+                        MP: row.MP,
+                        efficiency: row.efficiency
+                    }));
+                currentChart = new Chart(ctx, {
+                    type: 'scatter',
+                    data: {
+                        datasets: [{
+                            label: `${yAxis} vs ${xAxis}`,
+                            data: chartData,
+                            backgroundColor: 'rgba(102, 126, 234, 0.8)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: `${yAxis} vs ${xAxis}`
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const d = context.raw;
+                                        let eff = d.efficiency !== undefined && d.efficiency !== null ? Number(d.efficiency).toFixed(2) : '-';
+                                        return `${d.player_name}, ${d.team_code}\nTotal Points: ${d.PTS}\nMinutes Played: ${d.MP}\nPoints Per Minute: ${eff}`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: { title: { display: true, text: xAxis } },
+                            y: { title: { display: true, text: yAxis }, beginAtZero: true }
+                        }
+                    }
+                });
+            } else {
+                chartData = data.slice(0, 20).map(row => ({
+                    label: row[xAxis],
+                    value: isNaN(row[yAxis]) ? 0 : parseFloat(row[yAxis])
+                }));
+                const labels = chartData.map(d => d.label);
+                const values = chartData.map(d => d.value);
+                currentChart = new Chart(ctx, {
+                    type: chartType,
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: yAxis,
+                            data: values,
+                            backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                            borderColor: 'rgba(102, 126, 234, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: `${yAxis} vs ${xAxis}`
+                            }
+                        },
+                        scales: {
+                            y: { beginAtZero: true }
+                        }
+                    }
+                });
+            }
+        }
+
+        function updateChart() {
+            if (currentData) {
+                const columns = Object.keys(currentData[0] || {});
+                createChart(currentData, columns);
+            }
+        }
+
+        async function loadMLFeatures() {
+            try {
+                const response = await fetch('http://localhost:5000/api/ml/features');
+                const result = await response.json();
+                
+                if (result.success) {
+                    document.getElementById('results-container').innerHTML = `
+                        <div class="prediction-result">
+                            <strong>ML Features geladen:</strong> ${result.features.length} spelers<br>
+                            <strong>Features:</strong> ${result.feature_columns.join(', ')}
+                        </div>
+                    `;
+                    
+                    displayResults(result.features, result.feature_columns);
+                }
+            } catch (error) {
+                document.getElementById('results-container').innerHTML = `
+                    <div class="error">Fout bij laden ML features: ${error.message}</div>
+                `;
+            }
+        }
+
+        // Event handler voor dropdown
+        const statDropdown = document.getElementById('stat-category-dropdown');
+        statDropdown.addEventListener('change', function() {
+            currentStatCategory = this.value;
+            if (currentTemplate === 'top_performers') {
+                executeQueryTemplate('top_performers');
+            }
+        });
+    </script>
+</body>
+</html> 

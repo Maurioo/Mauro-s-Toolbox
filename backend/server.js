@@ -6,28 +6,27 @@ const path = require("path");
 const sql = require("mssql");
 const cron = require("node-cron");
 const { scrapeAndStore } = require("./scraper");
+const cors = require('cors');
 
 const app = express();
 const port = 8000;
 
-// Aanbevolen configuratie voor named instance 'MOCKCRM' op localhost:
+// Aanbevolen configuratie voor named instance 'MOCKCRM' op localhost:;
 const config = {
-  server: "localhost",
-  database: "nba",
-  user: "nbaUser",           // je nieuw aangemaakte SQL-login
-  password: "test123",
+  user: 'nbaUser',
+  password: 'test123',
+  server: 'localhost',
+  port: 50810, // bijvoorbeeld 49172
+  database: 'nba',
   options: {
-    instanceName: "MOCKCRM",  // je named instance
-    trustServerCertificate: true
-  },
-  // evt.: verhoog timeout
-  connectionTimeout: 30000,
-  requestTimeout: 30000
+    trustServerCertificate: true,
+    enableArithAbort: true
+  }
 };
-
 
 app.use(express.static(path.join(__dirname, "../public")));
 app.use(express.json()); // om JSON binnenkomend te kunnen lezen
+app.use(cors());
 
 app.post("/api/users", (req, res) => {
   console.log("Ontvangen:", req.body);
@@ -70,15 +69,41 @@ app.get("/api/nba/trends", async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`API draait op http://localhost:${port}`);
+app.get('/api/nbaPlayerTotals', async (req, res) => {
+  try {
+    await sql.connect(config);
+    const result = await sql.query('SELECT * FROM dbo.nbaPlayerTotals');
+    res.json(result.recordset);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-// scraper functionaliteit: dagelijkse NBA-scrape en opslaan in SQL Server
-// deze code gebruikt node-cron om elke dag om 06:00 een NBA-scrape uit te voeren en de resultaten op te slaan in een SQL Server database
+app.get('/api/nbaPlayerTotals/top10/:stat', async (req, res) => {
+  const stat = req.params.stat;
+  // Mapping van stat naar kolomnaam in de database
+  const statMap = {
+    PPG: 'PTS',
+    RPG: 'TRB',
+    APG: 'AST',
+    TP: 'PTS',
+    TR: 'TRB',
+    TA: 'AST',
+    MPG: 'MP'
+  };
+  const col = statMap[stat] || 'PTS';
+  try {
+    await sql.connect(config);
+    const result = await sql.query(`
+      SELECT TOP 10 * FROM dbo.nbaPlayerTotals
+      ORDER BY [${col}] DESC
+    `);
+    res.json(result.recordset);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
-// Plan: elke dag om 06:00 (aanpasbaar)
-cron.schedule("0 6 * * *", () => {
-  console.log("Start dagelijkse NBA-scrape…");
-  scrapeAndStore().catch(console.error);
+app.listen(port, () => {
+  console.log(`API draait op http://localhost:${port}`);
 });

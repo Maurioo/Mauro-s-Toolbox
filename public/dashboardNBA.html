@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css?family=Oswald:700|Roboto:400&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script type="module" src="/src/main.jsx"></script>
     <style>
         body {
             background: linear-gradient(135deg, #17408B 0%, #C9082A 100%);
@@ -337,6 +338,22 @@
             align-self: flex-start;
             border: 3px solid #fff;
         }
+        .trends-table th, .trends-table td {
+            border: 1px solid #ddd;
+            padding: 0.5rem 0.7rem;
+            text-align: center;
+            background: rgba(255,255,255,0.10);
+            color: #fff;
+        }
+        .trends-table th {
+            background: #C9082A;
+            color: #fff;
+            font-family: 'Oswald', Arial, sans-serif;
+            font-size: 1.1rem;
+        }
+        .trends-table tr:nth-child(even) td {
+            background: rgba(255,255,255,0.07);
+        }
     </style>
 </head>
 <body>
@@ -355,13 +372,14 @@
         <section>
             <h2>Overzicht Statistieken</h2>
             <div class="filters">
-                <button class="filter-btn" data-stat="PPG">PPG</button>
-                <button class="filter-btn" data-stat="RPG">RPG</button>
-                <button class="filter-btn" data-stat="APG">APG</button>
-                <button class="filter-btn" data-stat="TP">TP</button>
-                <button class="filter-btn" data-stat="TR">TR</button>
-                <button class="filter-btn" data-stat="TA">TA</button>
-                <button class="filter-btn" data-stat="MPG">MP</button>
+                !!!!!!
+                <button class="filter-btn" data-stat="PPG" onclick="fetchTop10('PPG')">PPG</button>
+                <button class="filter-btn" data-stat="RPG" onclick="fetchTop10('RPG')">RPG</button>
+                <button class="filter-btn" data-stat="APG" onclick="fetchTop10('APG')">APG</button>
+                <button class="filter-btn" data-stat="TP" onclick="fetchTop10('TP')">TP</button>
+                <button class="filter-btn" data-stat="TR" onclick="fetchTop10('TR')">TR</button>
+                <button class="filter-btn" data-stat="TA" onclick="fetchTop10('TA')">TA</button>
+                <button class="filter-btn" data-stat="MPG" onclick="fetchTop10('MPG')">MP</button>
                 <div class="filter-group" style="min-width:200px;">
                     <input class="filter-input" id="team-filter" placeholder="Zoek team..." autocomplete="off" />
                     <div id="team-autocomplete" class="autocomplete-list" style="display:none;"></div>
@@ -372,7 +390,7 @@
                 </div>
             </div>
             <ul class="stats-list" id="stats-list">
-                <li>Bezig met laden...</li>
+                <li>Klik op een categorie om de top 10 te zien</li>
             </ul>
             <div class="chart-row" id="chart-row" style="display:none;">
                 <canvas id="statChart"></canvas>
@@ -381,25 +399,23 @@
         </section>
         <section>
             <h2>Trends: Top 10 per Stat</h2>
-            <div class="trends-filters">
-                <button class="trends-filter-btn" data-stat="PPG">PPG</button>
-                <button class="trends-filter-btn" data-stat="RPG">RPG</button>
-                <button class="trends-filter-btn" data-stat="APG">APG</button>
-                <button class="trends-filter-btn" data-stat="TP">TP</button>
-                <button class="trends-filter-btn" data-stat="TR">TR</button>
-                <button class="trends-filter-btn" data-stat="TA">TA</button>
-                <button class="trends-filter-btn" data-stat="MPG">MP</button>
-            </div>
-            <ul class="trends-list" id="trends-list">
-                <li>Bezig met laden...</li>
-            </ul>
-            <div class="trends-chart-row" id="trends-chart-row" style="display:none;">
-                <canvas id="trendsStatChart"></canvas>
-                <button class="trends-back-btn" id="trends-back-btn" onclick="hideTrendsChart()">Terug</button>
-            </div>
-            <div class="ai-note" id="ai-note">
-                De AI analyseert de prestaties en trends van spelers op basis van de meest recente wedstrijden.
-            </div>
+            <table class="trends-table" id="trends-table" style="width:100%;border-collapse:collapse;margin-bottom:1.5rem;">
+                <thead>
+                    <tr>
+                        <th>Rk</th>
+                        <th>Speler</th>
+                        <th>Team</th>
+                        <th>GS</th>
+                        <th>MP</th>
+                        <th>PTS</th>
+                        <th>TRB</th>
+                        <th>AST</th>
+                    </tr>
+                </thead>
+                <tbody id="trends-table-body">
+                    <tr><td colspan="8">Bezig met laden...</td></tr>
+                </tbody>
+            </table>
         </section>
     </main>
     <div style="width:100%;display:flex;justify-content:flex-start;margin:2rem 0 0 2vw;">
@@ -673,18 +689,107 @@
                 });
             });
 
-        Papa.parse(CSV_URL, {
-            download: true,
-            header: true,
-            complete: function(results) {
-                playerStats = computeAverages(results.data);
-                fillFilterOptions(playerStats);
-                setupFilters();
-                setupTrendsFilters();
-                document.querySelector('.filter-btn[data-stat="PPG"]').classList.add('active');
-                updateDashboard();
-            }
+        // --- Alleen data uit de database, geen CSV ---
+        // Bij laden van de pagina: haal direct top 10 PPG uit de database
+        window.addEventListener('DOMContentLoaded', function() {
+            // Laad data van Flask API
+            fetchDataFromAPI();
         });
+
+        // Functie om data van Flask API op te halen
+        async function fetchDataFromAPI() {
+            try {
+                // Haal top spelers op
+                const playersResponse = await fetch('http://localhost:5000/api/nba/top-players');
+                const playersData = await playersResponse.json();
+                
+                // Haal team stats op
+                const teamsResponse = await fetch('http://localhost:5000/api/nba/team-stats');
+                const teamsData = await teamsResponse.json();
+                
+                // Update de UI met de data
+                updateDashboardWithAPI(playersData, teamsData);
+                
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                document.getElementById('stats-list').innerHTML = '<li>Fout bij laden van data van API</li>';
+            }
+        }
+
+        // Update dashboard met API data
+        function updateDashboardWithAPI(playersData, teamsData) {
+            // Update stats list
+            const statsList = document.getElementById('stats-list');
+            statsList.innerHTML = '';
+            
+            playersData.slice(0, 10).forEach((player, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span class="player-name">${index + 1}. ${player.player_name}</span>
+                    <span class="player-team">
+                        <span class='team-emblem' style='background:#888' title='${player.team_code}'></span>${player.team_code}
+                    </span>
+                    <span class="player-value">${player.PTS} PTS</span>
+                `;
+                statsList.appendChild(li);
+            });
+
+            // Update trends table met team data
+            const trendsTableBody = document.getElementById('trends-table-body');
+            if (trendsTableBody) {
+                trendsTableBody.innerHTML = '';
+                teamsData.slice(0, 10).forEach((team, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${team.team_code}</td>
+                        <td>${team.player_count}</td>
+                        <td>${parseFloat(team.avg_points || 0).toFixed(1)}</td>
+                        <td>${parseFloat(team.avg_rebounds || 0).toFixed(1)}</td>
+                        <td>${parseFloat(team.avg_assists || 0).toFixed(1)}</td>
+                    `;
+                    trendsTableBody.appendChild(row);
+                });
+            }
+        }
+
+        // Update fetchTop10 functie om Flask API te gebruiken
+        function fetchTop10(stat) {
+            fetch(`http://localhost:5000/api/nba/player-stats/${stat}`)
+                .then(res => res.json())
+                .then(data => {
+                    const statsList = document.getElementById('stats-list');
+                    statsList.innerHTML = '';
+                    if (!data || data.length === 0) {
+                        statsList.innerHTML = '<li>Geen data gevonden.</li>';
+                        return;
+                    }
+                    data.forEach((player, i) => {
+                        const name = player.player_name || 'Onbekend';
+                        const team = player.team_code || '-';
+                        let value = '';
+                        switch(stat) {
+                            case 'ppg': case 'TP': value = player.PTS; break;
+                            case 'rpg': case 'TR': value = player.TRB; break;
+                            case 'apg': case 'TA': value = player.AST; break;
+                            case 'mpg': value = player.MP; break;
+                            default: value = '-';
+                        }
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                            <span class="player-name">${i+1}. ${name}</span>
+                            <span class="player-team">
+                                <span class='team-emblem' style='background:#888' title='${team}'></span>${team}
+                            </span>
+                            <span class="player-value">${value} ${stat.toUpperCase()}</span>
+                        `;
+                        statsList.appendChild(li);
+                    });
+                })
+                .catch(() => {
+                    document.getElementById('stats-list').innerHTML = '<li>Fout bij laden van data.</li>';
+                });
+        }
 
         function hideChart() {
             document.getElementById('chart-row').style.display = 'none';
@@ -820,6 +925,42 @@
             // Init: active knop
             document.querySelector('.trends-filter-btn[data-stat="PPG"]').classList.add('active');
         }
+
+        // --- MVP: Trends Top 10 uit Flask API ---
+        function renderTrendsTop10Table(players) {
+            const tbody = document.getElementById('trends-table-body');
+            tbody.innerHTML = '';
+            if (!players || players.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8">Geen data gevonden.</td></tr>';
+                return;
+            }
+            // Sorteer op PTS (punten), neem top 10
+            const top10 = players.sort((a, b) => (b.PTS || 0) - (a.PTS || 0)).slice(0, 10);
+            top10.forEach((player, i) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${i+1}</td>
+                    <td>${player.player_name || '-'}</td>
+                    <td>${player.team_code || '-'}</td>
+                    <td>${player.GS || '-'}</td>
+                    <td>${player.MP || '-'}</td>
+                    <td>${player.PTS || '-'}</td>
+                    <td>${player.TRB || '-'}</td>
+                    <td>${player.AST || '-'}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Laad data uit Flask API bij laden van de pagina
+        window.addEventListener('DOMContentLoaded', function() {
+            fetch('http://localhost:5000/api/nba/top-players')
+                .then(res => res.json())
+                .then(data => renderTrendsTop10Table(data))
+                .catch(() => {
+                    document.getElementById('trends-table-body').innerHTML = '<tr><td colspan="8">Fout bij laden van data.</td></tr>';
+                });
+        });
     </script>
 </body>
 </html>
