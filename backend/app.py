@@ -6,13 +6,22 @@ from datetime import datetime
 import os
 import json
 import joblib
+import numpy as np
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
 
 app = Flask(__name__, static_folder='../public', static_url_path='')
 CORS(app)
 
 # Laad ML-model en feature volgorde bij startup
-MODEL = joblib.load('nba_pts_predictor.pkl')
-MODEL_FEATURES = joblib.load('nba_model_features.pkl')
+try:
+       MODEL = joblib.load('nba_pts_predictor.pkl')
+       MODEL_FEATURES = joblib.load('nba_model_features.pkl')
+except FileNotFoundError:
+       MODEL = None
+       MODEL_FEATURES = None
+       print("⚠️  ML-model niet gevonden, ML-functionaliteit is uitgeschakeld.")
 
 # SQL Server configuratie - gebruik dezelfde instellingen als server.js
 DB_CONFIG = {
@@ -378,6 +387,8 @@ def ml_predict():
     Verwacht JSON met 'player', 'team', 'opp'. Haalt rolling averages uit de database.
     """
     try:
+        if MODEL is None or MODEL_FEATURES is None:
+            return jsonify({"error": "ML-model niet beschikbaar"}), 503
         data = request.get_json()
         player = data['player']
         team = data['team']
@@ -521,6 +532,287 @@ def get_player_details(player_name):
     except Exception as e:
         print(f"Error in get_player_details: {e}")
         return jsonify({"error": str(e)}), 500
+
+@app.route('/api/cumulative/points/top20')
+def get_cumulative_points_top20():
+    """Geeft voor de top 20 spelers (hoogste PPG) het cumulatieve puntenverloop per datum terug."""
+    try:
+        conn = get_db_connection()
+        query = '''
+        WITH Top20 AS (
+            SELECT TOP 20 player_name, AVG(CAST(PTS AS FLOAT)) AS ppg
+            FROM dbo.nbaPlayerStats_Cumulative
+            GROUP BY player_name
+            ORDER BY ppg DESC
+        )
+        SELECT c.Date, c.player_name, c.team_code,
+               SUM(c.PTS) OVER (PARTITION BY c.player_name ORDER BY c.Date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS cumulative_pts
+        FROM dbo.nbaPlayerStats_Cumulative c
+        INNER JOIN Top20 t ON c.player_name = t.player_name
+        ORDER BY c.player_name, c.Date
+        '''
+        df = pd.read_sql(query, conn)
+        conn.close()
+        # Zet datum om naar string voor JSON serialisatie
+        df['Date'] = df['Date'].astype(str)
+        return jsonify({
+            "success": True,
+            "data": df.to_dict('records'),
+            "players": df['player_name'].unique().tolist(),
+            "dates": sorted(df['Date'].unique().tolist())
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/cumulative/stat', methods=['POST'])
+def get_cumulative_stat():
+    """Geeft voor een lijst spelers en een stat het cumulatieve verloop per datum terug."""
+    try:
+        data = request.get_json()
+        players = data.get('players', [])
+        stat = data.get('stat', 'PTS')
+        if not players or not stat:
+            return jsonify({"error": "players en stat zijn verplicht"}), 400
+        # Maak een string voor de IN-clause
+        placeholders = ','.join(['?'] * len(players))
+        query = f'''
+        SELECT c.Date, c.player_name, c.team_code,
+               c.[{stat}] AS cumulative_stat
+        FROM dbo.nbaPlayerStats_Cumulative c
+        WHERE c.player_name IN ({placeholders})
+        ORDER BY c.player_name, c.Date
+        '''
+        conn = get_db_connection()
+        df = pd.read_sql(query, conn, params=players)
+        conn.close()
+        df['Date'] = df['Date'].astype(str)
+        return jsonify({
+            "success": True,
+            "data": df.to_dict('records'),
+            "players": df['player_name'].unique().tolist(),
+            "dates": sorted(df['Date'].unique().tolist()),
+            "stat": stat
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/overview-totals')
+def overview_totals():
+    """Geeft per speler en team de totalen en correcte percentages terug."""
+    try:
+        conn = get_db_connection()
+        query = '''
+        SELECT
+            player_name,
+            SUM(PTS) AS [Total Points],
+            SUM(AST) AS [Total Assists],
+            SUM(TRB) AS [Total Rebounds],
+            SUM(STL) AS [Total Steals],
+            SUM(BLK) AS [Total Blocks],
+            SUM(TOV) AS [Total Turnovers],
+            SUM(PF)  AS [Total Personal Fouls],
+            CASE WHEN SUM(FGA) > 0 THEN CAST(SUM(FG) AS FLOAT) / SUM(FGA) ELSE NULL END AS [FG%],
+            SUM(FG)  AS [Total FG],
+            SUM(FGA) AS [Total FGA],
+            CASE WHEN SUM([3PA]) > 0 THEN CAST(SUM([3P]) AS FLOAT) / SUM([3PA]) ELSE NULL END AS [3P%],
+            SUM([3P])  AS [Total 3P],
+            SUM([3PA]) AS [Total 3PA],
+            CASE WHEN SUM([2PA]) > 0 THEN CAST(SUM([2P]) AS FLOAT) / SUM([2PA]) ELSE NULL END AS [2P%],
+            SUM([2P])  AS [Total 2P],
+            SUM([2PA]) AS [Total 2PA],
+            CASE WHEN SUM(FTA) > 0 THEN CAST(SUM(FT) AS FLOAT) / SUM(FTA) ELSE NULL END AS [FT%],
+            SUM(FT)  AS [Total FT],
+            SUM(FTA) AS [Total FTA],
+            CASE WHEN SUM(FGA) > 0 THEN CAST((SUM(FG) + 0.5 * SUM([3P])) AS FLOAT) / SUM(FGA) ELSE NULL END AS [eFG%],
+            SUM(ORB) AS [Total ORB],
+            SUM(DRB) AS [Total DRB],
+            team_code
+        FROM [nba].[dbo].[nbaPlayerStats_Cleaned]
+        GROUP BY player_name, team_code
+        ORDER BY [Total Points] DESC
+        '''
+        df = pd.read_sql(query, conn)
+        conn.close()
+        df = df.replace({np.nan: None})
+        return jsonify({
+            "success": True,
+            "data": df.to_dict('records'),
+            "columns": df.columns.tolist(),
+            "row_count": len(df)
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/overview-totals/sorted', methods=['POST'])
+def overview_totals_with_sort():
+    """Geeft per speler en team de totalen en correcte percentages terug met dynamische sortering."""
+    try:
+        data = request.get_json() or {}
+        sort_column = data.get('sort_column', 'Total Points')
+        sort_direction = data.get('sort_direction', 'DESC')
+        
+        # Debug logging
+        print(f"DEBUG: Received sort_column: '{sort_column}', sort_direction: '{sort_direction}'")
+        
+        # Map frontend kolomnamen naar database kolomnamen
+        column_mapping = {
+            'Total Points': '[Total Points]',
+            'Total Assists': '[Total Assists]',
+            'Total Rebounds': '[Total Rebounds]',
+            'Total Steals': '[Total Steals]',
+            'Total Blocks': '[Total Blocks]',
+            'Total Turnovers': '[Total Turnovers]',
+            'Total Personal Fouls': '[Total Personal Fouls]',
+            'Total FG': '[Total FG]',
+            'Total FGA': '[Total FGA]',
+            'Total 3P': '[Total 3P]',
+            'Total 3PA': '[Total 3PA]',
+            'Total 2P': '[Total 2P]',
+            'Total 2PA': '[Total 2PA]',
+            'Total FT': '[Total FT]',
+            'Total FTA': '[Total FTA]',
+            'Total ORB': '[Total ORB]',
+            'Total DRB': '[Total DRB]',
+            'player_name': 'player_name',
+            'team_code': 'team_code'
+        }
+        
+        # Bepaal de juiste ORDER BY clause
+        if sort_column in column_mapping:
+            order_by = f"ORDER BY {column_mapping[sort_column]} {sort_direction}"
+            print(f"DEBUG: Using mapped column: {column_mapping[sort_column]}")
+        else:
+            order_by = "ORDER BY [Total Points] DESC"
+            print(f"DEBUG: Column '{sort_column}' not found in mapping, using fallback")
+        
+        print(f"DEBUG: Final ORDER BY clause: {order_by}")
+        
+        conn = get_db_connection()
+        query = f'''
+        SELECT
+            player_name,
+            SUM(PTS) AS [Total Points],
+            SUM(AST) AS [Total Assists],
+            SUM(TRB) AS [Total Rebounds],
+            SUM(STL) AS [Total Steals],
+            SUM(BLK) AS [Total Blocks],
+            SUM(TOV) AS [Total Turnovers],
+            SUM(PF)  AS [Total Personal Fouls],
+            CASE WHEN SUM(FGA) > 0 THEN CAST(SUM(FG) AS FLOAT) / SUM(FGA) ELSE NULL END AS [FG%],
+            SUM(FG)  AS [Total FG],
+            SUM(FGA) AS [Total FGA],
+            CASE WHEN SUM([3PA]) > 0 THEN CAST(SUM([3P]) AS FLOAT) / SUM([3PA]) ELSE NULL END AS [3P%],
+            SUM([3P])  AS [Total 3P],
+            SUM([3PA]) AS [Total 3PA],
+            CASE WHEN SUM([2PA]) > 0 THEN CAST(SUM([2P]) AS FLOAT) / SUM([2PA]) ELSE NULL END AS [2P%],
+            SUM([2P])  AS [Total 2P],
+            SUM([2PA]) AS [Total 2PA],
+            CASE WHEN SUM(FTA) > 0 THEN CAST(SUM(FT) AS FLOAT) / SUM(FTA) ELSE NULL END AS [FT%],
+            SUM(FT)  AS [Total FT],
+            SUM(FTA) AS [Total FTA],
+            CASE WHEN SUM(FGA) > 0 THEN CAST((SUM(FG) + 0.5 * SUM([3P])) AS FLOAT) / SUM(FGA) ELSE NULL END AS [eFG%],
+            SUM(ORB) AS [Total ORB],
+            SUM(DRB) AS [Total DRB],
+            team_code
+        FROM [nba].[dbo].[nbaPlayerStats_Cleaned]
+        GROUP BY player_name, team_code
+        {order_by}
+        '''
+        df = pd.read_sql(query, conn)
+        conn.close()
+        df = df.replace({np.nan: None})
+        return jsonify({
+            "success": True,
+            "data": df.to_dict('records'),
+            "columns": df.columns.tolist(),
+            "row_count": len(df),
+            "sort_column": sort_column,
+            "sort_direction": sort_direction
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/cumulative/top10')
+def get_cumulative_top10():
+    """Cumulatieve punten per dag voor top 10 spelers (hardcoded lijst)"""
+    try:
+        # Haal de top 10 spelers op uit de database op basis van totale punten
+        conn = get_db_connection()
+        top10_query = """
+            SELECT TOP 10 player_name
+            FROM [nba].[dbo].[nbaPlayerStats_Cleaned]
+            GROUP BY player_name
+            ORDER BY SUM(PTS) DESC
+        """
+        top10_df = pd.read_sql(top10_query, conn)
+        top10 = top10_df['player_name'].tolist()
+        conn.close()
+        placeholders = ','.join(['?'] * len(top10))
+        query = f"""
+            SELECT player_name, [Date], 
+                PTS AS cumulative_pts
+            FROM nba.dbo.nbaPlayerStats_Cumulative
+            WHERE player_name IN ({placeholders})
+            ORDER BY player_name, [Date]
+        """
+        conn = get_db_connection()
+        df = pd.read_sql(query, conn, params=top10)
+        conn.close()
+        df['Date'] = df['Date'].astype(str)
+        return jsonify({
+            "success": True,
+            "data": df.to_dict('records'),
+            "players": df['player_name'].unique().tolist(),
+            "dates": sorted(df['Date'].unique().tolist())
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/top-performances-ml')
+def top_performances_ml():
+    """Geeft de top 50 beste individuele wedstrijden volgens een ML-performance score."""
+    try:
+        conn = get_db_connection()
+        query = '''
+        SELECT [Date], player_name, team_code, PTS, TRB, AST, STL, BLK, TOV, [FG%], [eFG%]
+        FROM dbo.nbaPlayerStats_Cleaned
+        WHERE player_name IS NOT NULL AND PTS IS NOT NULL
+        '''
+        df = pd.read_sql(query, conn)
+        conn.close()
+        # Drop rows met missende waarden
+        df = df.dropna()
+        # Features voor ML (MP uitgesloten vanwege datetime.time problemen)
+        features = ['PTS', 'TRB', 'AST', 'STL', 'BLK', 'TOV', 'FG%', 'eFG%']
+        # Handgemaakte score als target
+        df['perf_score'] = (
+            df['PTS'] +
+            1.2 * df['AST'] +
+            1.2 * df['TRB'] +
+            1.5 * df['STL'] +
+            1.5 * df['BLK'] -
+            1.0 * df['TOV']
+        ) * (df['eFG%'] + 0.5)
+        X = df[features]
+        y = df['perf_score']
+        pipeline = Pipeline([
+            ('scaler', StandardScaler()),
+            ('rf', RandomForestRegressor(n_estimators=100, random_state=42))
+        ])
+        pipeline.fit(X, y)
+        df['ml_score'] = pipeline.predict(X)
+        # Top 50 beste wedstrijden
+        top_games = df.sort_values('ml_score', ascending=False).head(50)
+        # Zet datum om naar string
+        top_games['Date'] = top_games['Date'].astype(str)
+        return jsonify({
+            'success': True,
+            'data': top_games.to_dict('records'),
+            'columns': list(top_games.columns),
+            'row_count': len(top_games)
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)})
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

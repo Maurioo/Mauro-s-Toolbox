@@ -3,257 +3,226 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Home – Simulated CRM</title>
-  <link href="https://fonts.googleapis.com/css?family=Oswald:700|Roboto:400&display=swap" rel="stylesheet">
+  <title>NBA Games Dashboard</title>
+  <link href="https://fonts.googleapis.com/css?family=Oswald:700|Roboto:400&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
       background: #f7f7f7;
       color: #111;
-      font-family: 'Roboto', Arial, sans-serif;
+      font-family: 'Poppins', 'Roboto', Arial, sans-serif;
       margin: 0;
       min-height: 100vh;
-      position: relative;
-      overflow-x: hidden;
-    }
-    /* Grafische achtergrond-elementen */
-    .bg-shape1, .bg-shape2, .bg-shape3 {
-      position: absolute;
-      z-index: 0;
-      border-radius: 50%;
-      opacity: 0.13;
-      pointer-events: none;
-    }
-    .bg-shape1 {
-      width: 420px; height: 420px;
-      background: linear-gradient(135deg, #6dd5ed, #2193b0);
-      top: -120px; left: -120px;
-    }
-    .bg-shape2 {
-      width: 320px; height: 320px;
-      background: linear-gradient(135deg, #f7971e, #ffd200);
-      bottom: -100px; right: -80px;
-    }
-    .bg-shape3 {
-      width: 180px; height: 180px;
-      background: linear-gradient(135deg, #f857a6, #ff5858);
-      top: 60%; left: -90px;
-    }
-    header {
-      background: #fff;
-      padding: 1.5rem 0 1rem 0;
-      text-align: center;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.05);
-      margin-bottom: 2rem;
-      position: relative;
-      z-index: 2;
-    }
-    h1 {
-      font-family: 'Oswald', Arial, sans-serif;
-      color: #111;
-      font-size: 2.8rem;
-      letter-spacing: 2px;
-      margin: 0;
-      text-transform: uppercase;
-      text-shadow: 1px 1px 0 #eee;
-    }
-    main {
-      max-width: 1100px;
-      background: rgba(255,255,255,0.97);
-      margin: 2rem auto;
-      border-radius: 18px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.07);
-      padding: 2rem 2.5rem;
-      display: flex;
-      gap: 2.5rem;
-      justify-content: center;
-      position: relative;
-      z-index: 2;
-    }
-    .main-intro {
-      position: absolute;
-      top: -2.2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #fff;
-      padding: 0.7rem 2.2rem;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-      font-size: 1.13rem;
-      font-weight: 500;
-      color: #444;
-      z-index: 3;
-    }
-    .block {
-      flex: 1 1 350px;
-      background: #f4f8fb;
-      border-radius: 14px;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.06);
-      padding: 2rem 1.5rem 1.5rem 1.5rem;
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
-      min-width: 280px;
-      position: relative;
-      z-index: 2;
     }
-    .block.crm {
-      border-top: 6px solid #2193b0;
-    }
-    .block.analytics {
-      border-top: 6px solid #ffd200;
-    }
-    .block-icon {
-      font-size: 2.2rem;
-      margin-bottom: 0.7rem;
-      opacity: 0.8;
-    }
-    h2 {
-      font-family: 'Oswald', Arial, sans-serif;
-      color: #222;
-      font-size: 1.7rem;
-      margin-top: 0.5rem;
-      margin-bottom: 1rem;
-      letter-spacing: 1px;
-      text-shadow: 1px 1px 0 #f2f2f2;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
+    .navbar {
       width: 100%;
-    }
-    li {
-      margin-bottom: 1.2rem;
-    }
-    a {
-      display: inline-block;
       background: #fff;
-      color: #111;
-      font-family: 'Oswald', Arial, sans-serif;
-      font-size: 1.1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 4rem 1.5rem 4rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      font-family: 'Poppins', 'Roboto', Arial, sans-serif;
+    }
+    .navbar-left, .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 3.5rem;
+    }
+    .navbar-link {
+      font-family: 'Poppins', 'Roboto', Arial, sans-serif;
+      font-size: 2.8rem;
+      color: #222;
       text-decoration: none;
-      padding: 0.7rem 1.5rem;
-      border-radius: 8px;
-      font-weight: bold;
+      padding: 1.2rem 3.5rem;
+      border-radius: 18px;
+      font-weight: 600;
+      transition: background 0.18s, color 0.18s;
+      position: relative;
+      letter-spacing: 1.5px;
+    }
+    .navbar-link.active, .navbar-link:focus {
+      background: #222;
+      color: #fff;
+      font-weight: 700;
+    }
+    .navbar-link:hover {
+      background: #f2f2f2;
+      color: #111;
+    }
+    .navbar-btn {
+      background: #222;
+      color: #fff;
+      font-family: 'Poppins', 'Oswald', Arial, sans-serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 20px;
+      padding: 1.2rem 3.5rem;
+      margin-left: 2.5rem;
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      letter-spacing: 1.5px;
+    }
+    .navbar-btn:hover {
+      background: #444;
+    }
+    /* Dropdown styles */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background: #fff;
+      min-width: 350px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      border-radius: 16px;
+      z-index: 100;
+      top: 110%;
+      left: 0;
+      padding: 1rem 0;
+    }
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+    .dropdown-link {
+      color: #222;
+      padding: 1.2rem 2.5rem;
+      text-decoration: none;
+      display: block;
+      font-size: 2rem;
+      border-radius: 12px;
+      transition: background 0.16s, color 0.16s;
+      font-family: 'Poppins', 'Roboto', Arial, sans-serif;
+      font-weight: 500;
       letter-spacing: 1px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-      transition: background 0.2s, color 0.2s, transform 0.2s;
-      border: 2px solid #222;
-      width: 100%;
+    }
+    .dropdown-link:hover {
+      background: #f2f2f2;
+      color: #111;
+    }
+    .hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 70vh;
       text-align: center;
     }
-    a:hover {
-      background: #111;
+    .hero-title {
+      font-family: 'Poppins', 'Oswald', Arial, sans-serif;
+      font-size: 8rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 0.7rem;
+      color: #111;
+      text-shadow: 0 8px 36px rgba(0,0,0,0.13);
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+      padding: 1rem 5rem;
+      display: inline-block;
+    }
+    .hero-subtitle {
+      font-size: 4rem;
+      color: #888;
+      font-weight: 400;
+      letter-spacing: 1px;
+      margin-bottom: 2.5rem;
+      font-family: 'Poppins', 'Roboto', Arial, sans-serif;
+      text-shadow: 0 4px 18px rgba(0,0,0,0.10);
+    }
+    .dashboard-links {
+      display: flex;
+      flex-direction: column;
+      gap: 2.2rem;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+      width: 100%;
+      max-width: 400px;
+    }
+    .dashboard-btn {
+      background: #fff;
+      color: #222;
+      font-family: 'Poppins', 'Oswald', Arial, sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      border: 2px solid #222;
+      border-radius: 16px;
+      padding: 1.5rem 0;
+      width: 100%;
+      cursor: pointer;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+      transition: background 0.18s, color 0.18s, border 0.18s, transform 0.18s, box-shadow 0.18s;
+      text-decoration: none;
+      letter-spacing: 1px;
+      display: inline-block;
+      margin: 0;
+    }
+    .dashboard-btn:hover {
+      background: #222;
       color: #fff;
-      transform: translateY(-2px) scale(1.04);
-      border-color: #111;
+      border-color: #222;
+      transform: scale(1.06) translateY(-2px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.22);
     }
-    @media (max-width: 900px) {
-      main {
+    @media (max-width: 700px) {
+      .navbar {
         flex-direction: column;
-        gap: 1.5rem;
-        padding: 1.5rem 0.5rem;
+        align-items: flex-start;
+        padding: 0.7rem 1rem;
       }
-      .main-intro {
-        position: static;
-        transform: none;
-        margin-bottom: 1.2rem;
+      .hero-title {
+        font-size: 3.5rem;
+        padding: 0.3rem 1.2rem;
       }
-    }
-    @media (max-width: 600px) {
-      main {
-        padding: 1rem 0.2rem;
+      .hero-subtitle {
+        font-size: 1.7rem;
       }
-      h1 {
-        font-size: 2rem;
+      .dashboard-links {
+        gap: 1.2rem;
+        max-width: 100%;
       }
-      h2 {
-        font-size: 1.2rem;
+      .dashboard-btn {
+        width: 100%;
+        padding: 1.2rem 0;
+        font-size: 1.1rem;
       }
-      .block {
-        padding: 1.2rem 0.7rem 1rem 0.7rem;
-      }
-    }
-    .disabled-link {
-      background: #e0e0e0 !important;
-      color: #888 !important;
-      border-color: #bbb !important;
-      cursor: not-allowed !important;
-      pointer-events: none !important;
-      text-decoration: line-through;
-      opacity: 0.7;
     }
   </style>
 </head>
 <body>
-  <!-- Grafische achtergrond-elementen -->
-  <div class="bg-shape1"></div>
-  <div class="bg-shape2"></div>
-  <div class="bg-shape3"></div>
-  <header>
-    <h1>Mauro's tools</h1>
-  </header>
-  <main>
-    <div class="main-intro">
-      Welkom bij Mauro's tools! Kies een optie hieronder om te beginnen.
+  <nav class="navbar">
+    <div class="navbar-left">
+      <a href="index.html" class="navbar-link active">NBA</a>
+      <div class="dropdown">
+        <a href="#" class="navbar-link">CRM-Systeem</a>
+        <div class="dropdown-content">
+          <a href="zoeken.html" class="dropdown-link">Zoeken</a>
+          <a href="addUser.html" class="dropdown-link">Nieuwe gebruiker toevoegen</a>
+        </div>
+      </div>
     </div>
-    <!-- CRM Systeem blok -->
-    <section class="block crm highlight-on-hover">
-      <div class="block-icon">👥</div>
-      <h2>CRM-Systeem</h2>
-      <ul>
-      <li><a class="block-link disabled-link" href="klantenlijst.html">Klantenlijst</a></li>
-      <li><a class="block-link" href="addUser.html">Nieuwe gebruiker toevoegen</a></li>
-      <li><a class="block-link" href="zoeken.html">Zoeken</a></li>
-      </ul>
-    </section>
-    
-    <!-- Analytics & Dashboards blok -->
-    <section class="block analytics highlight-on-hover">
-      <div class="block-icon">📊</div>
-      <h2>Analytics &amp; Dashboards</h2>
-      <ul>
-      <li><a class="block-link" href="dashboardNBA.html">NBA Dashboard</a></li>
-      <li><a class="block-link" href="analytics-dashboard.html">Analytics Dashboard</a></li>
-      <li><a class="block-link disabled-link" href="salesDashboard.html">Sales Dashboard</a></li>
-      <li><a class="block-link disabled-link" href="rapporten.html">Rapporten</a></li>
-      </ul>
-    </section>
-    <style>
-      .highlight-on-hover:hover {
-      box-shadow: 0 8px 32px rgba(255, 210, 0, 0.25), 0 4px 18px rgba(0,0,0,0.09);
-      background: #fffbe7;
-      transform: translateY(-4px) scale(1.02);
-      transition: box-shadow 0.2s, background 0.2s, transform 0.2s;
-      cursor: pointer;
-      }
-      .block ul {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 0;
-      }
-      .block li {
-      width: 80%;
-      min-width: 180px;
-      max-width: 320px;
-      margin-bottom: 1.2rem;
-      display: flex;
-      justify-content: center;
-      }
-      .block-link {
-      width: 100%;
-      box-sizing: border-box;
-      }
-      @media (max-width: 600px) {
-      .block li {
-        width: 100%;
-        min-width: 0;
-        max-width: none;
-      }
-      }
-    </style>
+    <div class="navbar-right">
+      <a href="index.html"><button class="navbar-btn">Mauro's Toolbox</button></a>
+    </div>
+  </nav>
+  <main class="hero">
+    <div class="hero-title">NBA</div>
+    <div class="hero-subtitle">Games Dashboard</div>
+    <div class="dashboard-links">
+      <a href="dashboardNBA.html" class="dashboard-btn">Top 10 Players</a>
+      <a href="analytics-dashboard.html" class="dashboard-btn">Analytics Dashboard</a>
+    </div>
   </main>
 </body>
 </html>
