@@ -42,8 +42,8 @@ Zorg dat je SQL Server draait met:
 ## 📊 Features
 
 - **Real-time data**: Data uit SQL Server database, met Webscraping Script (PlayWright, generate -> getNBAGames)
-- **Interactieve grafieken**: Bar charts, line charts met Recharts, React
-- **Overzicht Totalen en Gemiddelde per Speler** Query op Database met FlashAPI
+- **Interactieve grafieken**: Bar charts, scatterplots, line charts met Recharts, React
+- **Overview Major Stat Categories Totals and Averages** Query op Database met FlashAPI
 - **Responsive design**: Werkt op alle apparaten
 - **Animaties**: Smooth transitions met Framer Motion
 
@@ -98,7 +98,7 @@ SELECT TOP 10 * FROM dbo.nbaPlayerTotals ORDER BY PTS DESC
 
 ## 🚀 Deployment
 
-1. Build React app: `npm run build`
+1. Build React app: `npm start_app.py`
 2. Deploy Flask API naar je server
 3. Configureer database connectie
 4. Set environment variables
