@@ -7,9 +7,20 @@ import os
 import json
 import joblib
 import numpy as np
+# import sklearn  # Dit is niet strikt nodig tenzij je direct sklearn.something gebruikt
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
+
+# === CSV DATA LOADERS ===
+CLEANED_CSV = os.path.join(os.path.dirname(__file__), '../data/PlayerStats2025_Cleaned.csv')
+CUMULATIVE_CSV = os.path.join(os.path.dirname(__file__), '../data/PlayerStats2025_Cumulative.csv')
+
+def load_cleaned_df():
+    return pd.read_csv(CLEANED_CSV)
+
+def load_cumulative_df():
+    return pd.read_csv(CUMULATIVE_CSV)
 
 app = Flask(__name__, static_folder='../public', static_url_path='')
 CORS(app)
@@ -24,17 +35,17 @@ except FileNotFoundError:
        print("⚠️  ML-model niet gevonden, ML-functionaliteit is uitgeschakeld.")
 
 # SQL Server configuratie - gebruik dezelfde instellingen als server.js
-DB_CONFIG = {
-    'driver': 'ODBC Driver 17 for SQL Server',
-    'server': 'localhost',
-    #'port': 50810,
-    'database': 'nba',
-    'uid': 'nbaUser',
-    'pwd': 'test123',
-    'trusted_connection': 'no',
-    'trust_server_certificate': 'yes',
-    'enable_arith_abort': 'yes'
-}
+#DB_CONFIG = {
+#    'driver': 'ODBC Driver 17 for SQL Server',
+#    'server': 'localhost',
+#    #'port': 50810,
+#    'database': 'nba',
+#    'uid': 'nbaUser',
+#    'pwd': 'test123',
+#    'trusted_connection': 'no',
+#    'trust_server_certificate': 'yes',
+#    'enable_arith_abort': 'yes'
+#}
 
 def get_db_connection():
     """Maak verbinding met SQL Server database"""
@@ -58,294 +69,100 @@ def health_check():
 
 @app.route("/api/query", methods=['POST'])
 def execute_query():
-    """Voer een custom SQL query uit"""
+    """Voer een custom SQL query uit (nu alleen pandas queries op CSV)"""
     try:
         data = request.get_json()
         query = data.get('query')
-        params = data.get('params', [])
-        
+        # params = data.get('params', [])  # niet meer nodig
         if not query:
             return jsonify({"error": "Query is required"}), 400
-        
-        conn = get_db_connection()
-        df = pd.read_sql(query, conn, params=params)
-        conn.close()
-        
-        return jsonify({
-            "success": True,
-            "data": df.to_dict('records'),
-            "columns": df.columns.tolist(),
-            "row_count": len(df)
-        })
+        # Detecteer welke CSV gebruikt moet worden
+        if 'nbaPlayerStats_Cleaned' in query:
+            df = load_cleaned_df()
+        elif 'nbaPlayerStats_Cumulative' in query:
+            df = load_cumulative_df()
+        else:
+            return jsonify({"error": "Alleen queries op PlayerStats2025_Cleaned.csv en PlayerStats2025_Cumulative.csv worden ondersteund."}), 400
+        # Evalueer de query als pandas expressie (beperkt, alleen SELECT ... FROM ... WHERE ... GROUP BY ... ORDER BY ...)
+        # Simpele parser: alleen SELECT kolommen FROM ... WHERE ... GROUP BY ... ORDER BY ...
+        # Voor nu: alleen enkele standaard queries ondersteunen
+        # (Voor custom queries: geef een foutmelding terug)
+        return jsonify({"error": "Custom SQL queries worden niet meer ondersteund. Gebruik de query templates."}), 400
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 @app.route("/api/query-templates")
 def get_query_templates():
-    """Haal beschikbare query templates op"""
+    """Haal beschikbare query templates op (nu alleen pandas)"""
     templates = {
-        # Letterlijk alle totalen en gemiddelde in een platte tabel
         "Overview Major Stat Categories Totals And Averages": {
             "name": "Overview Major Stat Categories Totals and Averages",
             "description": "Points, Rebounds, Assists, Steals, Blocks, Personal Fouls, Turnovers, Games Played",
-            "query": """
-                select
-                player_name,
-                sum(pc.PTS) as [Total Points],
-                sum(pc.TRB) as [Total Rebounds],
-                sum(pc.AST) as [Total Assists],
-                sum(pc.STL) as [Total Steals],
-                sum(pc.BLK) as [Total Blocks],
-                sum(pc.PF)  as [Total Personal Fouls],
-                sum(pc.TOV) as [Total Turnovers],
-                count(*)    as [Total Games],
-                ROUND(AVG(pc.PTS), 2) as [Average Points],
-                ROUND(AVG(pc.TRB), 2) as [Average Rebounds],
-                ROUND(AVG(pc.AST), 2) as [Average Assists],
-                ROUND(AVG(pc.STL), 2) as [Average Steals],
-                ROUND(AVG(pc.BLK), 2) as [Average Blocks],
-                ROUND(AVG(pc.PF), 2)  as [Average Personal Fouls],
-                ROUND(AVG(pc.TOV), 2) as [Average Turnovers]
-                from dbo.nbaPlayerStats_Cleaned pc
-                group by player_name
-                order by [Total Points] desc
-            """
+            "query": "overview_totals"
         },
-
-        # Verfijning op spelers en uitblikwedstrijden, puur obv punten en efg% een performance score
         "top_performers": {
             "name": "Top Performances",
             "description": "Single Game Highlights",
-            "query": """
-                WITH Ranked AS (
-                    SELECT 
-                        [date], team, opp, result, fg, fga, [FG%], [3p], [3pa], [3p%], [2p], [2pa], [2P%], [efg%],
-                        ft, fta, [ft%], trb, stl, blk, tov, pf, player_name, pts,
-                        RANK() OVER (ORDER BY PTS DESC) AS RankPTS,
-                        RANK() OVER (ORDER BY [eFG%] DESC) AS RankEFG,
-                        COUNT(*) OVER () AS TotalPlayers
-                    FROM dbo.nbaPlayerStats_Cleaned
-                ),
-                Scored AS (
-                    SELECT *,
-                        1.0 - CAST(RankPTS - 0.7 AS FLOAT) / (TotalPlayers - 1) AS ScorePTS,
-                        1.0 - CAST(RankEFG - 1 AS FLOAT) / (TotalPlayers - 1) AS ScoreEFG
-                    FROM Ranked
-                ),
-                FinalScore AS (
-                    SELECT *,
-                        (0.7 * ScorePTS + 0.3 * ScoreEFG) AS PerformanceScore
-                    FROM Scored
-                )
-                SELECT 
-                    f.[Date], f.Team, CONCAT(f.player_name, ' - ', nba.team_code) AS [Player Name - Team],
-                    f.Opp, f.Result, f.FG, f.FGA, f.[FG%], f.[3P], f.[3PA], f.[3P%],
-                    f.[2P], f.[2PA], f.[2P%], f.[EFG%], f.FT, f.FTA, f.[FT%],
-                    f.TRB, f.STL, f.BLK, f.TOV, f.PF
-                FROM FinalScore f
-                INNER JOIN nba.dbo.nbaPlayerStats_Cleaned nba 
-                    ON f.player_name = nba.player_name AND f.[date] = nba.[date]  -- toegevoegd om rijen correct te matchen
-                ORDER BY f.PerformanceScore DESC, f.[Date], f.Team, [Player Name - Team];
-            """
-        },
-
-        ## TODO nog te bedenken welke aanpak ik hiervoor wil gebruiken
-        ##"player_performance": {
-        ##    "name": "Speler Performance Analyse",
-        ##    "description": "Analyseer speler statistieken per team",
-        ##    "query": """
-        ##        SELECT 
-        ##            player_name,
-        ##            team_code,
-        ##            PTS,
-        ##            TRB,
-        ##            AST,
-        ##            GS,
-        ##            MP,
-        ##            CAST(PTS AS FLOAT) / NULLIF(CAST(MP AS FLOAT), 0) as PTS_PER_MINUTE
-        ##        FROM dbo.nbaPlayerTotals 
-        ##        WHERE MP > 0
-        ##        ORDER BY PTS DESC
-        ##    """
-        ##},
-        ## TODO nog te bedenken welke aanpak ik hiervoor wil gebruiken
-
-        ##"team_comparison": {
-        ##    "name": "Team Vergelijking",
-        ##    "description": "Vergelijk teams op basis van gemiddelde statistieken",
-        ##    "query": """
-        ##        SELECT 
-        ##            team_code,
-        ##            COUNT(*) as player_count,
-        ##            AVG(CAST(PTS AS FLOAT)) as avg_points,
-        ##            AVG(CAST(TRB AS FLOAT)) as avg_rebounds,
-        ##            AVG(CAST(AST AS FLOAT)) as avg_assists,
-        ##            AVG(CAST(MP AS FLOAT)) as avg_minutes
-        ##        FROM dbo.nbaPlayerTotals 
-        ##        GROUP BY team_code
-        ##        ORDER BY avg_points DESC
-        ##    """
-        ##},
-        
-        ## TODO nog te bedenken welke aanpak ik hiervoor wil gebruiken
-        ##"efficiency_analysis": {
-        ##    "name": "Efficiëntie Analyse",
-        ##    "description": "Spelers gerangschikt op efficiëntie (punten per minuut)",
-        ##    "query": """
-        ##        SELECT 
-        ##            player_name,
-        ##            team_code,
-        ##            PTS,
-        ##            MP,
-        ##            CAST(PTS AS FLOAT) / NULLIF(CAST(MP AS FLOAT), 0) as efficiency,
-        ##            GS
-        ##        FROM dbo.nbaPlayerTotals 
-        ##        WHERE MP > 0
-        ##        ORDER BY efficiency DESC
-        ##    """
-        ##}
+            "query": "top_performers"
+        }
     }
     return jsonify(templates)
 
 @app.route("/api/query-template/<template_name>")
 def execute_query_template(template_name):
-    """Voer een query template uit"""
+    """Voer een query template uit (nu via pandas)"""
     try:
-        templates = {
-            "Overview Major Stat Categories Totals And Averages": """
-                select
-                player_name,
-                sum(pc.PTS) as [Total Points],
-                sum(pc.TRB) as [Total Rebounds],
-                sum(pc.AST) as [Total Assists],
-                sum(pc.STL) as [Total Steals],
-                sum(pc.BLK) as [Total Blocks],
-                sum(pc.PF)  as [Total Personal Fouls],
-                sum(pc.TOV) as [Total Turnovers],
-                count(*)    as [Total Games],
-                ROUND(AVG(pc.PTS), 2) as [Average Points],
-                ROUND(AVG(pc.TRB), 2) as [Average Rebounds],
-                ROUND(AVG(pc.AST), 2) as [Average Assists],
-                ROUND(AVG(pc.STL), 2) as [Average Steals],
-                ROUND(AVG(pc.BLK), 2) as [Average Blocks],
-                ROUND(AVG(pc.PF), 2)  as [Average Personal Fouls],
-                ROUND(AVG(pc.TOV), 2) as [Average Turnovers]
-                from dbo.nbaPlayerStats_Cleaned pc
-                group by player_name
-                order by [Total Points] desc
-            """,
-            "top_performers": """
-                WITH Ranked AS (
-                    SELECT 
-                        [date], team, opp, result, fg, fga, [FG%], [3p], [3pa], [3p%], [2p], [2pa], [2P%], [efg%],
-                        ft, fta, [ft%], trb, stl, blk, tov, pf, player_name, pts,
-                        RANK() OVER (ORDER BY PTS DESC) AS RankPTS,
-                        RANK() OVER (ORDER BY [eFG%] DESC) AS RankEFG,
-                        COUNT(*) OVER () AS TotalPlayers
-                    FROM dbo.nbaPlayerStats_Cleaned
-                ),
-                Scored AS (
-                    SELECT *,
-                        1.0 - CAST(RankPTS - 0.7 AS FLOAT) / (TotalPlayers - 1) AS ScorePTS,
-                        1.0 - CAST(RankEFG - 1 AS FLOAT) / (TotalPlayers - 1) AS ScoreEFG
-                    FROM Ranked
-                ),
-                FinalScore AS (
-                    SELECT *,
-                        (0.7 * ScorePTS + 0.3 * ScoreEFG) AS PerformanceScore
-                    FROM Scored
-                )
-                SELECT 
-                    f.[Date], f.Team, CONCAT(f.player_name, ' - ', nba.team_code) AS [Player Name - Team],
-                    f.Opp, f.Result, f.FG, f.FGA, f.[FG%], f.[3P], f.[3PA], f.[3P%],
-                    f.[2P], f.[2PA], f.[2P%], f.[EFG%], f.FT, f.FTA, f.[FT%],
-                    f.TRB, f.STL, f.BLK, f.TOV, f.PF
-                FROM FinalScore f
-                INNER JOIN nba.dbo.nbaPlayerStats_Cleaned nba 
-                    ON f.player_name = nba.player_name AND f.[date] = nba.[date]  -- toegevoegd om rijen correct te matchen
-                ORDER BY f.PerformanceScore DESC, f.[Date], f.Team, [Player Name - Team];
-            """
-            ##"top_performers": """
-            ##    WITH Ranked AS (
-            ##        SELECT 
-            ##            [date], team, opp, result, fg, fga, [FG%], [3p], [3pa], [3p%], [2p], [2pa], [2P%], [efg%],
-            ##            ft, fta, [ft%], trb, stl, blk, tov, pf, player_name, pts,
-            ##            RANK() OVER (ORDER BY PTS DESC) AS RankPTS,
-            ##            RANK() OVER (ORDER BY [eFG%] DESC) AS RankEFG,
-            ##            COUNT(*) OVER () AS TotalPlayers
-            ##        FROM dbo.nbaPlayerStats_Cleaned
-            ##    ),
-            ##    Scored AS (
-            ##        SELECT *,
-            ##            1.0 - CAST(RankPTS - 1 AS FLOAT) / (TotalPlayers - 1) AS ScorePTS,
-            ##            1.0 - CAST(RankEFG - 1 AS FLOAT) / (TotalPlayers - 1) AS ScoreEFG
-            ##        FROM Ranked
-            ##    ),
-            ##    FinalScore AS (
-            ##        SELECT *,
-            ##            (0.7 * ScorePTS + 0.3 * ScoreEFG) AS PerformanceScore
-            ##        FROM Scored
-            ##    )
-            ##    SELECT 
-            ##        f.[Date], f.Team, CONCAT(f.player_name, ' - ', nba.team_code) AS [Player Name - Team],
-            ##        f.Opp, f.Result, f.FG, f.FGA, f.[FG%], f.[3P], f.[3PA], f.[3P%],
-            ##        f.[2P], f.[2PA], f.[2P%], f.[EFG%], f.FT, f.FTA, f.[FT%],
-            ##        f.TRB, f.STL, f.BLK, f.TOV, f.PF
-            ##    FROM FinalScore f
-            ##    INNER JOIN nba.dbo.nbaPlayerStats_Cleaned nba 
-            ##        ON f.player_name = nba.player_name AND f.[date] = nba.[date]  -- toegevoegd om rijen correct te matchen
-            ##    ORDER BY f.PerformanceScore DESC, f.[Date], f.Team, [Player Name - Team];
-            ##""",
-            ##"category_leaders": """
-            ##    select
-            ##    player_name,
-            ##    sum(pc.PTS) as [Total Points],
-            ##    sum(pc.TRB) as [Total Rebounds],
-            ##    sum(pc.AST) as [Total Assists],
-            ##    sum(pc.STL) as [Total Steals],
-            ##    sum(pc.BLK) as [Total Blocks],
-            ##    sum(pc.PF)  as [Total Personal Fouls],
-            ##    sum(pc.TOV) as [Total Turnovers],
-            ##    count(*)    as [Total Games],
-            ##    ROUND(AVG(pc.PTS), 2) as [Average Points],
-            ##    ROUND(AVG(pc.TRB), 2) as [Average Rebounds],
-            ##    ROUND(AVG(pc.AST), 2) as [Average Assists],
-            ##    ROUND(AVG(pc.STL), 2) as [Average Steals],
-            ##    ROUND(AVG(pc.BLK), 2) as [Average Blocks],
-            ##    ROUND(AVG(pc.PF), 2)  as [Average Personal Fouls],
-            ##    ROUND(AVG(pc.TOV), 2) as [Average Turnovers]
-            ##    from dbo.nbaPlayerStats_Cleaned pc
-            ##    group by player_name
-            ##    order by [Total Points] desc
-            ##""",
-            ##"efficiency_analysis": """
-            ##    SELECT 
-            ##        player_name,
-            ##        team_code,
-            ##        PTS,
-            ##        MP,
-            ##        CAST(PTS AS FLOAT) / NULLIF(CAST(MP AS FLOAT), 0) as efficiency,
-            ##        GS
-            ##    FROM dbo.nbaPlayerTotals 
-            ##    WHERE MP > 0
-            ##    ORDER BY efficiency DESC
-            ##"""
-        }
-        
-        if template_name not in templates:
-            return jsonify({"error": "Template not found"}), 404
-        
-        conn = get_db_connection()
-        df = pd.read_sql(templates[template_name], conn)
-        conn.close()
-        
+        if template_name == "Overview Major Stat Categories Totals And Averages":
+            df = load_cleaned_df()
+            agg = df.groupby('player_name').agg({
+                'PTS': 'sum',
+                'TRB': 'sum',
+                'AST': 'sum',
+                'STL': 'sum',
+                'BLK': 'sum',
+                'PF': 'sum',
+                'TOV': 'sum',
+                'PTS': ['mean'],
+                'TRB': ['mean'],
+                'AST': ['mean'],
+                'STL': ['mean'],
+                'BLK': ['mean'],
+                'PF': ['mean'],
+                'TOV': ['mean'],
+                'player_name': 'count'
+            })
+            agg.columns = [
+                'Total Points', 'Total Rebounds', 'Total Assists', 'Total Steals', 'Total Blocks',
+                'Total Personal Fouls', 'Total Turnovers',
+                'Average Points', 'Average Rebounds', 'Average Assists', 'Average Steals',
+                'Average Blocks', 'Average Personal Fouls', 'Average Turnovers', 'Total Games'
+            ]
+            agg = agg.reset_index()
+            agg = agg.sort_values('Total Points', ascending=False)
+            return jsonify({
+                "success": True,
+                "template": template_name,
+                "data": agg.to_dict('records'),
+                "columns": agg.columns.tolist(),
+                "row_count": len(agg)
+            })
+        elif template_name == "top_performers":
+            df = load_cleaned_df()
+            # Simuleer performance score: PTS + 0.7*AST + 0.7*TRB + 1.2*STL + 1.2*BLK - 0.7*TOV
+            df = df.dropna(subset=['PTS', 'AST', 'TRB', 'STL', 'BLK', 'TOV'])
+            df['PerformanceScore'] = (
+                df['PTS'] + 0.7*df['AST'] + 0.7*df['TRB'] + 1.2*df['STL'] + 1.2*df['BLK'] - 0.7*df['TOV']
+            )
+            top = df.sort_values('PerformanceScore', ascending=False).head(50)
         return jsonify({
             "success": True,
             "template": template_name,
-            "data": df.to_dict('records'),
-            "columns": df.columns.tolist(),
-            "row_count": len(df)
+                "data": top.to_dict('records'),
+                "columns": top.columns.tolist(),
+                "row_count": len(top)
         })
+        else:
+            return jsonify({"error": "Template not found"}), 404
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -426,6 +243,148 @@ def ml_predict():
         return jsonify({"success": True, "predicted_pts": float(pred)})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@app.route('/api/ml/predict-next-game')
+def ml_predict_next_game():
+    """Voorspel voor elke speler het aantal punten in de volgende wedstrijd (rolling average laatste 5 wedstrijden)."""
+    try:
+        df = load_cleaned_df()
+        df['Date'] = pd.to_datetime(df['Date'])
+        df = df.sort_values(by=['player_name', 'Date'])
+        # Rolling average laatste 5 wedstrijden per speler
+        df['rolling_avg_pts'] = df.groupby('player_name')['PTS'].transform(lambda x: x.rolling(window=5, min_periods=1).mean())
+        # Pak de laatste wedstrijd per speler
+        last_games = df.groupby('player_name').tail(1).copy()
+        result = last_games[['player_name', 'team_code', 'Date', 'PTS', 'rolling_avg_pts']].copy()
+        result = pd.DataFrame(result)
+        result = result.rename(columns={'PTS': 'last_game_pts', 'rolling_avg_pts': 'predicted_next_pts'})
+        result = result.replace({np.nan: None, np.inf: None, -np.inf: None})
+        return jsonify({
+            'success': True,
+            'data': result.to_dict(orient='records'),
+            'columns': list(result.columns),
+            'row_count': len(result)
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+@app.route('/api/ml/hot-streaks')
+def ml_hot_streaks():
+    """Detecteer spelers die in hun laatste 5 wedstrijden >20% boven hun seizoensgemiddelde scoren."""
+    try:
+        df = load_cleaned_df()
+        df['Date'] = pd.to_datetime(df['Date'])
+        df = df.sort_values(by=['player_name', 'Date'])
+        # Seizoensgemiddelde per speler als DataFrame
+        season_avg = df.groupby('player_name')['PTS'].mean().to_frame('season_avg')
+        # Rolling average laatste 5 wedstrijden
+        df['rolling_avg_5'] = df.groupby('player_name')['PTS'].transform(lambda x: x.rolling(window=5, min_periods=1).mean())
+        # Pak de laatste wedstrijd per speler
+        last_games = df.groupby('player_name').tail(1).copy()
+        last_games = last_games.merge(season_avg, left_on='player_name', right_index=True)
+        last_games['hot_streak'] = last_games['rolling_avg_5'] > 1.2 * last_games['season_avg']
+        hot = last_games[last_games['hot_streak']].copy()
+        result = hot[['player_name', 'team_code', 'Date', 'rolling_avg_5', 'season_avg']].copy()
+        result = pd.DataFrame(result)
+        result = result.rename(columns={'rolling_avg_5': 'last5_avg_pts'})
+        result = result.replace({np.nan: None, np.inf: None, -np.inf: None})
+        return jsonify({
+            'success': True,
+            'data': result.to_dict(orient='records'),
+            'columns': list(result.columns),
+            'row_count': len(result)
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+@app.route('/api/ml/outliers')
+def ml_outliers():
+    """Geef wedstrijden terug waar een speler >2 standaarddeviaties boven zijn eigen gemiddelde scoorde (uitschieters)."""
+    try:
+        df = load_cleaned_df()
+        # Gemiddelde en std per speler
+        stats = df.groupby('player_name')['PTS'].agg(['mean', 'std']).reset_index()
+        df = df.merge(stats, on='player_name', how='left')
+        df['z_score'] = (df['PTS'] - df['mean']) / df['std']
+        outliers = df[df['z_score'] > 2].copy()
+        result = outliers[['Date', 'player_name', 'team_code', 'PTS', 'mean', 'std', 'z_score']].copy()
+        result = pd.DataFrame(result)
+        result = result.replace({np.nan: None, np.inf: None, -np.inf: None})
+        return jsonify({
+            'success': True,
+            'data': result.to_dict(orient='records'),
+            'columns': list(result.columns),
+            'row_count': len(result)
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+@app.route('/api/ml/jeremy-lin-games')
+def ml_jeremy_lin_games():
+    """
+    Vind wedstrijden waarin een speler veel beter presteerde dan zijn eigen gemiddelde, op basis van PTS, FG% en eFG%.
+    Geeft de top 30 grootste uitschieters terug (Jeremy Lin Games).
+    """
+    try:
+        df = load_cleaned_df()
+        # Alleen wedstrijden met voldoende data
+        df = df.dropna(subset=['PTS', 'FG%', 'eFG%'])
+        # Seizoensgemiddelde en std per speler
+        stats = df.groupby('player_name').agg({
+            'PTS': ['mean', 'std'],
+            'FG%': ['mean', 'std'],
+            'eFG%': ['mean', 'std']
+        })
+        stats.columns = ['PTS_mean', 'PTS_std', 'FG%_mean', 'FG%_std', 'eFG%_mean', 'eFG%_std']
+        df = df.merge(stats, left_on='player_name', right_index=True, how='left')
+        # Z-scores per stat
+        df['z_pts'] = (df['PTS'] - df['PTS_mean']) / df['PTS_std']
+        df['z_fg'] = (df['FG%'] - df['FG%_mean']) / df['FG%_std']
+        df['z_efg'] = (df['eFG%'] - df['eFG%_mean']) / df['eFG%_std']
+        # Combineer tot één Jeremy Lin score (gewogen som, PTS zwaarst)
+        df['jeremy_lin_score'] = df['z_pts'] * 1.5 + df['z_fg'] + df['z_efg']
+        # Sorteer op score
+        top = df.sort_values('jeremy_lin_score', ascending=False).head(30).copy()
+        top['Date'] = pd.to_datetime(top['Date']).dt.strftime('%Y-%m-%d')
+        # Kolommen voor tabel en grafiek
+        if 'opp' in top.columns:
+            result = top[['Date', 'player_name', 'team_code', 'opp', 'PTS', 'FG%', 'eFG%', 'jeremy_lin_score']].copy()
+        else:
+            result = top[['Date', 'player_name', 'team_code', 'PTS', 'FG%', 'eFG%', 'jeremy_lin_score']].copy()
+            result['opp'] = None
+            result = result[['Date', 'player_name', 'team_code', 'opp', 'PTS', 'FG%', 'eFG%', 'jeremy_lin_score']]
+        result = result.rename(columns={'team_code': 'Team Code', 'jeremy_lin_score': 'JeremyLinScore', 'opp': 'OPP'})
+        result['JeremyLinScore'] = result['JeremyLinScore'].round(2)
+        result = result.replace({np.nan: None, np.inf: None, -np.inf: None})
+        # Selecteer top 5 unieke spelers met hoogste JeremyLinScore
+        top = df.sort_values('jeremy_lin_score', ascending=False)
+        top_players = top['player_name'].unique()[:5]
+        top = top[top['player_name'].isin(top_players)].copy()
+        # Voor elke speler alleen de hoogste uitschieter
+        top = top.sort_values('jeremy_lin_score', ascending=False).drop_duplicates('player_name')
+        # Kolommen voor grouped bar chart
+        result = top[['player_name', 'team_code', 'PTS', 'PTS_mean', 'FG%', 'FG%_mean', 'eFG%', 'eFG%_mean', 'jeremy_lin_score']].copy()
+        result = result.rename(columns={
+            'player_name': 'Player Name',
+            'team_code': 'Team Code',
+            'PTS': 'PTS (Game)',
+            'PTS_mean': 'PTS (Season Avg)',
+            'FG%': 'FG% (Game)',
+            'FG%_mean': 'FG% (Season Avg)',
+            'eFG%': 'eFG% (Game)',
+            'eFG%_mean': 'eFG% (Season Avg)',
+            'jeremy_lin_score': 'JeremyLinScore'
+        })
+        result['JeremyLinScore'] = result['JeremyLinScore'].round(2)
+        result = result.replace({np.nan: None, np.inf: None, -np.inf: None})
+        return jsonify({
+            'success': True,
+            'data': result.to_dict(orient='records'),
+            'columns': list(result.columns),
+            'row_count': len(result)
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)})
 
 # === BESTAANDE ENDPOINTS (behouden voor backward compatibility) ===
 
@@ -566,31 +525,27 @@ def get_cumulative_points_top20():
 
 @app.route('/api/cumulative/stat', methods=['POST'])
 def get_cumulative_stat():
-    """Geeft voor een lijst spelers en een stat het cumulatieve verloop per datum terug."""
     try:
         data = request.get_json()
         players = data.get('players', [])
         stat = data.get('stat', 'PTS')
         if not players or not stat:
             return jsonify({"error": "players en stat zijn verplicht"}), 400
-        # Maak een string voor de IN-clause
-        placeholders = ','.join(['?'] * len(players))
-        query = f'''
-        SELECT c.Date, c.player_name, c.team_code,
-               c.[{stat}] AS cumulative_stat
-        FROM dbo.nbaPlayerStats_Cumulative c
-        WHERE c.player_name IN ({placeholders})
-        ORDER BY c.player_name, c.Date
-        '''
-        conn = get_db_connection()
-        df = pd.read_sql(query, conn, params=players)
-        conn.close()
-        df['Date'] = df['Date'].astype(str)
+        df = load_cleaned_df()
+        df = df[df['player_name'].isin(players)]
+        df['Date'] = pd.to_datetime(df['Date'])
+        df = df.sort_values(by='player_name')
+        df = df.sort_values(by='Date')
+        df['cumulative_stat'] = df.groupby(['player_name', 'team_code'])[stat].cumsum()
+        df['Date'] = df['Date'].dt.strftime('%Y-%m-%d')
+        result = df[['Date', 'player_name', 'team_code', 'cumulative_stat']].copy()
+        result = pd.DataFrame(result)
+        result = result.replace({np.nan: None, np.inf: None, -np.inf: None})
         return jsonify({
             "success": True,
-            "data": df.to_dict('records'),
-            "players": df['player_name'].unique().tolist(),
-            "dates": sorted(df['Date'].unique().tolist()),
+            "data": result.to_dict(orient='records'),
+            "players": result['player_name'].drop_duplicates().tolist(),
+            "dates": sorted(result['Date'].drop_duplicates().tolist()),
             "stat": stat
         })
     except Exception as e:
@@ -598,134 +553,137 @@ def get_cumulative_stat():
 
 @app.route('/api/overview-totals')
 def overview_totals():
-    """Geeft per speler en team de totalen en correcte percentages terug."""
     try:
-        conn = get_db_connection()
-        query = '''
-        SELECT
-            player_name,
-            SUM(PTS) AS [Total Points],
-            SUM(AST) AS [Total Assists],
-            SUM(TRB) AS [Total Rebounds],
-            SUM(STL) AS [Total Steals],
-            SUM(BLK) AS [Total Blocks],
-            SUM(TOV) AS [Total Turnovers],
-            SUM(PF)  AS [Total Personal Fouls],
-            CASE WHEN SUM(FGA) > 0 THEN CAST(SUM(FG) AS FLOAT) / SUM(FGA) ELSE NULL END AS [FG%],
-            SUM(FG)  AS [Total FG],
-            SUM(FGA) AS [Total FGA],
-            CASE WHEN SUM([3PA]) > 0 THEN CAST(SUM([3P]) AS FLOAT) / SUM([3PA]) ELSE NULL END AS [3P%],
-            SUM([3P])  AS [Total 3P],
-            SUM([3PA]) AS [Total 3PA],
-            CASE WHEN SUM([2PA]) > 0 THEN CAST(SUM([2P]) AS FLOAT) / SUM([2PA]) ELSE NULL END AS [2P%],
-            SUM([2P])  AS [Total 2P],
-            SUM([2PA]) AS [Total 2PA],
-            CASE WHEN SUM(FTA) > 0 THEN CAST(SUM(FT) AS FLOAT) / SUM(FTA) ELSE NULL END AS [FT%],
-            SUM(FT)  AS [Total FT],
-            SUM(FTA) AS [Total FTA],
-            CASE WHEN SUM(FGA) > 0 THEN CAST((SUM(FG) + 0.5 * SUM([3P])) AS FLOAT) / SUM(FGA) ELSE NULL END AS [eFG%],
-            SUM(ORB) AS [Total ORB],
-            SUM(DRB) AS [Total DRB],
-            team_code
-        FROM [nba].[dbo].[nbaPlayerStats_Cleaned]
-        GROUP BY player_name, team_code
-        ORDER BY [Total Points] DESC
-        '''
-        df = pd.read_sql(query, conn)
-        conn.close()
-        df = df.replace({np.nan: None})
+        df = load_cleaned_df()
+        grouped = df.groupby(['player_name', 'team_code']).agg({
+            'PTS': 'sum',
+            'AST': 'sum',
+            'TRB': 'sum',
+            'STL': 'sum',
+            'BLK': 'sum',
+            'TOV': 'sum',
+            'PF': 'sum',
+            'FG': 'sum',
+            'FGA': 'sum',
+            '3P': 'sum',
+            '3PA': 'sum',
+            '2P': 'sum',
+            '2PA': 'sum',
+            'FT': 'sum',
+            'FTA': 'sum',
+            'ORB': 'sum',
+            'DRB': 'sum'
+        }).reset_index()
+        grouped['FG%'] = grouped.apply(lambda r: r['FG']/r['FGA'] if r['FGA'] > 0 else None, axis=1)
+        grouped['3P%'] = grouped.apply(lambda r: r['3P']/r['3PA'] if r['3PA'] > 0 else None, axis=1)
+        grouped['2P%'] = grouped.apply(lambda r: r['2P']/r['2PA'] if r['2PA'] > 0 else None, axis=1)
+        grouped['FT%'] = grouped.apply(lambda r: r['FT']/r['FTA'] if r['FTA'] > 0 else None, axis=1)
+        grouped['eFG%'] = grouped.apply(lambda r: (r['FG'] + 0.5*r['3P'])/r['FGA'] if r['FGA'] > 0 else None, axis=1)
+        grouped = grouped.sort_values(by='PTS', ascending=False)
+        grouped = grouped.replace({np.nan: None})
+        columns = [
+            'player_name',
+            'Total Points', 'Total Assists', 'Total Rebounds', 'Total Steals', 'Total Blocks',
+            'Total Turnovers', 'Total Personal Fouls',
+            'FG%', 'Total FG', 'Total FGA', '3P%', 'Total 3P', 'Total 3PA',
+            '2P%', 'Total 2P', 'Total 2PA', 'FT%', 'Total FT', 'Total FTA', 'eFG%',
+            'Total ORB', 'Total DRB', 'team_code'
+        ]
+        grouped = grouped.rename(columns={
+            'PTS': 'Total Points',
+            'AST': 'Total Assists',
+            'TRB': 'Total Rebounds',
+            'STL': 'Total Steals',
+            'BLK': 'Total Blocks',
+            'TOV': 'Total Turnovers',
+            'PF': 'Total Personal Fouls',
+            'FG': 'Total FG',
+            'FGA': 'Total FGA',
+            '3P': 'Total 3P',
+            '3PA': 'Total 3PA',
+            '2P': 'Total 2P',
+            '2PA': 'Total 2PA',
+            'FT': 'Total FT',
+            'FTA': 'Total FTA',
+            'ORB': 'Total ORB',
+            'DRB': 'Total DRB'
+        })
+        grouped = grouped[columns]
         return jsonify({
             "success": True,
-            "data": df.to_dict('records'),
-            "columns": df.columns.tolist(),
-            "row_count": len(df)
+            "data": grouped.to_dict(orient='records'),
+            "columns": columns,
+            "row_count": len(grouped)
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/overview-totals/sorted', methods=['POST'])
 def overview_totals_with_sort():
-    """Geeft per speler en team de totalen en correcte percentages terug met dynamische sortering."""
     try:
         data = request.get_json() or {}
         sort_column = data.get('sort_column', 'Total Points')
         sort_direction = data.get('sort_direction', 'DESC')
-        
-        # Debug logging
-        print(f"DEBUG: Received sort_column: '{sort_column}', sort_direction: '{sort_direction}'")
-        
-        # Map frontend kolomnamen naar database kolomnamen
-        column_mapping = {
-            'Total Points': '[Total Points]',
-            'Total Assists': '[Total Assists]',
-            'Total Rebounds': '[Total Rebounds]',
-            'Total Steals': '[Total Steals]',
-            'Total Blocks': '[Total Blocks]',
-            'Total Turnovers': '[Total Turnovers]',
-            'Total Personal Fouls': '[Total Personal Fouls]',
-            'Total FG': '[Total FG]',
-            'Total FGA': '[Total FGA]',
-            'Total 3P': '[Total 3P]',
-            'Total 3PA': '[Total 3PA]',
-            'Total 2P': '[Total 2P]',
-            'Total 2PA': '[Total 2PA]',
-            'Total FT': '[Total FT]',
-            'Total FTA': '[Total FTA]',
-            'Total ORB': '[Total ORB]',
-            'Total DRB': '[Total DRB]',
-            'player_name': 'player_name',
-            'team_code': 'team_code'
-        }
-        
-        # Bepaal de juiste ORDER BY clause
-        if sort_column in column_mapping:
-            order_by = f"ORDER BY {column_mapping[sort_column]} {sort_direction}"
-            print(f"DEBUG: Using mapped column: {column_mapping[sort_column]}")
-        else:
-            order_by = "ORDER BY [Total Points] DESC"
-            print(f"DEBUG: Column '{sort_column}' not found in mapping, using fallback")
-        
-        print(f"DEBUG: Final ORDER BY clause: {order_by}")
-        
-        conn = get_db_connection()
-        query = f'''
-        SELECT
-            player_name,
-            SUM(PTS) AS [Total Points],
-            SUM(AST) AS [Total Assists],
-            SUM(TRB) AS [Total Rebounds],
-            SUM(STL) AS [Total Steals],
-            SUM(BLK) AS [Total Blocks],
-            SUM(TOV) AS [Total Turnovers],
-            SUM(PF)  AS [Total Personal Fouls],
-            CASE WHEN SUM(FGA) > 0 THEN CAST(SUM(FG) AS FLOAT) / SUM(FGA) ELSE NULL END AS [FG%],
-            SUM(FG)  AS [Total FG],
-            SUM(FGA) AS [Total FGA],
-            CASE WHEN SUM([3PA]) > 0 THEN CAST(SUM([3P]) AS FLOAT) / SUM([3PA]) ELSE NULL END AS [3P%],
-            SUM([3P])  AS [Total 3P],
-            SUM([3PA]) AS [Total 3PA],
-            CASE WHEN SUM([2PA]) > 0 THEN CAST(SUM([2P]) AS FLOAT) / SUM([2PA]) ELSE NULL END AS [2P%],
-            SUM([2P])  AS [Total 2P],
-            SUM([2PA]) AS [Total 2PA],
-            CASE WHEN SUM(FTA) > 0 THEN CAST(SUM(FT) AS FLOAT) / SUM(FTA) ELSE NULL END AS [FT%],
-            SUM(FT)  AS [Total FT],
-            SUM(FTA) AS [Total FTA],
-            CASE WHEN SUM(FGA) > 0 THEN CAST((SUM(FG) + 0.5 * SUM([3P])) AS FLOAT) / SUM(FGA) ELSE NULL END AS [eFG%],
-            SUM(ORB) AS [Total ORB],
-            SUM(DRB) AS [Total DRB],
-            team_code
-        FROM [nba].[dbo].[nbaPlayerStats_Cleaned]
-        GROUP BY player_name, team_code
-        {order_by}
-        '''
-        df = pd.read_sql(query, conn)
-        conn.close()
-        df = df.replace({np.nan: None})
+        df = load_cleaned_df()
+        grouped = df.groupby(['player_name', 'team_code']).agg({
+            'PTS': 'sum',
+            'AST': 'sum',
+            'TRB': 'sum',
+            'STL': 'sum',
+            'BLK': 'sum',
+            'TOV': 'sum',
+            'PF': 'sum',
+            'FG': 'sum',
+            'FGA': 'sum',
+            '3P': 'sum',
+            '3PA': 'sum',
+            '2P': 'sum',
+            '2PA': 'sum',
+            'FT': 'sum',
+            'FTA': 'sum',
+            'ORB': 'sum',
+            'DRB': 'sum'
+        }).reset_index()
+        grouped['FG%'] = grouped.apply(lambda r: r['FG']/r['FGA'] if r['FGA'] > 0 else None, axis=1)
+        grouped['3P%'] = grouped.apply(lambda r: r['3P']/r['3PA'] if r['3PA'] > 0 else None, axis=1)
+        grouped['2P%'] = grouped.apply(lambda r: r['2P']/r['2PA'] if r['2PA'] > 0 else None, axis=1)
+        grouped['FT%'] = grouped.apply(lambda r: r['FT']/r['FTA'] if r['FTA'] > 0 else None, axis=1)
+        grouped['eFG%'] = grouped.apply(lambda r: (r['FG'] + 0.5*r['3P'])/r['FGA'] if r['FGA'] > 0 else None, axis=1)
+        grouped = grouped.rename(columns={
+            'PTS': 'Total Points',
+            'AST': 'Total Assists',
+            'TRB': 'Total Rebounds',
+            'STL': 'Total Steals',
+            'BLK': 'Total Blocks',
+            'TOV': 'Total Turnovers',
+            'PF': 'Total Personal Fouls',
+            'FG': 'Total FG',
+            'FGA': 'Total FGA',
+            '3P': 'Total 3P',
+            '3PA': 'Total 3PA',
+            '2P': 'Total 2P',
+            '2PA': 'Total 2PA',
+            'FT': 'Total FT',
+            'FTA': 'Total FTA',
+            'ORB': 'Total ORB',
+            'DRB': 'Total DRB'
+        })
+        columns = [
+            'player_name',
+            'Total Points', 'Total Assists', 'Total Rebounds', 'Total Steals', 'Total Blocks',
+            'Total Turnovers', 'Total Personal Fouls',
+            'FG%', 'Total FG', 'Total FGA', '3P%', 'Total 3P', 'Total 3PA',
+            '2P%', 'Total 2P', 'Total 2PA', 'FT%', 'Total FT', 'Total FTA', 'eFG%',
+            'Total ORB', 'Total DRB', 'team_code'
+        ]
+        grouped = grouped[columns]
+        grouped = grouped.replace({np.nan: None})
+        grouped = grouped.sort_values(by=sort_column, ascending=(sort_direction == 'asc'))
         return jsonify({
             "success": True,
-            "data": df.to_dict('records'),
-            "columns": df.columns.tolist(),
-            "row_count": len(df),
+            "data": grouped.to_dict(orient='records'),
+            "columns": columns,
+            "row_count": len(grouped),
             "sort_column": sort_column,
             "sort_direction": sort_direction
         })
@@ -734,57 +692,32 @@ def overview_totals_with_sort():
 
 @app.route('/api/cumulative/top10')
 def get_cumulative_top10():
-    """Cumulatieve punten per dag voor top 10 spelers (hardcoded lijst)"""
     try:
-        # Haal de top 10 spelers op uit de database op basis van totale punten
-        conn = get_db_connection()
-        top10_query = """
-            SELECT TOP 10 player_name
-            FROM [nba].[dbo].[nbaPlayerStats_Cleaned]
-            GROUP BY player_name
-            ORDER BY SUM(PTS) DESC
-        """
-        top10_df = pd.read_sql(top10_query, conn)
-        top10 = top10_df['player_name'].tolist()
-        conn.close()
-        placeholders = ','.join(['?'] * len(top10))
-        query = f"""
-            SELECT player_name, [Date], 
-                PTS AS cumulative_pts
-            FROM nba.dbo.nbaPlayerStats_Cumulative
-            WHERE player_name IN ({placeholders})
-            ORDER BY player_name, [Date]
-        """
-        conn = get_db_connection()
-        df = pd.read_sql(query, conn, params=top10)
-        conn.close()
-        df['Date'] = df['Date'].astype(str)
+        df = load_cleaned_df()
+        df['Date'] = pd.to_datetime(df['Date'])
+        top10 = df.groupby('player_name')['PTS'].sum().sort_values(ascending=False).head(10).index.tolist()
+        df_top = df[df['player_name'].isin(top10)]
+        df_top = df_top.sort_values(by='player_name')
+        df_top = df_top.sort_values(by='Date')
+        df_top['cumulative_pts'] = df_top.groupby(['player_name', 'team_code'])['PTS'].cumsum()
+        df_top['Date'] = df_top['Date'].dt.strftime('%Y-%m-%d')
+        result = df_top[['Date', 'player_name', 'team_code', 'cumulative_pts']].copy()
+        result = pd.DataFrame(result)
         return jsonify({
             "success": True,
-            "data": df.to_dict('records'),
-            "players": df['player_name'].unique().tolist(),
-            "dates": sorted(df['Date'].unique().tolist())
+            "data": result.rename(columns={'cumulative_pts': 'cumulative_stat'}).to_dict(orient='records'),
+            "players": result['player_name'].drop_duplicates().tolist(),
+            "dates": sorted(result['Date'].drop_duplicates().tolist())
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/top-performances-ml')
 def top_performances_ml():
-    """Geeft de top 50 beste individuele wedstrijden volgens een ML-performance score."""
     try:
-        conn = get_db_connection()
-        query = '''
-        SELECT [Date], player_name, team_code, PTS, TRB, AST, STL, BLK, TOV, [FG%], [eFG%]
-        FROM dbo.nbaPlayerStats_Cleaned
-        WHERE player_name IS NOT NULL AND PTS IS NOT NULL
-        '''
-        df = pd.read_sql(query, conn)
-        conn.close()
-        # Drop rows met missende waarden
-        df = df.dropna()
-        # Features voor ML (MP uitgesloten vanwege datetime.time problemen)
+        df = load_cleaned_df()
+        df = df.dropna(subset=['PTS', 'TRB', 'AST', 'STL', 'BLK', 'TOV', 'FG%', 'eFG%'])
         features = ['PTS', 'TRB', 'AST', 'STL', 'BLK', 'TOV', 'FG%', 'eFG%']
-        # Handgemaakte score als target
         df['perf_score'] = (
             df['PTS'] +
             1.2 * df['AST'] +
@@ -793,23 +726,61 @@ def top_performances_ml():
             1.5 * df['BLK'] -
             1.0 * df['TOV']
         ) * (df['eFG%'] + 0.5)
-        X = df[features]
-        y = df['perf_score']
-        pipeline = Pipeline([
-            ('scaler', StandardScaler()),
-            ('rf', RandomForestRegressor(n_estimators=100, random_state=42))
-        ])
-        pipeline.fit(X, y)
-        df['ml_score'] = pipeline.predict(X)
-        # Top 50 beste wedstrijden
-        top_games = df.sort_values('ml_score', ascending=False).head(50)
-        # Zet datum om naar string
-        top_games['Date'] = top_games['Date'].astype(str)
+        top_games = df.sort_values(by='perf_score', ascending=False).head(50).copy()
+        top_games['Date'] = pd.to_datetime(top_games['Date']).dt.strftime('%Y-%m-%d')
+        result = top_games.copy()
+        result = pd.DataFrame(result)
+        result = result.replace({np.nan: None, np.inf: None, -np.inf: None})
+        # Zet kolomvolgorde netjes
+        desired_order = [
+            'Date', 'player_name', 'team_code', 'perf_score', 'PTS', 'TRB', 'AST', 'BLK', 'STL', 'TOV', 'PF',
+            'FG', 'FGA', 'FG%', '3P', '3PA', '3P%', '2P', '2PA', '2P%', 'FT', 'FTA', 'FT%', 'eFG%'
+        ]
+        cols = [col for col in desired_order if col in result.columns]
+        result = result[cols + [c for c in result.columns if c not in cols]]
+        # Verwijder ongewenste kolommen
+        result = result.drop(columns=['Rk', 'Gcar', 'Gtm', 'Unnamed_5', 'GS', 'MP', 'ORB', 'DRB', 'GmSc', 'PlusMinus', 'player_id'], errors='ignore')
         return jsonify({
             'success': True,
-            'data': top_games.to_dict('records'),
-            'columns': list(top_games.columns),
-            'row_count': len(top_games)
+            'data': result.to_dict(orient='records'),
+            'columns': list(result.columns),
+            'row_count': len(result)
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+@app.route('/api/predict/next10games')
+def predict_next10games():
+    """Voorspel voor elke speler de stats voor de komende 10 wedstrijden van het volgende seizoen (AI/ML-style)."""
+    try:
+        df = load_cleaned_df()
+        stats = ['PTS', 'TRB', 'AST', 'STL', 'BLK', 'TOV', 'FG%', '3P%', 'FT%']
+        players = df['player_name'].unique()
+        predictions = []
+        for player in players:
+            player_df = df[df['player_name'] == player]
+            team = player_df['team_code'].iloc[-1] if not player_df.empty else None
+            pred_rows = []
+            for i in range(1, 11):
+                pred = {'player_name': player, 'team_code': team, 'game': i}
+                for stat in stats:
+                    mean = player_df[stat].mean()
+                    std = player_df[stat].std() if player_df[stat].std() > 0 else 1
+                    # Simuleer AI: random normaal rond mean, min 0
+                    value = np.random.normal(mean, std)
+                    if stat.endswith('%'):
+                        value = max(0, min(1, value))
+                    else:
+                        value = max(0, value)
+                    pred[stat] = round(float(value), 2)
+                pred_rows.append(pred)
+            predictions.append({'player_name': player, 'team_code': team, 'predictions': pred_rows})
+        return jsonify({
+            'success': True,
+            'players': players.tolist(),
+            'data': predictions,
+            'columns': ['player_name', 'team_code', 'game'] + stats,
+            'row_count': len(predictions)
         })
     except Exception as e:
         return jsonify({'error': str(e)})
