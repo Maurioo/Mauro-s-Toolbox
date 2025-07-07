@@ -1,0 +1,19 @@
+import pandas as pd
+import pyodbc  # of sqlite3
+
+conn_str = (
+    "DRIVER={ODBC Driver 17 for SQL Server};"
+    "SERVER=localhost\\MOCKCRM;"
+    "DATABASE=nba;"
+    "UID=nbaUser;"
+    "PWD=test123;"
+    "TrustServerCertificate=yes;"
+    "Encrypt=no;"
+)
+conn = pyodbc.connect(conn_str)
+df = pd.read_sql(" SELECT *  FROM [nba].[dbo].[nbaPlayerStats2025_Cumulative]", conn)
+df.to_csv("data/PlayerStats2025_Cumulative.csv", index=False)
+
+conn = pyodbc.connect(conn_str)
+df = pd.read_sql("SELECT * FROM [nba].[dbo].[nbaPlayerStats2025_Cleaned]", conn)
+df.to_csv("data/PlayerStats2025_Cleaned.csv", index=False)

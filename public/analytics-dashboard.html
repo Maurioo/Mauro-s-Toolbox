@@ -14,37 +14,72 @@
         }
 
         body {
-            font-family: 'Nunito', 'Poppins', 'Roboto', Arial, sans-serif;
-            background: #f7f7f7;
-            min-height: 100vh;
+            background: linear-gradient(135deg, #f7f7f7 60%, #e3e9f7 100%);
             color: #222;
+            font-family: 'Nunito', 'Poppins', 'Roboto', Arial, sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
         }
-
+        /* --- Basketbal cirkels/visuals op de achtergrond --- */
+        .basketball-bg {
+            position: fixed;
+            z-index: 0;
+            pointer-events: none;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            overflow: hidden;
+        }
+        .basketball-circle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.13;
+            background: radial-gradient(circle at 60% 40%, #ff9800 60%, #c9082a 100%);
+            box-shadow: 0 8px 48px 0 #c9082a33;
+        }
+        .basketball-circle.big {
+            width: 420px; height: 420px; left: -120px; top: 60px;
+        }
+        .basketball-circle.mid {
+            width: 220px; height: 220px; right: -80px; top: 180px;
+            background: radial-gradient(circle at 40% 60%, #17408b 60%, #c9082a 100%);
+        }
+        .basketball-circle.small {
+            width: 110px; height: 110px; left: 60vw; top: 70vh;
+            background: radial-gradient(circle at 60% 40%, #ff9800 70%, #17408b 100%);
+        }
+        .basketball-stripes {
+            position: absolute;
+            width: 180px; height: 180px; left: 10vw; top: 60vh;
+            border-radius: 50%;
+            border: 4px solid #c9082a44;
+            border-right: 8px solid #ff9800aa;
+            opacity: 0.10;
+            transform: rotate(-18deg);
+        }
         .header {
             background: #fff;
             padding: 2.5rem 4rem;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            box-shadow: 0 2px 12px rgba(25,40,80,0.09);
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-radius: 0 0 24px 24px;
         }
-
         .header h1 {
             font-family: 'Poppins', 'Oswald', Arial, sans-serif;
-            color: #111;
+            color: #17408b;
             font-size: 4rem;
             font-weight: 700;
             letter-spacing: 2px;
-            text-shadow: 0 4px 18px rgba(0,0,0,0.10);
+            text-shadow: 0 4px 18px #c9082a22;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            box-shadow: 0 2px 12px #17408b11;
             padding: 0.5rem 2.5rem;
             display: inline-block;
+            background: #fff;
         }
-
         .back-btn {
-            background: #222;
+            background: linear-gradient(90deg, #17408b 85%, #c9082a 100%);
             color: #fff;
             border: none;
             padding: 1.2rem 3.5rem;
@@ -54,13 +89,14 @@
             font-size: 2.2rem;
             font-weight: 700;
             letter-spacing: 1.5px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            box-shadow: 0 2px 8px rgba(25,40,80,0.10);
             transition: background 0.18s, color 0.18s, transform 0.18s, box-shadow 0.18s;
         }
         .back-btn:hover {
-            background: #444;
+            background: linear-gradient(90deg, #c9082a 60%, #ff9800 100%);
+            color: #fff;
             transform: scale(1.06) translateY(-2px);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+            box-shadow: 0 8px 32px #c9082a33;
         }
 
         .container {
@@ -329,6 +365,54 @@
             box-shadow: 0 4px 16px rgba(0,0,0,0.13);
         }
 
+        /* --- AI Predictie spelerfilter styling --- */
+        #pred-player-filter {
+            background: #f8f9fa;
+            border: 1.5px solid #bbb;
+            border-radius: 8px;
+            padding: 0.7em 1em;
+            font-size: 1.08rem;
+            margin-bottom: 0.5em;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            width: 100%;
+            max-width: 400px;
+            transition: border 0.18s, box-shadow 0.18s;
+        }
+        #pred-player-filter:focus {
+            border: 1.5px solid #667eea;
+            outline: none;
+            box-shadow: 0 4px 16px rgba(102,126,234,0.13);
+        }
+        #pred-player-select {
+            background: #fff;
+            border: 1.5px solid #bbb;
+            border-radius: 8px;
+            padding: 0.5em 0.7em;
+            font-size: 1.08rem;
+            margin-bottom: 0.5em;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            width: 100%;
+            max-width: 400px;
+            min-height: 2.5em;
+            transition: border 0.18s, box-shadow 0.18s;
+        }
+        #pred-player-select:focus {
+            border: 1.5px solid #667eea;
+            outline: none;
+            box-shadow: 0 4px 16px rgba(102,126,234,0.13);
+        }
+        #pred-player-select option {
+            padding: 0.4em 0.7em;
+            border-radius: 6px;
+        }
+        #pred-player-select option:checked {
+            background: #667eea;
+            color: #fff;
+        }
+        #pred-player-filter + #pred-player-select {
+            margin-top: 0.2em;
+        }
+
         @media (max-width: 1200px) {
             .container {
                 max-width: 98vw;
@@ -350,8 +434,14 @@
     </style>
 </head>
 <body>
+    <div class="basketball-bg">
+        <div class="basketball-circle big"></div>
+        <div class="basketball-circle mid"></div>
+        <div class="basketball-circle small"></div>
+        <div class="basketball-stripes"></div>
+    </div>
     <div class="header">
-        <h1>Analytics Dashboard</h1>
+        <h1>NBA - Analytics Dashboard</h1>
         <button class="back-btn" onclick="window.location.href='index.html'">Terug naar Home</button>
     </div>
 
@@ -394,33 +484,20 @@
                     <button class="execute-btn" onclick="updateChart()">Update Chart</button>
                 </div>
 
-                <div class="section">
-                    <h3>Custom Query</h3>
-                    <div style="background:#f8f9fa;padding:1rem;border-radius:6px;margin-bottom:1rem;color:#333;">
-                        <b>Voorbeeldqueries:</b><br>
-                        <ul style="margin:0 0 0 1.2em;padding:0;">
-                            <li>Top 5 spelers: <code>SELECT TOP 5 player_name, team_code, PTS FROM dbo.nbaPlayerStats_Cleaned ORDER BY PTS DESC</code></li>
-                            <li>Gemiddelde punten per team: <code>SELECT team_code, AVG(CAST(PTS AS FLOAT)) as avg_points FROM dbo.nbaPlayerTotals GROUP BY team_code</code></li>
-                            <li>Efficiëntie: <code>SELECT player_name, PTS, MP, CAST(PTS AS FLOAT)/NULLIF(CAST(MP AS FLOAT),0) as efficiency FROM dbo.nbaPlayerTotals WHERE MP > 0 ORDER BY efficiency DESC</code></li>
-                            <li><b>Aantal gespeelde wedstrijden per speler:</b> <code>SELECT player_name, COUNT(*) as games_played FROM dbo.nbaPlayerStats_Cleaned WHERE player_name IS NOT NULL AND PTS IS NOT NULL GROUP BY player_name ORDER BY games_played DESC</code></li>
-                        </ul>
-                        <div style="margin-top:0.5em;font-size:0.95em;">
-                            Let op: Alleen numerieke kolommen kunnen als Y-as gebruikt worden in grafieken.<br>
-                            <b>GS = Games Started</b> (aantal keer in de basisopstelling). Voor totaal aantal gespeelde wedstrijden, zie de query hierboven.
+                <div class="section ml-section" style="background:#fff;border-radius:16px;padding:2rem;box-shadow:0 4px 18px rgba(0,0,0,0.07);margin-bottom:2rem;">
+                    <h3 style="margin-bottom:1rem;">Machine Learning</h3>
+                    <div class="visualization-controls" style="margin-bottom:0;">
+                        <div class="control-group" style="width:100%;">
+                            <label for="ml-analysis-type">Kies analyse:</label>
+                            <select id="ml-analysis-type" style="margin-bottom: 0.5em; width:100%;">
+                                <option value="top-performances-ml">Top Performances (ML)</option>
+                                <option value="predict-next-game">Voorspel Volgende Wedstrijd</option>
+                                <option value="hot-streaks">Hot Streaks</option>
+                                <option value="jeremy-lin-games">Jeremy Lin Games</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="custom-query">
-                        <textarea id="custom-query" placeholder="Voer je SQL query in..."></textarea>
-                        <button class="execute-btn" onclick="executeCustomQuery()">Uitvoeren</button>
-                    </div>
-                </div>
-
-                <div class="section">
-                    <div class="ml-section">
-                        <h4>Machine Learning</h4>
-                        <p>ML features en voorspellingen (toekomstig)</p>
-                        <button class="execute-btn" onclick="loadMLFeatures()">Laad ML Features</button>
-                    </div>
+                    <button class="execute-btn" style="margin-top:1.2em;" onclick="runMLAnalysis()">Uitvoeren</button>
                 </div>
             </div>
 
@@ -501,20 +578,14 @@
             mlBtn.onclick = () => executeTopPerformancesML();
             container.appendChild(mlBtn);
 
-            // Aantal Gespeelde Wedstrijden knop
+            // Aantal Gespeelde Wedstrijden knop (nu AI-predictie)
             const gamesPlayedBtn = document.createElement('button');
             gamesPlayedBtn.className = 'template-btn';
             gamesPlayedBtn.innerHTML = `
-                <strong>Aantal Gespeelde Wedstrijden</strong><br>
-                <small>Aantal gespeelde wedstrijden per speler (uit game logs)</small>
+                <strong>AI Voorspelling: Volgende 10 Wedstrijden</strong><br>
+                <small>Voorspel de prestaties van alle spelers in de komende 10 wedstrijden</small>
             `;
-            gamesPlayedBtn.onclick = () => executeCustomQueryWithTemplate(`
-                SELECT player_name, COUNT(*) as games_played 
-                FROM dbo.nbaPlayerStats_Cleaned 
-                WHERE player_name IS NOT NULL AND PTS IS NOT NULL 
-                GROUP BY player_name 
-                ORDER BY games_played DESC
-            `);
+            gamesPlayedBtn.onclick = () => executePredictNext10Games();
             container.appendChild(gamesPlayedBtn);
         }
 
@@ -1395,12 +1466,43 @@
                             }
                         },
                         tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            axis: 'x',
                             callbacks: {
                                 label: function(context) {
-                                    return `${context.dataset.label}: ${context.parsed.y}`;
+                                    const value = context.parsed.y;
+                                    const datasetIndex = context.datasetIndex;
+                                    const dataIndex = context.dataIndex;
+                                    let diff = null;
+                                    if (dataIndex > 0) {
+                                        const prev = context.chart.data.datasets[datasetIndex].data[dataIndex - 1];
+                                        if (prev !== null && prev !== undefined && value !== null && value !== undefined) {
+                                            diff = value - prev;
+                                        }
+                                    }
+                                    let diffStr = '';
+                                    if (diff !== null) {
+                                        if (diff > 0) {
+                                            diffStr = ` (+${diff})`;
+                                        } else if (diff < 0) {
+                                            diffStr = ` (–${Math.abs(diff)})`;
+                                        } else {
+                                            diffStr = ` (0)`;
+                                        }
+                                    }
+                                    return `${context.dataset.label}: ${value}${diffStr}`;
                                 }
+                            },
+                            itemSort: function(a, b) {
+                                // Sorteer tooltip items op y-waarde aflopend
+                                return b.parsed.y - a.parsed.y;
                             }
                         }
+                    },
+                    hover: {
+                        mode: 'index',
+                        intersect: false
                     },
                     scales: {
                         x: {
@@ -1409,6 +1511,49 @@
                         },
                         y: {
                             title: { display: true, text: `Cumulatief ${stat}` },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function showMLBarChartPerfScore(data) {
+            const ctx = document.getElementById('chart').getContext('2d');
+            if (currentChart) currentChart.destroy();
+            // Top 20 spelers op basis van hoogste perf_score
+            const topData = data.slice(0, 20);
+            const labels = topData.map(row => row['player_name']);
+            const values = topData.map(row => row['perf_score']);
+            currentChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'ML Performance Score',
+                        data: values,
+                        backgroundColor: 'rgba(100,100,255,0.7)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Top 20 ML Performance Score per Speler'
+                        },
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'Speler' },
+                            ticks: { color: '#444', maxTicksLimit: 20 }
+                        },
+                        y: {
+                            title: { display: true, text: 'ML Performance Score' },
                             beginAtZero: true
                         }
                     }
@@ -1426,7 +1571,36 @@
                     const data = result.data.slice(0, 50);
                     const columns = result.columns;
                     displayResults(data, columns);
-                    showMLScatterPlot(data);
+                    showMLBarChartPerfScore(data); // Gebruik bar chart voor perf_score per speler
+                } else {
+                    throw new Error(result.error);
+                }
+            } catch (error) {
+                document.getElementById('results-container').innerHTML = `<div class="error">Fout: ${error.message}</div>`;
+            }
+        }
+
+        async function runMLAnalysis() {
+            const type = document.getElementById('ml-analysis-type').value;
+            let endpoint = '';
+            if (type === 'top-performances-ml') {
+                endpoint = '/api/top-performances-ml';
+            } else if (type === 'predict-next-game') {
+                endpoint = '/api/ml/predict-next-game';
+            } else if (type === 'hot-streaks') {
+                endpoint = '/api/ml/hot-streaks';
+            } else if (type === 'jeremy-lin-games') {
+                endpoint = '/api/ml/jeremy-lin-games';
+            }
+            document.getElementById('results-container').innerHTML = '<div class="loading">Laden...';
+            try {
+                const response = await fetch('http://localhost:5000' + endpoint);
+                const result = await response.json();
+                if (result.success) {
+                    displayResults(result.data, result.columns);
+                    if (type === 'jeremy-lin-games') {
+                        showJeremyLinGroupedBarChart(result.data);
+                    }
                 } else {
                     throw new Error(result.error);
                 }
@@ -1482,6 +1656,175 @@
                         y: {
                             title: { display: true, text: 'ML Performance Score' },
                             beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- AI Predictie: Vervang Aantal Gespeelde Wedstrijden knop ---
+        async function executePredictNext10Games() {
+            try {
+                document.getElementById('results-container').innerHTML = '<div class="loading">Voorspellingen genereren... (AI)';
+                const response = await fetch('http://localhost:5000/api/predict/next10games');
+                const result = await response.json();
+                if (!result.success) throw new Error(result.error);
+                // UI verbeteringen: compact, gecentreerd, modern
+                const playerList = result.players;
+                let dropdownHTML = `
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:1.2em;">
+            <label for="pred-player-filter" style="font-weight:700;font-size:1.1rem;margin-bottom:0.3em;align-self:flex-start;">Kies speler:</label>
+            <input type="text" id="pred-player-filter" placeholder="Zoek speler..." style="margin-bottom:0.5em;width:100%;max-width:340px;padding:0.5em 1em;border-radius:8px;border:1.5px solid #bbb;box-shadow:0 2px 8px rgba(0,0,0,0.06);font-size:1.08rem;">
+            <select id="pred-player-select" size="8" style="width:100%;max-width:340px;min-width:180px;border-radius:8px;padding:0.5em 0.7em;font-size:1.08rem;box-shadow:0 2px 8px rgba(0,0,0,0.06);border:1.5px solid #bbb;max-height:220px;overflow-y:auto;background:#fff;">
+        `;
+                playerList.forEach(p => { dropdownHTML += `<option value="${p}">${p}</option>`; });
+                dropdownHTML += '</select></div>';
+                document.getElementById('results-container').innerHTML = dropdownHTML + '<div id="pred-table-container"></div><div id="pred-chart-container" style="height:400px;margin-top:1em;"></div>';
+                // Event handler voor dropdown
+                document.getElementById('pred-player-select').addEventListener('change', function() {
+                    showPredictedTableAndChart(result.data, this.value);
+                });
+                // Live filter op input
+                document.getElementById('pred-player-filter').addEventListener('input', function() {
+                    const filter = this.value.toLowerCase();
+                    const select = document.getElementById('pred-player-select');
+                    select.innerHTML = '';
+                    playerList.filter(p => p.toLowerCase().includes(filter)).forEach(p => {
+                        const opt = document.createElement('option');
+                        opt.value = p;
+                        opt.textContent = p;
+                        select.appendChild(opt);
+                    });
+                    // Selecteer eerste match automatisch
+                    if (select.options.length > 0) {
+                        select.selectedIndex = 0;
+                        showPredictedTableAndChart(result.data, select.value);
+                    } else {
+                        document.getElementById('pred-table-container').innerHTML = '';
+                        document.getElementById('pred-chart-container').innerHTML = '';
+                    }
+                });
+                // Toon initieel de eerste speler
+                showPredictedTableAndChart(result.data, playerList[0]);
+            } catch (error) {
+                document.getElementById('results-container').innerHTML = `<div class="error">Fout: ${error.message}</div>`;
+            }
+        }
+
+        function showPredictedTableAndChart(data, playerName) {
+            const player = data.find(p => p.player_name === playerName);
+            if (!player) return;
+            // Tabel
+            let tableHTML = '<table class="data-table"><thead><tr>';
+            const columns = ['game', 'PTS', 'TRB', 'AST', 'STL', 'BLK', 'TOV', 'FG%', '3P%', 'FT%'];
+            tableHTML += columns.map(c => `<th>${c}</th>`).join('') + '</tr></thead><tbody>';
+            player.predictions.forEach(row => {
+                tableHTML += '<tr>' + columns.map(c => `<td>${row[c]}</td>`).join('') + '</tr>';
+            });
+            tableHTML += '</tbody></table>';
+            document.getElementById('pred-table-container').innerHTML = tableHTML;
+            // Lijngrafiek (PTS)
+            const ctxId = 'pred-chart-canvas';
+            let chartDiv = document.getElementById('pred-chart-container');
+            chartDiv.innerHTML = `<canvas id="${ctxId}"></canvas>`;
+            const ctx = document.getElementById(ctxId).getContext('2d');
+            if (window.predChart) window.predChart.destroy();
+            window.predChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: player.predictions.map(r => r.game),
+                    datasets: [{
+                        label: 'Voorspelde PTS',
+                        data: player.predictions.map(r => r.PTS),
+                        borderColor: 'rgba(100,100,255,0.8)',
+                        backgroundColor: 'rgba(100,100,255,0.2)',
+                        tension: 0.2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: { display: true, text: `Voorspelde punten (PTS) komende 10 wedstrijden voor ${playerName}` }
+                    },
+                    scales: {
+                        x: { title: { display: true, text: 'Wedstrijd' } },
+                        y: { title: { display: true, text: 'PTS' }, beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        function showJeremyLinGroupedBarChart(data) {
+            const ctx = document.getElementById('chart').getContext('2d');
+            if (currentChart) currentChart.destroy();
+            // X-as: spelers
+            const labels = data.map(row => row['Player Name']);
+            // 6 datasets: PTS (Game), PTS (Season Avg), FG% (Game), FG% (Season Avg), eFG% (Game), eFG% (Season Avg)
+            const datasets = [
+                {
+                    label: 'PTS (Game)',
+                    data: data.map(row => row['PTS (Game)']),
+                    backgroundColor: 'rgba(200,30,30,0.8)'
+                },
+                {
+                    label: 'PTS (Season Avg)',
+                    data: data.map(row => row['PTS (Season Avg)']),
+                    backgroundColor: 'rgba(200,30,30,0.3)'
+                },
+                {
+                    label: 'FG% (Game)',
+                    data: data.map(row => row['FG% (Game)'] * 100),
+                    backgroundColor: 'rgba(30,120,200,0.8)'
+                },
+                {
+                    label: 'FG% (Season Avg)',
+                    data: data.map(row => row['FG% (Season Avg)'] * 100),
+                    backgroundColor: 'rgba(30,120,200,0.3)'
+                },
+                {
+                    label: 'eFG% (Game)',
+                    data: data.map(row => row['eFG% (Game)'] * 100),
+                    backgroundColor: 'rgba(30,200,120,0.8)'
+                },
+                {
+                    label: 'eFG% (Season Avg)',
+                    data: data.map(row => row['eFG% (Season Avg)'] * 100),
+                    backgroundColor: 'rgba(30,200,120,0.3)'
+                }
+            ];
+            currentChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Jeremy Lin Games: Uitschieters vs Seizoensgemiddelde'
+                        },
+                        legend: {
+                            labels: { color: '#444', font: { size: 13 } }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'Speler' },
+                            stacked: false,
+                            ticks: { color: '#444' }
+                        },
+                        y: {
+                            title: { display: true, text: 'Waarde' },
+                            beginAtZero: true,
+                            stacked: false
                         }
                     }
                 }
