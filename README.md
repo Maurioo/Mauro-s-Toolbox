@@ -14,11 +14,12 @@ Dit project is een modern NBA-analytics dashboard dat volledig draait op CSV-dat
 - **De data-bestanden in de map `data/`**
 
 ### 2. Dependencies installeren
+```bash
 git clone https://github.com/Maurioo/Mauro-s-Toolbox.git
 
 cd Mauro-s-Toolbox
 code .
-
+```
 Open een terminal in de projectmap en voer uit:
 
 ```bash
