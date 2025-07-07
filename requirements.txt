@@ -7,4 +7,4 @@ apache-airflow-providers-postgres>=4.2.0
 loguru>=0.5.0
 faker>=13.0.0
 matplotlib>=3.4.0
-joblib
+joblib>=1.0.0
