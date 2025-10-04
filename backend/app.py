@@ -161,8 +161,7 @@ def execute_query_template(template_name):
                 "columns": top.columns.tolist(),
                 "row_count": len(top)
         })
-        else:
-            return jsonify({"error": "Template not found"}), 404
+        return jsonify({"error": "Template not found"}), 404
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

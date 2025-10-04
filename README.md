@@ -34,16 +34,16 @@ cd ..
 
 ### 3. Data-bestanden
 Zorg dat de volgende bestanden aanwezig zijn in de `data/` map:
-- `PlayerStats2025_Cleaned.csv`
-- `PlayerStats2025_Cumulative.csv`
+- `nba_2025_players.csv`
+- `nba_2025_teams.csv`
 
 ### 4. Backend starten
 
 ```bash
 cd backend
+npm run
 python app.py
 ```
-De backend draait nu op [http://localhost:5000](http://localhost:5000)
 
 ### 5. Frontend openen
 Open `public/analytics-dashboard.html` direct in je browser (dubbelklik of via contextmenu).

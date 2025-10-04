@@ -54,20 +54,16 @@
     }
     .navbar {
       width: 100vw;
-      max-width: 100vw;
-      overflow-x: hidden;
-      box-sizing: border-box;
       background: #fff;
       box-shadow: 0 2px 12px rgba(25,40,80,0.09);
-      border-radius: 0;
-      margin-bottom: 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1.5rem 4rem 1.5rem 4rem;
+      padding: 1.5rem 4rem;
       position: sticky;
       top: 0;
-      z-index: 10;
+      z-index: 100;
+      overflow: visible; /* <-- important! */
     }
     .navbar-left, .navbar-right {
       display: flex;
@@ -86,15 +82,16 @@
       position: relative;
       letter-spacing: 1.5px;
     }
+    .navbar-link:hover,
+    .dropdown:hover > .navbar-link {
+      background: #17408b;
+      color: #fff;
+    }
     .navbar-link.active, .navbar-link:focus {
       background: #c9082a;
       color: #fff;
       font-weight: 700;
       box-shadow: 0 2px 12px #c9082a22;
-    }
-    .navbar-link:hover {
-      background: #17408b;
-      color: #fff;
     }
     .navbar-btn {
       background: linear-gradient(90deg, #17408b 60%, #c9082a 100%);
@@ -131,15 +128,23 @@
       position: absolute;
       background: #fff;
       min-width: 350px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      box-shadow: 0 16px 48px rgba(25,40,80,0.18);
       border-radius: 16px;
-      z-index: 100;
+      z-index: 99999;
       top: 110%;
       left: 0;
       padding: 1rem 0;
+      margin-top: 0.5rem;
+      /* Add a slight transform for "fall down" effect */
+      transition: opacity 0.18s, transform 0.18s;
+      opacity: 0;
+      transform: translateY(-10px);
     }
-    .dropdown:hover .dropdown-content {
+    .dropdown:hover .dropdown-content,
+    .dropdown:focus-within .dropdown-content {
       display: block;
+      opacity: 1;
+      transform: translateY(0);
     }
     .dropdown-link {
       color: #222;
@@ -230,14 +235,11 @@
       padding: 2.1rem 0 !important;
       margin-bottom: 1.1rem !important;
       width: 100% !important;
-      background: linear-gradient(90deg, #17408b 60%, #c9082a 100%) !important;
+      background: #222 !important;
       color: #fff !important;
-      border: 3.5px solid #ff9800 !important;
-      box-shadow: 0 12px 36px #17408b22, 0 0 0 0 #ff9800;
+      border: 2.5px solid #222 !important;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.18) !important;
       border-radius: 22px !important;
-      transition: box-shadow 0.22s cubic-bezier(.4,2,.6,1), transform 0.18s, background 0.18s, color 0.18s;
-      position: relative;
-      z-index: 1;
     }
     .analytics-btn:hover, .analytics-btn:focus {
       box-shadow: 0 16px 48px #c9082a33, 0 0 24px 4px #ff9800cc;
@@ -317,19 +319,18 @@
     <div class="basketball-circle small"></div>
     <div class="basketball-stripes"></div>
   </div>
-  <nav class="navbar" style="box-sizing:border-box;width:100vw;max-width:100vw;overflow-x:hidden;">
+  <nav class="navbar">
     <div class="navbar-left">
       <a href="index.html" class="navbar-link active">NBA</a>
       <div class="dropdown">
-        <a href="#" class="navbar-link">CRM-Systeem</a>
+        <a href="#" class="navbar-link">CRM-Tools</a>
         <div class="dropdown-content">
-          <a href="zoeken.html" class="dropdown-link">Zoeken</a>
-          <a href="addUser.html" class="dropdown-link">Nieuwe gebruiker toevoegen</a>
+          <a href="document-classificatie.html" class="dropdown-link">Document Classificatie</a>
         </div>
       </div>
     </div>
-    <div class="navbar-right" style="flex-shrink:0;">
-      <a href="index.html"><button class="navbar-btn" style="max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Mauro's Toolbox</button></a>
+    <div class="navbar-right">
+      <a href="index.html"><button class="navbar-btn">Mauro's Toolbox</button></a>
     </div>
   </nav>
   <main class="hero" style="min-height:calc(100vh - 140px);height:calc(100vh - 140px);justify-content:center;">
@@ -353,7 +354,7 @@
       min-height: 100vh;
       width: 100vw;
       overflow-x: hidden;
-      overflow-y: hidden;
+      /* Remove: overflow-y: hidden; */
     }
     body {
       box-sizing: border-box;
