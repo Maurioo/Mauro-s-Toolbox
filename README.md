@@ -1,15 +1,15 @@
 # Mauro's Toolbox
 
-Een modern analytics en utilities platform met HTML/JavaScript frontend, Python Flask backend en dynamische visualisaties. Zero-database design met focus op CSV-data processing en configureerbare formulieren voor bedrijfsverzoeken.
+Een modern analytics en utilities platform met HTML/JavaScript frontend, Python Flask backend en dynamische visualisaties. Zero-database design met focus op CRM-systeem gerelateerde tools.
 
 ---
 
-## 🎯 Projectoverzicht
+## Projectoverzicht
 
 Dit project bevat twee hoofdcomponenten:
 
 ### 1. **NBA Analytics Dashboard**
-- Interactief dashboard voor NBA-statistieken en game analysis
+- Interactief dashboard voor NBA-statistieken en game analysis voor het 2024-2025 seizoen, WIP etl job dat live game data aanvult.
 - Volledig gebaseerd op CSV-data (`nba_2025_players.csv`, `nba_2025_teams.csv`, `nba_gamelogs_2025.csv`)
 - Real-time filtering, charting en data visualization
 - Machine Learning predictions voor game outcomes
@@ -27,7 +27,7 @@ Dit project bevat twee hoofdcomponenten:
 
 ---
 
-## ⚡ Snel Starten
+## Snel Starten
 
 ### Minimale setup (alleen frontend)
 ```powershell
@@ -55,7 +55,7 @@ start public/index.html
 
 ---
 
-## 📋 Vereisten
+## Vereisten
 
 ### Minimaal (alleen frontend tools)
 - **Modern web browser** (Chrome, Edge, Firefox)
@@ -71,17 +71,17 @@ start public/index.html
 
 ---
 
-## 📁 Project Structuur
+## Project Structuur
 
 ```
 Mauro-s-Toolbox/
 ├── public/                          # Frontend HTML/JS pages
-│   ├── index.html                   # 🏠 Homepage with navigation
-│   ├── analytics-dashboard.html      # 📊 NBA Analytics Dashboard
-│   ├── crm-menu.html                # 🎯 CRM Tools Menu
-│   ├── request-builder.html          # 📋 Request Builder (Form wizard)
-│   ├── document-classificatie.html   # 📄 Document Classification Tool
-│   ├── dashboardNBA.html             # 🏀 NBA Game Query (legacy)
+│   ├── index.html                   # Homepage with navigation
+│   ├── analytics-dashboard.html      # NBA Analytics Dashboard
+│   ├── crm-menu.html                # CRM Tools Menu
+│   ├── request-builder.html          # Request Builder (Form wizard)
+│   ├── document-classificatie.html   # Document Classification Tool
+│   ├── dashboardNBA.html             # NBA Game Query (legacy)
 │   └── ...other utilities
 │
 ├── backend/                         # Python Flask API
@@ -101,7 +101,7 @@ Mauro-s-Toolbox/
 
 ---
 
-## 🎮 Frontend Pages Guide
+## Frontend Pages Guide
 
 ### `index.html` - Homepage
 **Direct access**: Double-click `public/index.html` in File Explorer
@@ -175,7 +175,7 @@ BlockBase
 
 ---
 
-## 🔧 Installation & Setup
+## Installation & Setup
 
 ### Step 1: Clone Repository
 ```powershell
@@ -216,7 +216,7 @@ start public/index.html
 
 ---
 
-## 🚀 Direct Commands
+## Direct Commands
 
 | Command | Purpose | Environment |
 |---------|---------|-------------|
@@ -230,7 +230,7 @@ start public/index.html
 
 ---
 
-## 📊 Form Block Configuration
+## Form Block Configuration
 
 Each request type is defined as JSON config. Example:
 
@@ -263,7 +263,7 @@ Each request type is defined as JSON config. Example:
 
 ---
 
-## 🛠️ Extending the Project
+## Extending the Project
 
 ### Adding a New Request Type Config
 
@@ -309,7 +309,7 @@ const blockMap = {
 
 ---
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 | Issue | Solution |
 |-------|----------|
@@ -324,7 +324,7 @@ const blockMap = {
 
 ---
 
-## 📚 Technologies Used
+## Technologies Used
 
 | Layer | Technology |
 |-------|-----------|
@@ -337,7 +337,7 @@ const blockMap = {
 
 ---
 
-## ✅ Validation System
+## Validation System
 
 All form blocks validate on three triggers:
 
@@ -354,7 +354,7 @@ Error messages show:
 
 ---
 
-## 🔐 Security Considerations
+## Security Considerations
 
 This is a **proof-of-concept** for internal use. For production deployment:
 
@@ -371,7 +371,7 @@ This is a **proof-of-concept** for internal use. For production deployment:
 
 ---
 
-## 📞 Support & Contribution
+## Support & Contribution
 
 - **Issues**: Open an issue on [GitHub](https://github.com/Maurioo/Mauro-s-Toolbox/issues)
 - **Questions**: Contact Mauro
@@ -379,7 +379,7 @@ This is a **proof-of-concept** for internal use. For production deployment:
 
 ---
 
-## 📄 License & Attribution
+## License & Attribution
 
 Side project for testing data pipelines, ETL processes, and modern web tooling.
 Focus on clean architecture, reusable components, and user experience.
