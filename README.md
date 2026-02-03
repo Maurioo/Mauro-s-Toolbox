@@ -29,7 +29,6 @@ pip install -r backend/requirements.txt
 # (Optioneel) Frontend dependencies voor development
 cd react-app
 npm install
-cd ..
 ```
 
 ### 3. Data-bestanden
@@ -38,7 +37,6 @@ Zorg dat de volgende bestanden aanwezig zijn in de `data/` map:
 - `nba_2025_teams.csv`
 
 ### 4. Backend starten
-
 ```bash
 cd backend
 npm run
@@ -47,9 +45,6 @@ python app.py
 
 ### 5. Frontend openen
 Open `public/analytics-dashboard.html` direct in je browser (dubbelklik of via contextmenu).
-
-**Let op:** De frontend verwacht dat de backend draait op `localhost:5000`.
-
 ---
 
 ## Extra: Setup script (Windows)
@@ -99,7 +94,7 @@ Neem contact op met Mauro of open een issue op GitHub.
    - Wacht tot alle packages zijn geïnstalleerd
 
 4. **Controleer of de data-bestanden aanwezig zijn**
-   - Controleer of in de map `data/` de bestanden `PlayerStats2025_Cleaned.csv` en `PlayerStats2025_Cumulative.csv` staan
+   - Controleer of in de map `data/` de bestanden `PlayerStats2025_Cleaned.csv` en `PlayerStats2025_Cumulative.csv` aanwezig zijn.
 
 5. **Start de backend (Flask API)**
    - Typ:

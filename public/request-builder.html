@@ -1,0 +1,2089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Request Builder - Mauro's Toolbox</title>
+  <link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================
+       SETUP & DEBUG GUIDE (READ THIS FIRST)
+       ============================================
+       
+       FILE STRUCTURE:
+       - This is a standalone HTML file with embedded CSS + JavaScript
+       - All form block types are implemented as ES6 classes
+       - Configuration is stored in a ConfigRepository (mocked data)
+       - State management uses vanilla JS with localStorage for audit logs
+       
+       HOW TO DEBUG:
+       1. Open browser DevTools (F12)
+       2. Check Console for any errors
+       3. FormConfig objects are logged when page loads
+       4. Try submitting a form and check localStorage:
+          - localStorage.getItem('requestLogs') to view audit trail
+          - localStorage.clear() to reset
+       
+       HOW TO ADD A NEW BLOCK TYPE:
+       1. Create a new class extending from BlockBase (see SelectionDefinitionBlock as example)
+       2. Implement: render(), validate(), getValue(), isFilled()
+       3. Update blockFactoryMap in buildFormForType()
+       4. Add example to requestTypes config
+       
+       HOW TO ADD A NEW REQUEST TYPE CONFIG:
+       1. Go to ConfigRepository.getRequestTypes() section
+       2. Add new object to requestTypes array with:
+          - id, name, version, description, blocks[]
+       3. Each block references a blockType and its config
+       4. RequestTypeSelect dropdown will auto-populate
+       
+       TYPE SYSTEM:
+       - Uses JSDoc for TypeScript-like types
+       - All block classes have @typedef comments
+       - ConfigRepository implements data access layer (easy to swap with API later)
+    ============================================ */
+
+    * {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+      color: #e0e0e0;
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Background decorations */
+    .bg-decoration {
+      position: fixed;
+      z-index: 0;
+      pointer-events: none;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      overflow: hidden;
+    }
+    .decoration-circle {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.08;
+      background: radial-gradient(circle at 60% 40%, #8b5cf6 60%, #6366f1 100%);
+      box-shadow: 0 8px 48px 0 #8b5cf633;
+    }
+    .decoration-circle.big {
+      width: 420px; height: 420px; left: -120px; top: 60px;
+    }
+    .decoration-circle.small {
+      width: 220px; height: 220px; right: -80px; top: 180px;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: #1a1a2e;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    .navbar-link {
+      font-size: 1.3rem;
+      color: #e0e0e0;
+      text-decoration: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      letter-spacing: 0.5px;
+    }
+
+    .navbar-link:hover {
+      color: #fff;
+      background: rgba(139, 92, 246, 0.1);
+    }
+
+    .navbar-link.active {
+      color: #8b5cf6;
+      border-bottom: 2px solid #8b5cf6;
+    }
+
+    .navbar-right {
+      flex-shrink: 0;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .back-btn {
+      background: transparent;
+      color: #e0e0e0;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border: 1.5px solid #8b5cf6;
+      border-radius: 8px;
+      padding: 0.6rem 1.2rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      letter-spacing: 0.5px;
+      text-decoration: none;
+    }
+
+    .back-btn:hover {
+      background: #8b5cf6;
+      color: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 900px;
+      margin: 3rem auto;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #fff;
+      text-shadow: 0 4px 20px rgba(139, 92, 246, 0.2);
+      margin-bottom: 0.5rem;
+    }
+
+    .page-subtitle {
+      font-size: 1.1rem;
+      color: #a0aec0;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+    }
+
+    .tab {
+      background: transparent;
+      color: #a0aec0;
+      border: none;
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      border-bottom: 2px solid transparent;
+      position: relative;
+      bottom: -1px;
+    }
+
+    .tab:hover {
+      color: #8b5cf6;
+    }
+
+    .tab.active {
+      color: #8b5cf6;
+      border-bottom-color: #8b5cf6;
+    }
+
+    /* Card & Sections */
+    .card {
+      background: rgba(26, 26, 46, 0.8);
+      border: 1.5px solid rgba(139, 92, 246, 0.2);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .card h3 {
+      font-size: 1.3rem;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+
+    /* Form Rows & Fields */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    .form-label {
+      font-weight: 600;
+      color: #fff;
+      padding-top: 0.5rem;
+    }
+
+    .form-label.required::after {
+      content: ' *';
+      color: #ef4444;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    textarea,
+    select {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 6px;
+      color: #e0e0e0;
+      padding: 0.75rem;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    input[type="date"]:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: #8b5cf6;
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+    }
+
+    input.invalid,
+    textarea.invalid,
+    select.invalid {
+      border-color: #ef4444;
+      background: rgba(239, 68, 68, 0.05);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    select[multiple] {
+      min-height: 120px;
+    }
+
+    .form-hint {
+      font-size: 0.85rem;
+      color: #a0aec0;
+      font-style: italic;
+      margin-top: 0.25rem;
+    }
+
+    .form-error {
+      font-size: 0.85rem;
+      color: #ef4444;
+      margin-top: 0.25rem;
+      display: none;
+    }
+
+    .form-error.show {
+      display: block;
+    }
+
+    /* Fieldset for grouped controls */
+    fieldset {
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      border-radius: 6px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    legend {
+      padding: 0 0.5rem;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* Radio & Checkbox */
+    input[type="radio"],
+    input[type="checkbox"] {
+      accent-color: #8b5cf6;
+      cursor: pointer;
+      margin-right: 0.5rem;
+    }
+
+    label {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      color: #e0e0e0;
+    }
+
+    /* Buttons */
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      justify-content: flex-end;
+    }
+
+    button {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    button.primary {
+      background: #8b5cf6;
+      color: #fff;
+    }
+
+    button.primary:hover:not(:disabled) {
+      background: #7c3aed;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    }
+
+    button.secondary {
+      background: transparent;
+      color: #8b5cf6;
+      border: 1.5px solid #8b5cf6;
+    }
+
+    button.secondary:hover:not(:disabled) {
+      background: rgba(139, 92, 246, 0.1);
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Steps */
+    .step {
+      display: none;
+    }
+
+    .step.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Error Summary Banner */
+    .error-banner {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid #ef4444;
+      border-radius: 6px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      display: none;
+    }
+
+    .error-banner.show {
+      display: block;
+    }
+
+    .error-banner h4 {
+      color: #ef4444;
+      margin-bottom: 0.5rem;
+    }
+
+    .error-banner ul {
+      list-style: none;
+      color: #fca5a5;
+    }
+
+    .error-banner li {
+      padding: 0.25rem 0;
+    }
+
+    .error-banner li::before {
+      content: '✗ ';
+      margin-right: 0.5rem;
+    }
+
+    /* Summary & JSON Preview */
+    .summary-text,
+    .json-preview {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      border-radius: 6px;
+      padding: 1rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      color: #c0c0ff;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 300px;
+      overflow-y: auto;
+      user-select: none;
+      margin-bottom: 1rem;
+    }
+
+    .json-preview {
+      user-select: text;
+    }
+
+    /* Internal Data Table */
+    .internal-data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    .internal-data-table th,
+    .internal-data-table td {
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      padding: 0.75rem;
+      text-align: left;
+    }
+
+    .internal-data-table th {
+      background: rgba(139, 92, 246, 0.1);
+      color: #8b5cf6;
+      font-weight: 600;
+    }
+
+    .internal-data-table td {
+      color: #e0e0e0;
+      user-select: none;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #10b981;
+      color: #fff;
+      padding: 1rem 1.5rem;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      animation: slideIn 0.3s ease;
+      z-index: 1000;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(400px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    /* Watermark */
+    .watermark {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      font-size: 4rem;
+      color: rgba(0, 0, 0, 0.08);
+      transform: translate(-50%, -50%) rotate(-25deg);
+      pointer-events: none;
+      user-select: none;
+      z-index: 0;
+      white-space: nowrap;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+
+      .page-title {
+        font-size: 1.8rem;
+      }
+
+      .navbar {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .navbar-left,
+      .navbar-right {
+        width: 100%;
+      }
+
+      .navbar-right {
+        justify-content: center;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-decoration">
+    <div class="decoration-circle big"></div>
+    <div class="decoration-circle small"></div>
+  </div>
+  <div class="watermark">Internal Use Only</div>
+
+  <nav class="navbar">
+    <div class="navbar-left">
+      <a href="index.html" class="navbar-link">Mauro's Toolbox</a>
+      <a href="crm-menu.html" class="navbar-link">CRM Tools</a>
+    </div>
+    <div class="navbar-right">
+      <a href="crm-menu.html" class="back-btn">← Back to CRM Menu</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="page-header">
+      <h1 class="page-title">Request Builder</h1>
+      <p class="page-subtitle">Structure your CRM requests for faster processing</p>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" id="tabNew" data-tab="newRequest">New Request</button>
+      <button class="tab" id="tabAudit" data-tab="auditLog">Audit Log</button>
+    </div>
+
+    <!-- NEW REQUEST WIZARD -->
+    <div id="newRequest" class="tab-content">
+      <!-- Step 1: Select Request Type -->
+      <div class="step active" id="step1">
+        <div class="card">
+          <h3>Step 1: Select Request Type</h3>
+          <div class="form-group">
+            <div class="form-row">
+              <label class="form-label required">Request Type</label>
+              <div class="form-field">
+                <select id="requestTypeSelect">
+                  <option value="">Choose a request type...</option>
+                </select>
+                <div id="typeDescription" class="form-hint"></div>
+              </div>
+            </div>
+          </div>
+          <div class="button-group">
+            <button class="secondary" id="resetBtn">Reset</button>
+            <button class="primary" id="toStep2Btn" disabled>Next</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Fill Form -->
+      <div class="step" id="step2">
+        <div class="card">
+          <h3>Step 2: Fill Request Details</h3>
+          <div id="errorBanner" class="error-banner"></div>
+          <form id="requestForm" novalidate>
+            <div id="formBlocksContainer"></div>
+          </form>
+          <div class="button-group">
+            <button class="secondary" id="backToStep1Btn">Back</button>
+            <button class="primary" id="toStep3Btn" disabled>Review</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Review & Submit -->
+      <div class="step" id="step3">
+        <div class="card">
+          <h3>Step 3: Review Request</h3>
+          
+          <h4 style="color: #fff; margin-top: 1rem; margin-bottom: 0.5rem;">Summary</h4>
+          <div id="summaryText" class="summary-text"></div>
+          <button class="secondary" id="copySummaryBtn" style="margin-bottom: 1rem;">Copy Summary</button>
+
+          <h4 style="color: #fff; margin-top: 1rem; margin-bottom: 0.5rem;">JSON Payload</h4>
+          <details style="margin-bottom: 1rem;">
+            <summary style="cursor: pointer; color: #8b5cf6; font-weight: 600;">Show/Hide JSON</summary>
+            <div id="jsonPreview" class="json-preview"></div>
+          </details>
+
+          <h4 style="color: #fff; margin-top: 1rem; margin-bottom: 0.5rem;">Internal Data (Mocked)</h4>
+          <table class="internal-data-table">
+            <thead>
+              <tr>
+                <th>Account ID</th>
+                <th>Status</th>
+                <th>Balance</th>
+                <th>Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>ACC-001234</td>
+                <td>Active</td>
+                <td>€ 1,250,000</td>
+                <td>Portfolio</td>
+              </tr>
+              <tr>
+                <td>ACC-005678</td>
+                <td>Active</td>
+                <td>€ 875,500</td>
+                <td>Sub-Account</td>
+              </tr>
+              <tr>
+                <td>ACC-009012</td>
+                <td>Inactive</td>
+                <td>€ 325,000</td>
+                <td>Portfolio</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="button-group">
+            <button class="secondary" id="backToStep2Btn">Back</button>
+            <button class="primary" id="submitTopdeskBtn">Simulate Topdesk</button>
+            <button class="primary" id="startWorkflowBtn">Start Workflow</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4: Confirmation -->
+      <div class="step" id="step4">
+        <div class="card">
+          <h3>Request Submitted</h3>
+          <p style="color: #a0aec0; margin: 1rem 0; font-size: 1.05rem;">
+            Your request has been logged with ID: <strong id="confirmRequestId" style="color: #8b5cf6;"></strong>
+          </p>
+          <p style="color: #a0aec0; margin: 1rem 0;">
+            You can view it in the Audit Log tab. The request will be processed according to our internal workflow.
+          </p>
+          <div class="button-group">
+            <button class="secondary" id="newRequestBtn">Create New Request</button>
+            <button class="primary" id="viewAuditBtn">View Audit Log</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AUDIT LOG -->
+    <div id="auditLog" class="tab-content" style="display: none;">
+      <div class="card">
+        <h3>Audit Log</h3>
+        <div id="auditLogContainer">
+          <p style="color: #a0aec0;">No requests submitted yet.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ============================================
+       TYPE DEFINITIONS (JSDoc for TypeScript-like types)
+       ============================================ */
+
+    /**
+     * @typedef {Object} BlockConfig
+     * @property {string} id - Unique block identifier
+     * @property {string} blockType - Type of block (TextInputBlock, etc.)
+     * @property {string} label - Label displayed to user
+     * @property {boolean} [required] - Whether field is required
+     * @property {string} [hint] - Helper text
+     * @property {Object} [validation] - Validation rules
+     * @property {Object} [options] - For dropdown/select blocks
+     */
+
+    /**
+     * @typedef {Object} FormConfig
+     * @property {string} id - Request type identifier
+     * @property {string} name - Display name
+     * @property {string} version - Config version
+     * @property {string} description - Description
+     * @property {BlockConfig[]} blocks - Array of form blocks
+     */
+
+    /**
+     * @typedef {Object} SubmissionLog
+     * @property {string} id - Unique request ID (REQ-XXXX)
+     * @property {string} timestamp - ISO timestamp
+     * @property {string} requestTypeId - Type ID
+     * @property {string} requestTypeName - Type name
+     * @property {string} version - Config version
+     * @property {string} route - Submission route (Topdesk/Workflow)
+     * @property {Object} payload - Full form payload
+     */
+
+    /* ============================================
+       CONFIGURATION REPOSITORY (Data Access Layer)
+       ============================================ */
+
+    class ConfigRepository {
+      /**
+       * Get all available request types
+       * @returns {FormConfig[]}
+       */
+      static getRequestTypes() {
+        return [
+          {
+            id: 'ad-hoc-mailing',
+            name: 'Ad-hoc Mailing Selection',
+            version: '1.0.0',
+            description: 'Define customer selection and mailing parameters for internal communications',
+            blocks: [
+              {
+                id: 'mailingTitle',
+                blockType: 'TextInputBlock',
+                label: 'Mailing Title',
+                required: true,
+                validation: { maxLength: 80 },
+                hint: 'Short, descriptive title for this mailing campaign'
+              },
+              {
+                id: 'selectionDefinition',
+                blockType: 'SelectionDefinitionBlock',
+                label: 'Customer/Portfolio Selection',
+                required: true,
+                hint: 'Define which customers or portfolios should receive this mailing'
+              },
+              {
+                id: 'channels',
+                blockType: 'MultiSelectBlock',
+                label: 'Communication Channels',
+                required: true,
+                options: ['Email', 'SMS', 'Letter', 'In-app Notification'],
+                hint: 'Select all applicable channels for this mailing'
+              },
+              {
+                id: 'contentSummary',
+                blockType: 'TextAreaBlock',
+                label: 'Content Summary',
+                required: false,
+                validation: { maxLength: 500 },
+                hint: 'Brief overview of the message content (optional)'
+              },
+              {
+                id: 'sendDate',
+                blockType: 'DateBlock',
+                label: 'Planned Send Date',
+                required: true,
+                hint: 'When should this mailing be sent?'
+              },
+              {
+                id: 'priority',
+                blockType: 'ImpactUrgencyBlock',
+                label: 'Priority Assessment',
+                required: true,
+                hint: 'Rate impact and urgency to determine priority'
+              }
+            ]
+          },
+          {
+            id: 'portfolio-config',
+            name: 'Portfolio Configuration Change',
+            version: '1.0.0',
+            description: 'Request changes to portfolio settings, thresholds, or fee structures',
+            blocks: [
+              {
+                id: 'portfolioId',
+                blockType: 'NumberBlock',
+                label: 'Portfolio ID',
+                required: true,
+                validation: { min: 1 },
+                hint: 'Numeric portfolio identifier'
+              },
+              {
+                id: 'changeType',
+                blockType: 'DropdownBlock',
+                label: 'Type of Change',
+                required: true,
+                options: ['Threshold Update', 'Fee Adjustment', 'Risk Parameters', 'Rebalancing Rules', 'Other'],
+                hint: 'What aspect of the portfolio needs to change?'
+              },
+              {
+                id: 'description',
+                blockType: 'TextAreaBlock',
+                label: 'Detailed Description',
+                required: true,
+                validation: { maxLength: 500 },
+                hint: 'Explain the requested change and business justification'
+              },
+              {
+                id: 'scope',
+                blockType: 'ScopeBlock',
+                label: 'Deployment Scope',
+                required: true,
+                hint: 'Select target environment and scope of impact'
+              },
+              {
+                id: 'priority',
+                blockType: 'ImpactUrgencyBlock',
+                label: 'Priority Assessment',
+                required: true,
+                hint: 'Rate impact and urgency'
+              },
+              {
+                id: 'implementationDate',
+                blockType: 'DateBlock',
+                label: 'Planned Implementation Date',
+                required: true,
+                hint: 'When should this change be deployed?'
+              }
+            ]
+          },
+          {
+            id: 'rm-reassignment',
+            name: 'Bulk RM/Banker Reassignment',
+            version: '1.0.0',
+            description: 'Reassign relationship managers, bankers, or investment advisors in bulk',
+            blocks: [
+              {
+                id: 'selectionDefinition',
+                blockType: 'SelectionDefinitionBlock',
+                label: 'Customer/Portfolio Selection',
+                required: true,
+                hint: 'Which customers/portfolios need reassignment?'
+              },
+              {
+                id: 'roleType',
+                blockType: 'DropdownBlock',
+                label: 'Role to Reassign',
+                required: true,
+                options: ['Relationship Manager', 'Primary Banker', 'Investment Advisor', 'All Roles'],
+                hint: 'Which role(s) need reassignment?'
+              },
+              {
+                id: 'newAssignment',
+                blockType: 'TextInputBlock',
+                label: 'New Assignment Details',
+                required: true,
+                validation: { maxLength: 200 },
+                hint: 'Name or ID of new RM/Banker/Advisor'
+              },
+              {
+                id: 'reason',
+                blockType: 'TextAreaBlock',
+                label: 'Reason for Change',
+                required: true,
+                validation: { maxLength: 300 },
+                hint: 'Why is this reassignment necessary?'
+              },
+              {
+                id: 'effectiveDate',
+                blockType: 'DateBlock',
+                label: 'Effective Date',
+                required: true,
+                hint: 'When should the reassignment take effect?'
+              },
+              {
+                id: 'priority',
+                blockType: 'ImpactUrgencyBlock',
+                label: 'Priority Assessment',
+                required: true,
+                hint: 'Rate the impact and urgency of this change'
+              }
+            ]
+          }
+        ];
+      }
+
+      /**
+       * Get single request type by ID
+       * @param {string} typeId
+       * @returns {FormConfig|null}
+       */
+      static getRequestTypeById(typeId) {
+        return this.getRequestTypes().find(t => t.id === typeId) || null;
+      }
+
+      /**
+       * Get audit logs from localStorage
+       * @returns {SubmissionLog[]}
+       */
+      static getAuditLogs() {
+        try {
+          return JSON.parse(localStorage.getItem('requestLogs') || '[]');
+        } catch (e) {
+          console.error('Error reading audit logs:', e);
+          return [];
+        }
+      }
+
+      /**
+       * Save new audit log entry
+       * @param {SubmissionLog} logEntry
+       */
+      static saveAuditLog(logEntry) {
+        const logs = this.getAuditLogs();
+        logs.push(logEntry);
+        localStorage.setItem('requestLogs', JSON.stringify(logs));
+        localStorage.setItem('lastRequestId', logEntry.id);
+      }
+
+      /**
+       * Generate next request ID
+       * @returns {string}
+       */
+      static generateRequestId() {
+        const lastId = localStorage.getItem('lastRequestId') || 'REQ-0000';
+        const num = parseInt(lastId.replace('REQ-', '')) + 1;
+        return `REQ-${num.toString().padStart(4, '0')}`;
+      }
+    }
+
+    /* ============================================
+       BLOCK BASE CLASS
+       ============================================ */
+
+    class BlockBase {
+      constructor(config) {
+        this.id = config.id;
+        this.blockType = config.blockType;
+        this.label = config.label;
+        this.required = !!config.required;
+        this.hint = config.hint || '';
+        this.validation = config.validation || {};
+        this.value = null;
+        this.errorMsg = '';
+      }
+
+      render(container) {
+        throw new Error('render() must be implemented by subclass');
+      }
+
+      validate() {
+        throw new Error('validate() must be implemented by subclass');
+      }
+
+      getValue() {
+        throw new Error('getValue() must be implemented by subclass');
+      }
+
+      isFilled() {
+        throw new Error('isFilled() must be implemented by subclass');
+      }
+
+      setError(msg) {
+        this.errorMsg = msg;
+      }
+
+      showError() {
+        const elem = document.getElementById(`error-${this.id}`);
+        if (elem) {
+          elem.textContent = this.errorMsg;
+          elem.classList.toggle('show', !!this.errorMsg);
+        }
+      }
+
+      createFormRow() {
+        const row = document.createElement('div');
+        row.className = 'form-group';
+        return row;
+      }
+
+      createLabel() {
+        const label = document.createElement('label');
+        label.className = 'form-label' + (this.required ? ' required' : '');
+        label.textContent = this.label;
+        return label;
+      }
+
+      createHint() {
+        if (!this.hint) return null;
+        const hint = document.createElement('div');
+        hint.className = 'form-hint';
+        hint.textContent = this.hint;
+        return hint;
+      }
+
+      createError() {
+        const error = document.createElement('div');
+        error.id = `error-${this.id}`;
+        error.className = 'form-error';
+        return error;
+      }
+    }
+
+    /* ============================================
+       BLOCK IMPLEMENTATIONS
+       ============================================ */
+
+    class TextInputBlock extends BlockBase {
+      render(container) {
+        const row = this.createFormRow();
+        const rowInner = document.createElement('div');
+        rowInner.className = 'form-row';
+
+        const label = this.createLabel();
+        const field = document.createElement('div');
+        field.className = 'form-field';
+
+        this.input = document.createElement('input');
+        this.input.type = 'text';
+        this.input.id = this.id;
+        if (this.validation.maxLength) this.input.maxLength = this.validation.maxLength;
+
+        this.input.addEventListener('input', () => {
+          this.validate();
+          updateFormState();
+        });
+        this.input.addEventListener('blur', () => this.validate());
+
+        field.appendChild(this.input);
+        field.appendChild(this.createError());
+        if (this.hint) field.appendChild(this.createHint());
+
+        rowInner.appendChild(label);
+        rowInner.appendChild(field);
+        row.appendChild(rowInner);
+        container.appendChild(row);
+      }
+
+      validate() {
+        this.value = this.input.value.trim();
+        this.errorMsg = '';
+
+        if (this.required && !this.value) {
+          this.errorMsg = 'This field is required';
+        } else if (this.value && this.validation.regex) {
+          const regex = new RegExp(this.validation.regex);
+          if (!regex.test(this.value)) {
+            this.errorMsg = this.validation.regexMessage || 'Invalid format';
+          }
+        } else if (this.value && this.validation.minLength && this.value.length < this.validation.minLength) {
+          this.errorMsg = `Minimum ${this.validation.minLength} characters required`;
+        }
+
+        this.input.classList.toggle('invalid', !!this.errorMsg);
+        this.showError();
+        return !this.errorMsg;
+      }
+
+      getValue() {
+        return this.value;
+      }
+
+      isFilled() {
+        return this.value && this.value.length > 0;
+      }
+    }
+
+    class TextAreaBlock extends BlockBase {
+      render(container) {
+        const row = this.createFormRow();
+        const rowInner = document.createElement('div');
+        rowInner.className = 'form-row';
+
+        const label = this.createLabel();
+        const field = document.createElement('div');
+        field.className = 'form-field';
+
+        this.textarea = document.createElement('textarea');
+        this.textarea.id = this.id;
+        if (this.validation.maxLength) this.textarea.maxLength = this.validation.maxLength;
+
+        this.textarea.addEventListener('input', () => {
+          this.validate();
+          updateFormState();
+        });
+        this.textarea.addEventListener('blur', () => this.validate());
+
+        field.appendChild(this.textarea);
+        field.appendChild(this.createError());
+        if (this.hint) field.appendChild(this.createHint());
+
+        rowInner.appendChild(label);
+        rowInner.appendChild(field);
+        row.appendChild(rowInner);
+        container.appendChild(row);
+      }
+
+      validate() {
+        this.value = this.textarea.value.trim();
+        this.errorMsg = '';
+
+        if (this.required && !this.value) {
+          this.errorMsg = 'This field is required';
+        } else if (this.value && this.validation.maxLength && this.value.length > this.validation.maxLength) {
+          this.errorMsg = `Maximum ${this.validation.maxLength} characters`;
+        }
+
+        this.textarea.classList.toggle('invalid', !!this.errorMsg);
+        this.showError();
+        return !this.errorMsg;
+      }
+
+      getValue() {
+        return this.value;
+      }
+
+      isFilled() {
+        return this.value && this.value.length > 0;
+      }
+    }
+
+    class DropdownBlock extends BlockBase {
+      constructor(config) {
+        super(config);
+        this.options = config.options || [];
+      }
+
+      render(container) {
+        const row = this.createFormRow();
+        const rowInner = document.createElement('div');
+        rowInner.className = 'form-row';
+
+        const label = this.createLabel();
+        const field = document.createElement('div');
+        field.className = 'form-field';
+
+        this.select = document.createElement('select');
+        this.select.id = this.id;
+
+        const placeholder = document.createElement('option');
+        placeholder.value = '';
+        placeholder.textContent = 'Select...';
+        this.select.appendChild(placeholder);
+
+        this.options.forEach(opt => {
+          const option = document.createElement('option');
+          option.value = opt;
+          option.textContent = opt;
+          this.select.appendChild(option);
+        });
+
+        this.select.addEventListener('change', () => {
+          this.validate();
+          updateFormState();
+        });
+
+        field.appendChild(this.select);
+        field.appendChild(this.createError());
+        if (this.hint) field.appendChild(this.createHint());
+
+        rowInner.appendChild(label);
+        rowInner.appendChild(field);
+        row.appendChild(rowInner);
+        container.appendChild(row);
+      }
+
+      validate() {
+        this.value = this.select.value;
+        this.errorMsg = '';
+
+        if (this.required && !this.value) {
+          this.errorMsg = 'Please select an option';
+        }
+
+        this.select.classList.toggle('invalid', !!this.errorMsg);
+        this.showError();
+        return !this.errorMsg;
+      }
+
+      getValue() {
+        return this.value;
+      }
+
+      isFilled() {
+        return this.value && this.value.length > 0;
+      }
+    }
+
+    class MultiSelectBlock extends BlockBase {
+      constructor(config) {
+        super(config);
+        this.options = config.options || [];
+      }
+
+      render(container) {
+        const row = this.createFormRow();
+        const rowInner = document.createElement('div');
+        rowInner.className = 'form-row';
+
+        const label = this.createLabel();
+        const field = document.createElement('div');
+        field.className = 'form-field';
+
+        this.select = document.createElement('select');
+        this.select.id = this.id;
+        this.select.multiple = true;
+        this.select.size = Math.min(5, this.options.length);
+
+        this.options.forEach(opt => {
+          const option = document.createElement('option');
+          option.value = opt;
+          option.textContent = opt;
+          this.select.appendChild(option);
+        });
+
+        this.select.addEventListener('change', () => {
+          this.validate();
+          updateFormState();
+        });
+
+        field.appendChild(this.select);
+        field.appendChild(this.createError());
+        if (this.hint) field.appendChild(this.createHint());
+
+        rowInner.appendChild(label);
+        rowInner.appendChild(field);
+        row.appendChild(rowInner);
+        container.appendChild(row);
+      }
+
+      validate() {
+        this.value = Array.from(this.select.selectedOptions).map(o => o.value);
+        this.errorMsg = '';
+
+        if (this.required && this.value.length === 0) {
+          this.errorMsg = 'Please select at least one option';
+        }
+
+        this.select.classList.toggle('invalid', !!this.errorMsg);
+        this.showError();
+        return !this.errorMsg;
+      }
+
+      getValue() {
+        return this.value;
+      }
+
+      isFilled() {
+        return this.value && this.value.length > 0;
+      }
+    }
+
+    class DateBlock extends BlockBase {
+      render(container) {
+        const row = this.createFormRow();
+        const rowInner = document.createElement('div');
+        rowInner.className = 'form-row';
+
+        const label = this.createLabel();
+        const field = document.createElement('div');
+        field.className = 'form-field';
+
+        this.input = document.createElement('input');
+        this.input.type = 'date';
+        this.input.id = this.id;
+
+        this.input.addEventListener('change', () => {
+          this.validate();
+          updateFormState();
+        });
+
+        field.appendChild(this.input);
+        field.appendChild(this.createError());
+        if (this.hint) field.appendChild(this.createHint());
+
+        rowInner.appendChild(label);
+        rowInner.appendChild(field);
+        row.appendChild(rowInner);
+        container.appendChild(row);
+      }
+
+      validate() {
+        this.value = this.input.value;
+        this.errorMsg = '';
+
+        if (this.required && !this.value) {
+          this.errorMsg = 'Please select a date';
+        }
+
+        this.input.classList.toggle('invalid', !!this.errorMsg);
+        this.showError();
+        return !this.errorMsg;
+      }
+
+      getValue() {
+        return this.value;
+      }
+
+      isFilled() {
+        return this.value && this.value.length > 0;
+      }
+    }
+
+    class NumberBlock extends BlockBase {
+      render(container) {
+        const row = this.createFormRow();
+        const rowInner = document.createElement('div');
+        rowInner.className = 'form-row';
+
+        const label = this.createLabel();
+        const field = document.createElement('div');
+        field.className = 'form-field';
+
+        this.input = document.createElement('input');
+        this.input.type = 'number';
+        this.input.id = this.id;
+        if (this.validation.min !== undefined) this.input.min = this.validation.min;
+        if (this.validation.max !== undefined) this.input.max = this.validation.max;
+
+        this.input.addEventListener('input', () => {
+          this.validate();
+          updateFormState();
+        });
+        this.input.addEventListener('blur', () => this.validate());
+
+        field.appendChild(this.input);
+        field.appendChild(this.createError());
+        if (this.hint) field.appendChild(this.createHint());
+
+        rowInner.appendChild(label);
+        rowInner.appendChild(field);
+        row.appendChild(rowInner);
+        container.appendChild(row);
+      }
+
+      validate() {
+        this.value = this.input.value ? Number(this.input.value) : null;
+        this.errorMsg = '';
+
+        if (this.required && this.value === null) {
+          this.errorMsg = 'Please enter a number';
+        } else if (this.value !== null) {
+          if (this.validation.min !== undefined && this.value < this.validation.min) {
+            this.errorMsg = `Minimum value is ${this.validation.min}`;
+          }
+          if (this.validation.max !== undefined && this.value > this.validation.max) {
+            this.errorMsg = `Maximum value is ${this.validation.max}`;
+          }
+        }
+
+        this.input.classList.toggle('invalid', !!this.errorMsg);
+        this.showError();
+        return !this.errorMsg;
+      }
+
+      getValue() {
+        return this.value;
+      }
+
+      isFilled() {
+        return this.value !== null;
+      }
+    }
+
+    class ImpactUrgencyBlock extends BlockBase {
+      render(container) {
+        const row = this.createFormRow();
+        row.className = 'form-group';
+
+        const fieldset = document.createElement('fieldset');
+        const legend = document.createElement('legend');
+        legend.textContent = this.label + (this.required ? ' *' : '');
+        fieldset.appendChild(legend);
+
+        // Impact
+        const impactRow = document.createElement('div');
+        impactRow.className = 'form-row';
+        const impactLabel = document.createElement('label');
+        impactLabel.className = 'form-label required';
+        impactLabel.textContent = 'Impact Level';
+        const impactField = document.createElement('div');
+        impactField.className = 'form-field';
+
+        this.impactSelect = document.createElement('select');
+        this.impactSelect.id = `${this.id}-impact`;
+        ['Low', 'Medium', 'High'].forEach(level => {
+          const opt = document.createElement('option');
+          opt.value = level;
+          opt.textContent = level;
+          this.impactSelect.appendChild(opt);
+        });
+
+        impactField.appendChild(this.impactSelect);
+        impactRow.appendChild(impactLabel);
+        impactRow.appendChild(impactField);
+        fieldset.appendChild(impactRow);
+
+        // Urgency
+        const urgencyRow = document.createElement('div');
+        urgencyRow.className = 'form-row';
+        const urgencyLabel = document.createElement('label');
+        urgencyLabel.className = 'form-label required';
+        urgencyLabel.textContent = 'Urgency Level';
+        const urgencyField = document.createElement('div');
+        urgencyField.className = 'form-field';
+
+        this.urgencySelect = document.createElement('select');
+        this.urgencySelect.id = `${this.id}-urgency`;
+        ['Low', 'Medium', 'High'].forEach(level => {
+          const opt = document.createElement('option');
+          opt.value = level;
+          opt.textContent = level;
+          this.urgencySelect.appendChild(opt);
+        });
+
+        urgencyField.appendChild(this.urgencySelect);
+        urgencyRow.appendChild(urgencyLabel);
+        urgencyRow.appendChild(urgencyField);
+        fieldset.appendChild(urgencyRow);
+
+        // Priority Display
+        const priorityRow = document.createElement('div');
+        priorityRow.className = 'form-row';
+        const priorityLabel = document.createElement('label');
+        priorityLabel.className = 'form-label';
+        priorityLabel.textContent = 'Derived Priority';
+        const priorityField = document.createElement('div');
+        priorityField.className = 'form-field';
+
+        this.priorityDisplay = document.createElement('input');
+        this.priorityDisplay.type = 'text';
+        this.priorityDisplay.id = `${this.id}-priority`;
+        this.priorityDisplay.disabled = true;
+
+        priorityField.appendChild(this.priorityDisplay);
+        priorityRow.appendChild(priorityLabel);
+        priorityRow.appendChild(priorityField);
+        fieldset.appendChild(priorityRow);
+
+        // Error
+        fieldset.appendChild(this.createError());
+        if (this.hint) {
+          const hint = document.createElement('div');
+          hint.className = 'form-hint';
+          hint.textContent = this.hint;
+          fieldset.appendChild(hint);
+        }
+
+        const onChange = () => {
+          this.updatePriority();
+          this.validate();
+          updateFormState();
+        };
+
+        this.impactSelect.addEventListener('change', onChange);
+        this.urgencySelect.addEventListener('change', onChange);
+
+        row.appendChild(fieldset);
+        container.appendChild(row);
+      }
+
+      updatePriority() {
+        const impact = this.impactSelect.value;
+        const urgency = this.urgencySelect.value;
+
+        if (!impact || !urgency) {
+          this.priorityDisplay.value = '';
+          return;
+        }
+
+        const levels = { 'Low': 1, 'Medium': 2, 'High': 3 };
+        const sum = levels[impact] + levels[urgency];
+
+        if (sum <= 2) this.priorityDisplay.value = 'Low';
+        else if (sum <= 4) this.priorityDisplay.value = 'Medium';
+        else this.priorityDisplay.value = 'High';
+      }
+
+      validate() {
+        this.errorMsg = '';
+
+        if (this.required) {
+          if (!this.impactSelect.value || !this.urgencySelect.value) {
+            this.errorMsg = 'Both impact and urgency are required';
+          }
+        }
+
+        this.showError();
+        return !this.errorMsg;
+      }
+
+      getValue() {
+        return {
+          impact: this.impactSelect.value,
+          urgency: this.urgencySelect.value,
+          priority: this.priorityDisplay.value
+        };
+      }
+
+      isFilled() {
+        return this.impactSelect.value && this.urgencySelect.value;
+      }
+    }
+
+    class ScopeBlock extends BlockBase {
+      render(container) {
+        const row = this.createFormRow();
+        row.className = 'form-group';
+
+        const fieldset = document.createElement('fieldset');
+        const legend = document.createElement('legend');
+        legend.textContent = this.label + (this.required ? ' *' : '');
+        fieldset.appendChild(legend);
+
+        // Environment
+        const envRow = document.createElement('div');
+        envRow.className = 'form-row';
+        const envLabel = document.createElement('label');
+        envLabel.className = 'form-label required';
+        envLabel.textContent = 'Environment';
+        const envField = document.createElement('div');
+        envField.className = 'form-field';
+
+        this.envSelect = document.createElement('select');
+        this.envSelect.id = `${this.id}-env`;
+        ['OT', 'ACC', 'PROD'].forEach(env => {
+          const opt = document.createElement('option');
+          opt.value = env;
+          opt.textContent = env;
+          this.envSelect.appendChild(opt);
+        });
+
+        envField.appendChild(this.envSelect);
+        envRow.appendChild(envLabel);
+        envRow.appendChild(envField);
+        fieldset.appendChild(envRow);
+
+        // Explanation
+        const explRow = document.createElement('div');
+        explRow.className = 'form-row';
+        const explLabel = document.createElement('label');
+        explLabel.className = 'form-label required';
+        explLabel.textContent = 'Scope Explanation';
+        const explField = document.createElement('div');
+        explField.className = 'form-field';
+
+        this.explanationInput = document.createElement('input');
+        this.explanationInput.type = 'text';
+        this.explanationInput.id = `${this.id}-explanation`;
+        this.explanationInput.placeholder = 'E.g., "All portfolios in region X" or "Test accounts only"';
+
+        explField.appendChild(this.explanationInput);
+        explRow.appendChild(explLabel);
+        explRow.appendChild(explField);
+        fieldset.appendChild(explRow);
+
+        // Error
+        fieldset.appendChild(this.createError());
+        if (this.hint) {
+          const hint = document.createElement('div');
+          hint.className = 'form-hint';
+          hint.textContent = this.hint;
+          fieldset.appendChild(hint);
+        }
+
+        const onChange = () => {
+          this.validate();
+          updateFormState();
+        };
+
+        this.envSelect.addEventListener('change', onChange);
+        this.explanationInput.addEventListener('input', onChange);
+        this.explanationInput.addEventListener('blur', () => this.validate());
+
+        row.appendChild(fieldset);
+        container.appendChild(row);
+      }
+
+      validate() {
+        this.errorMsg = '';
+
+        if (this.required) {
+          if (!this.envSelect.value || !this.explanationInput.value.trim()) {
+            this.errorMsg = 'Environment and explanation are required';
+          }
+        }
+
+        this.envSelect.classList.toggle('invalid', !!this.errorMsg);
+        this.explanationInput.classList.toggle('invalid', !!this.errorMsg);
+        this.showError();
+        return !this.errorMsg;
+      }
+
+      getValue() {
+        return {
+          environment: this.envSelect.value,
+          explanation: this.explanationInput.value.trim()
+        };
+      }
+
+      isFilled() {
+        return this.envSelect.value && this.explanationInput.value.trim();
+      }
+    }
+
+    class SelectionDefinitionBlock extends BlockBase {
+      render(container) {
+        const row = this.createFormRow();
+        row.className = 'form-group';
+
+        const fieldset = document.createElement('fieldset');
+        const legend = document.createElement('legend');
+        legend.textContent = this.label + (this.required ? ' *' : '');
+        fieldset.appendChild(legend);
+
+        if (this.hint) {
+          const hint = document.createElement('div');
+          hint.className = 'form-hint';
+          hint.textContent = this.hint;
+          fieldset.appendChild(hint);
+        }
+
+        // Radio buttons for modes
+        const modesDiv = document.createElement('div');
+        modesDiv.style.marginBottom = '1rem';
+
+        this.radios = [];
+        const modes = [
+          { value: 'customer-ids', label: 'Specific Customer IDs' },
+          { value: 'portfolio-ids', label: 'Portfolio IDs' },
+          { value: 'rule-based', label: 'Rule-based Description' }
+        ];
+
+        modes.forEach((mode, idx) => {
+          const radioLabel = document.createElement('label');
+          radioLabel.style.display = 'block';
+          radioLabel.style.marginBottom = '0.5rem';
+
+          const radio = document.createElement('input');
+          radio.type = 'radio';
+          radio.name = `${this.id}-mode`;
+          radio.value = mode.value;
+          if (idx === 0) radio.checked = true;
+
+          radioLabel.appendChild(radio);
+          radioLabel.appendChild(document.createTextNode(` ${mode.label}`));
+
+          radio.addEventListener('change', () => this.onModeChange(mode.value));
+          this.radios.push({ radio, mode: mode.value });
+
+          modesDiv.appendChild(radioLabel);
+        });
+
+        fieldset.appendChild(modesDiv);
+
+        // Input containers
+        this.idListInput = document.createElement('textarea');
+        this.idListInput.placeholder = 'Enter IDs separated by commas or newlines (e.g., 12345, 67890, 11111)';
+        this.idListInput.rows = 4;
+        this.idListInput.style.display = 'block';
+
+        this.ruleInput = document.createElement('input');
+        this.ruleInput.type = 'text';
+        this.ruleInput.placeholder = 'E.g., "All clients in Frankfurt region with portfolio > €500k"';
+        this.ruleInput.style.display = 'none';
+
+        const onChange = () => {
+          this.validate();
+          updateFormState();
+        };
+
+        this.idListInput.addEventListener('input', onChange);
+        this.idListInput.addEventListener('blur', () => this.validate());
+        this.ruleInput.addEventListener('input', onChange);
+        this.ruleInput.addEventListener('blur', () => this.validate());
+
+        fieldset.appendChild(this.idListInput);
+        fieldset.appendChild(this.ruleInput);
+        fieldset.appendChild(this.createError());
+
+        row.appendChild(fieldset);
+        container.appendChild(row);
+
+        this.currentMode = 'customer-ids';
+      }
+
+      onModeChange(mode) {
+        this.currentMode = mode;
+        if (mode === 'rule-based') {
+          this.idListInput.style.display = 'none';
+          this.ruleInput.style.display = 'block';
+        } else {
+          this.idListInput.style.display = 'block';
+          this.ruleInput.style.display = 'none';
+        }
+        this.errorMsg = '';
+        this.showError();
+      }
+
+      validate() {
+        this.errorMsg = '';
+
+        if (this.currentMode === 'rule-based') {
+          const ruleValue = this.ruleInput.value.trim();
+          if (this.required && !ruleValue) {
+            this.errorMsg = 'Rule description is required';
+          } else if (ruleValue && ruleValue.length < 10) {
+            this.errorMsg = 'Rule description must be at least 10 characters';
+          }
+          this.ruleInput.classList.toggle('invalid', !!this.errorMsg);
+        } else {
+          const idValue = this.idListInput.value.trim();
+          if (this.required && !idValue) {
+            this.errorMsg = 'At least one ID is required';
+          } else if (idValue) {
+            const ids = idValue.split(/[,\s]+/).filter(x => x);
+            if (!ids.every(id => /^\d+$/.test(id))) {
+              this.errorMsg = 'All IDs must be numeric';
+            }
+          }
+          this.idListInput.classList.toggle('invalid', !!this.errorMsg);
+        }
+
+        this.showError();
+        return !this.errorMsg;
+      }
+
+      getValue() {
+        if (this.currentMode === 'rule-based') {
+          return { mode: 'rule-based', rule: this.ruleInput.value.trim() };
+        } else {
+          const idValue = this.idListInput.value.trim();
+          const ids = idValue ? idValue.split(/[,\s]+/).filter(x => x).map(Number) : [];
+          return { mode: this.currentMode, ids };
+        }
+      }
+
+      isFilled() {
+        if (this.currentMode === 'rule-based') {
+          return this.ruleInput.value.trim().length > 0;
+        } else {
+          return this.idListInput.value.trim().length > 0;
+        }
+      }
+    }
+
+    /* ============================================
+       STATE & FORM MANAGEMENT
+       ============================================ */
+
+    let currentRequestType = null;
+    let formBlocks = [];
+
+    function updateFormState() {
+      const reviewBtn = document.getElementById('toStep3Btn');
+      if (!reviewBtn) return;
+
+      let allValid = true;
+      formBlocks.forEach(block => {
+        if (block.required && !block.isFilled()) {
+          allValid = false;
+        }
+        if (block.errorMsg) {
+          allValid = false;
+        }
+      });
+
+      reviewBtn.disabled = !allValid;
+    }
+
+    function buildForm(requestTypeId) {
+      currentRequestType = ConfigRepository.getRequestTypeById(requestTypeId);
+      if (!currentRequestType) return;
+
+      const container = document.getElementById('formBlocksContainer');
+      container.innerHTML = '';
+      formBlocks = [];
+
+      currentRequestType.blocks.forEach(blockConfig => {
+        let block = null;
+
+        const blockMap = {
+          'TextInputBlock': () => new TextInputBlock(blockConfig),
+          'TextAreaBlock': () => new TextAreaBlock(blockConfig),
+          'DropdownBlock': () => new DropdownBlock(blockConfig),
+          'MultiSelectBlock': () => new MultiSelectBlock(blockConfig),
+          'DateBlock': () => new DateBlock(blockConfig),
+          'NumberBlock': () => new NumberBlock(blockConfig),
+          'ImpactUrgencyBlock': () => new ImpactUrgencyBlock(blockConfig),
+          'ScopeBlock': () => new ScopeBlock(blockConfig),
+          'SelectionDefinitionBlock': () => new SelectionDefinitionBlock(blockConfig)
+        };
+
+        if (blockMap[blockConfig.blockType]) {
+          block = blockMap[blockConfig.blockType]();
+          block.render(container);
+          formBlocks.push(block);
+        } else {
+          console.warn(`Unknown block type: ${blockConfig.blockType}`);
+        }
+      });
+
+      updateFormState();
+    }
+
+    function collectFormData() {
+      const payload = {};
+      formBlocks.forEach(block => {
+        payload[block.id] = block.getValue();
+      });
+      return payload;
+    }
+
+    function validateAllFields() {
+      let errors = [];
+      formBlocks.forEach(block => {
+        if (!block.validate()) {
+          errors.push(`${block.label}: ${block.errorMsg}`);
+        }
+      });
+
+      const errorBanner = document.getElementById('errorBanner');
+      if (errors.length > 0) {
+        let html = '<h4>Please fix the following errors:</h4><ul>';
+        errors.forEach(err => {
+          html += `<li>${err}</li>`;
+        });
+        html += '</ul>';
+        errorBanner.innerHTML = html;
+        errorBanner.classList.add('show');
+        return false;
+      } else {
+        errorBanner.classList.remove('show');
+        return true;
+      }
+    }
+
+    /* ============================================
+       EVENT HANDLERS & UI LOGIC
+       ============================================ */
+
+    document.getElementById('requestTypeSelect').addEventListener('change', function() {
+      const selectedId = this.value;
+      const requestType = ConfigRepository.getRequestTypeById(selectedId);
+
+      if (requestType) {
+        document.getElementById('typeDescription').textContent = requestType.description;
+        document.getElementById('toStep2Btn').disabled = false;
+      } else {
+        document.getElementById('typeDescription').textContent = '';
+        document.getElementById('toStep2Btn').disabled = true;
+      }
+    });
+
+    document.getElementById('toStep2Btn').addEventListener('click', () => {
+      const typeId = document.getElementById('requestTypeSelect').value;
+      if (typeId) {
+        buildForm(typeId);
+        showStep(2);
+      }
+    });
+
+    document.getElementById('backToStep1Btn').addEventListener('click', () => showStep(1));
+
+    document.getElementById('toStep3Btn').addEventListener('click', () => {
+      if (validateAllFields()) {
+        const payload = collectFormData();
+        buildReview(payload);
+        showStep(3);
+      }
+    });
+
+    document.getElementById('backToStep2Btn').addEventListener('click', () => showStep(2));
+
+    document.getElementById('copySummaryBtn').addEventListener('click', () => {
+      const text = document.getElementById('summaryText').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('Summary copied to clipboard!');
+      });
+    });
+
+    document.getElementById('submitTopdeskBtn').addEventListener('click', () => {
+      submitRequest('Topdesk');
+    });
+
+    document.getElementById('startWorkflowBtn').addEventListener('click', () => {
+      submitRequest('Internal Workflow');
+    });
+
+    document.getElementById('newRequestBtn').addEventListener('click', () => {
+      resetForm();
+      showStep(1);
+    });
+
+    document.getElementById('viewAuditBtn').addEventListener('click', () => {
+      document.getElementById('tabAudit').click();
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      resetForm();
+    });
+
+    // Tab switching
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        const tabName = this.dataset.tab;
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+        this.classList.add('active');
+        document.getElementById(tabName).style.display = 'block';
+
+        if (tabName === 'auditLog') {
+          renderAuditLog();
+        }
+      });
+    });
+
+    /* ============================================
+       UTILITY FUNCTIONS
+       ============================================ */
+
+    function showStep(stepNum) {
+      document.querySelectorAll('.step').forEach(step => {
+        step.classList.remove('active');
+      });
+      document.getElementById(`step${stepNum}`).classList.add('active');
+      window.scrollTo(0, 0);
+    }
+
+    function resetForm() {
+      document.getElementById('requestTypeSelect').value = '';
+      document.getElementById('typeDescription').textContent = '';
+      document.getElementById('toStep2Btn').disabled = true;
+      document.getElementById('formBlocksContainer').innerHTML = '';
+      document.getElementById('errorBanner').classList.remove('show');
+      formBlocks = [];
+    }
+
+    function buildReview(payload) {
+      const summary = buildSummaryText(payload);
+      document.getElementById('summaryText').textContent = summary;
+      document.getElementById('jsonPreview').textContent = JSON.stringify(
+        {
+          requestType: currentRequestType.id,
+          requestTypeName: currentRequestType.name,
+          version: currentRequestType.version,
+          timestamp: new Date().toISOString(),
+          payload
+        },
+        null,
+        2
+      );
+    }
+
+    function buildSummaryText(payload) {
+      let text = `REQUEST SUMMARY\n`;
+      text += `Type: ${currentRequestType.name} (v${currentRequestType.version})\n`;
+      text += `Submitted: ${new Date().toLocaleString()}\n\n`;
+      text += `DETAILS:\n`;
+      text += `─────────────────────────────────────\n`;
+
+      formBlocks.forEach(block => {
+        const value = payload[block.id];
+        let displayValue = '';
+
+        if (typeof value === 'object' && value !== null) {
+          if (Array.isArray(value)) {
+            displayValue = value.join(', ');
+          } else if (value.mode) {
+            displayValue = value.mode === 'rule-based' ? `Rule: ${value.rule}` : `IDs: ${(value.ids || []).join(', ')}`;
+          } else if (value.impact !== undefined) {
+            displayValue = `Impact: ${value.impact}, Urgency: ${value.urgency}, Priority: ${value.priority}`;
+          } else if (value.environment !== undefined) {
+            displayValue = `Environment: ${value.environment}, Scope: ${value.explanation}`;
+          } else {
+            displayValue = JSON.stringify(value);
+          }
+        } else {
+          displayValue = value || '(empty)';
+        }
+
+        text += `${block.label}:\n  ${displayValue}\n\n`;
+      });
+
+      return text;
+    }
+
+    function submitRequest(route) {
+      const payload = collectFormData();
+      const requestId = ConfigRepository.generateRequestId();
+      const logEntry = {
+        id: requestId,
+        timestamp: new Date().toISOString(),
+        requestTypeId: currentRequestType.id,
+        requestTypeName: currentRequestType.name,
+        version: currentRequestType.version,
+        route,
+        payload
+      };
+
+      ConfigRepository.saveAuditLog(logEntry);
+      document.getElementById('confirmRequestId').textContent = requestId;
+      showToast(`Request ${requestId} submitted via ${route}`);
+      showStep(4);
+    }
+
+    function renderAuditLog() {
+      const logs = ConfigRepository.getAuditLogs();
+      const container = document.getElementById('auditLogContainer');
+
+      if (logs.length === 0) {
+        container.innerHTML = '<p style="color: #a0aec0;">No requests submitted yet.</p>';
+        return;
+      }
+
+      let html = '';
+      [...logs].reverse().forEach(log => {
+        html += `
+          <details style="margin-bottom: 1rem; border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 6px; padding: 1rem;">
+            <summary style="cursor: pointer; color: #8b5cf6; font-weight: 600;">
+              ${log.id} — ${log.requestTypeName} — ${new Date(log.timestamp).toLocaleString()} (${log.route})
+            </summary>
+            <pre style="margin-top: 1rem; background: rgba(0, 0, 0, 0.3); padding: 1rem; border-radius: 4px; overflow-x: auto; color: #c0c0ff; font-size: 0.9rem;">${JSON.stringify(log, null, 2)}</pre>
+          </details>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function showToast(message) {
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+        toast.remove();
+      }, 3000);
+    }
+
+    /* ============================================
+       INITIALIZATION
+       ============================================ */
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Populate request type dropdown
+      const select = document.getElementById('requestTypeSelect');
+      ConfigRepository.getRequestTypes().forEach(type => {
+        const option = document.createElement('option');
+        option.value = type.id;
+        option.textContent = type.name;
+        select.appendChild(option);
+      });
+
+      console.log('Request Builder initialized');
+      console.log('Available request types:', ConfigRepository.getRequestTypes());
+    });
+  </script>
+</body>
+</html>

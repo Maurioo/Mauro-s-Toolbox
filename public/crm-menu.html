@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CRM Tools - Mauro's Toolbox</title>
+  <link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+      color: #e0e0e0;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* --- Background decorations --- */
+    .bg-decoration {
+      position: fixed;
+      z-index: 0;
+      pointer-events: none;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      overflow: hidden;
+    }
+    .decoration-circle {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.08;
+      background: radial-gradient(circle at 60% 40%, #8b5cf6 60%, #6366f1 100%);
+      box-shadow: 0 8px 48px 0 #8b5cf633;
+    }
+    .decoration-circle.big {
+      width: 420px; height: 420px; left: -120px; top: 60px;
+    }
+    .decoration-circle.small {
+      width: 220px; height: 220px; right: -80px; top: 180px;
+    }
+
+    /* --- Navbar --- */
+    .navbar {
+      width: 100vw;
+      background: #1a1a2e;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-sizing: border-box;
+    }
+
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    .navbar-link {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.3rem;
+      color: #e0e0e0;
+      text-decoration: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      letter-spacing: 0.5px;
+    }
+
+    .navbar-link:hover {
+      color: #fff;
+      background: rgba(139, 92, 246, 0.1);
+    }
+
+    .navbar-link.active {
+      color: #8b5cf6;
+      border-bottom: 2px solid #8b5cf6;
+    }
+
+    .navbar-right {
+      flex-shrink: 0;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .back-btn {
+      background: transparent;
+      color: #e0e0e0;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border: 1.5px solid #8b5cf6;
+      border-radius: 8px;
+      padding: 0.6rem 1.2rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      letter-spacing: 0.5px;
+      text-decoration: none;
+    }
+
+    .back-btn:hover {
+      background: #8b5cf6;
+      color: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    }
+
+    /* --- Main Content --- */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - 100px);
+      text-align: center;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 2rem;
+    }
+
+    .page-title {
+      font-size: 3rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 1rem;
+      color: #fff;
+      text-shadow: 0 4px 20px rgba(139, 92, 246, 0.2);
+    }
+
+    .page-subtitle {
+      font-size: 1.2rem;
+      color: #a0aec0;
+      font-weight: 600;
+      margin-bottom: 3rem;
+      letter-spacing: 0.5px;
+    }
+
+    .tools-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    .tool-card {
+      background: rgba(139, 92, 246, 0.05);
+      border: 1.5px solid #8b5cf644;
+      border-radius: 12px;
+      padding: 2rem;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      cursor: pointer;
+    }
+
+    .tool-card:hover {
+      background: rgba(139, 92, 246, 0.1);
+      border-color: #8b5cf6;
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(139, 92, 246, 0.2);
+    }
+
+    .tool-icon {
+      font-size: 2.5rem;
+    }
+
+    .tool-name {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #fff;
+      margin: 0;
+    }
+
+    .tool-description {
+      font-size: 0.95rem;
+      color: #a0aec0;
+      margin: 0;
+      flex-grow: 1;
+    }
+
+    .tool-status {
+      display: inline-block;
+      background: #8b5cf6;
+      color: #fff;
+      padding: 0.3rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-top: 0.5rem;
+    }
+
+    .tool-status.wip {
+      background: #f59e0b;
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 768px) {
+      .page-title {
+        font-size: 2.2rem;
+      }
+
+      .page-subtitle {
+        font-size: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .tools-container {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 0 1rem;
+      }
+
+      .navbar {
+        padding: 1rem;
+      }
+
+      .navbar-link {
+        font-size: 1.1rem;
+        padding: 0.6rem 1rem;
+      }
+
+      .back-btn {
+        font-size: 0.95rem;
+        padding: 0.5rem 1rem;
+      }
+    }
+
+    html, body {
+      height: 100%;
+      min-height: 100vh;
+      width: 100vw;
+      overflow-x: hidden;
+    }
+
+    body {
+      box-sizing: border-box;
+      padding: 0;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-decoration">
+    <div class="decoration-circle big"></div>
+    <div class="decoration-circle small"></div>
+  </div>
+
+  <nav class="navbar">
+    <div class="navbar-left">
+      <a href="index.html" class="navbar-link">Mauro's Toolbox</a>
+      <a href="crm-menu.html" class="navbar-link active">CRM Tools</a>
+    </div>
+    <div class="navbar-right">
+      <a href="index.html" class="back-btn">← Back to Home</a>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <h1 class="page-title">CRM Tools</h1>
+    <p class="page-subtitle">Enterprise-grade tools for customer relationship management</p>
+
+    <div class="tools-container">
+      <!-- Document Classification Tool -->
+      <a href="document-classificatie.html" class="tool-card">
+        <div class="tool-icon">📄</div>
+        <h2 class="tool-name">Document Classification</h2>
+        <p class="tool-description">Automatically classify and organize your documents using AI-powered categorization.</p>
+        <span class="tool-status">Available</span>
+      </a>
+
+      <!-- Request Builder Tool -->
+      <a href="request-builder.html" class="tool-card">
+        <div class="tool-icon">📋</div>
+        <h2 class="tool-name">Request Builder</h2>
+        <p class="tool-description">Structure and submit CRM requests with dynamic forms, validation, and audit logging.</p>
+        <span class="tool-status">Available</span>
+      </a>
+
+      <!-- Placeholder for future tool 2 -->
+      <div class="tool-card" style="opacity: 0.6; cursor: not-allowed;">
+        <h2 class="tool-name">Coming Soon</h2>
+        <p class="tool-description">Additional utilities will be added as the platform expands.</p>
+        <span class="tool-status wip">Work in Progress</span>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

@@ -3,19 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NBA Games Dashboard</title>
-  <link href="https://fonts.googleapis.com/css?family=Oswald:700|Roboto:400&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <title>Mauro's Toolbox</title>
+  <link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
+    * {
+      font-family: 'Poppins', sans-serif;
+    }
+
     body {
-      background: linear-gradient(135deg, #f7f7f7 60%, #e3e9f7 100%);
-      color: #111;
-      font-family: 'Poppins', 'Roboto', Arial, sans-serif;
+      background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+      color: #e0e0e0;
+      font-family: 'Poppins', sans-serif;
       margin: 0;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       position: relative;
-      overflow: hidden;
+      overflow-x: hidden;
     }
     /* --- Basketbal cirkels/visuals op de achtergrond --- */
     .basketball-bg {
@@ -28,139 +32,130 @@
     .basketball-circle {
       position: absolute;
       border-radius: 50%;
-      opacity: 0.13;
-      background: radial-gradient(circle at 60% 40%, #ff9800 60%, #c9082a 100%);
-      box-shadow: 0 8px 48px 0 #c9082a33;
+      opacity: 0.08;
+      background: radial-gradient(circle at 60% 40%, #3b82f6 60%, #8b5cf6 100%);
+      box-shadow: 0 8px 48px 0 #3b82f633;
     }
     .basketball-circle.big {
       width: 420px; height: 420px; left: -120px; top: 60px;
     }
     .basketball-circle.mid {
       width: 220px; height: 220px; right: -80px; top: 180px;
-      background: radial-gradient(circle at 40% 60%, #17408b 60%, #c9082a 100%);
+      background: radial-gradient(circle at 40% 60%, #6366f1 60%, #8b5cf6 100%);
     }
     .basketball-circle.small {
       width: 110px; height: 110px; left: 60vw; top: 70vh;
-      background: radial-gradient(circle at 60% 40%, #ff9800 70%, #17408b 100%);
+      background: radial-gradient(circle at 60% 40%, #3b82f6 70%, #6366f1 100%);
     }
     .basketball-stripes {
       position: absolute;
       width: 180px; height: 180px; left: 10vw; top: 60vh;
       border-radius: 50%;
-      border: 4px solid #c9082a44;
-      border-right: 8px solid #ff9800aa;
-      opacity: 0.10;
+      border: 4px solid #8b5cf644;
+      border-right: 8px solid #3b82f6aa;
+      opacity: 0.08;
       transform: rotate(-18deg);
     }
     .navbar {
       width: 100vw;
-      background: #fff;
-      box-shadow: 0 2px 12px rgba(25,40,80,0.09);
+      background: #1a1a2e;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1.5rem 4rem;
+      padding: 1.2rem 2rem;
       position: sticky;
       top: 0;
       z-index: 100;
-      overflow: visible; /* <-- important! */
+      box-sizing: border-box;
     }
-    .navbar-left, .navbar-right {
+    .navbar-left {
       display: flex;
       align-items: center;
-      gap: 3.5rem;
+      gap: 0;
+    }
+    .navbar-right {
+      flex-shrink: 0;
+      display: flex;
+      justify-content: flex-end;
     }
     .navbar-link {
-      font-family: 'Poppins', 'Roboto', Arial, sans-serif;
-      font-size: 2.8rem;
-      color: #17408b;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.3rem;
+      color: #e0e0e0;
       text-decoration: none;
-      padding: 1.2rem 3.5rem;
-      border-radius: 18px;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
       font-weight: 600;
-      transition: background 0.18s, color 0.18s;
-      position: relative;
-      letter-spacing: 1.5px;
+      transition: all 0.2s ease;
+      letter-spacing: 0.5px;
     }
     .navbar-link:hover,
-    .dropdown:hover > .navbar-link {
-      background: #17408b;
+    .navbar-link.active {
       color: #fff;
+      background: rgba(59, 130, 246, 0.1);
     }
-    .navbar-link.active, .navbar-link:focus {
-      background: #c9082a;
-      color: #fff;
-      font-weight: 700;
-      box-shadow: 0 2px 12px #c9082a22;
+    .navbar-link.active {
+      color: #3b82f6;
+      border-bottom: 2px solid #3b82f6;
     }
     .navbar-btn {
-      background: linear-gradient(90deg, #17408b 60%, #c9082a 100%);
-      color: #fff;
-      font-family: 'Poppins', 'Oswald', Arial, sans-serif;
-      font-size: 2.2rem;
-      font-weight: 700;
-      border: none;
-      border-radius: 20px;
-      padding: 1.2rem 3.5rem;
-      margin-left: 2.5rem;
+      background: transparent;
+      color: #e0e0e0;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border: 1.5px solid #3b82f6;
+      border-radius: 8px;
+      padding: 0.6rem 1.2rem;
       cursor: pointer;
-      transition: background 0.18s, color 0.18s, box-shadow 0.18s;
-      box-shadow: 0 2px 8px rgba(25,40,80,0.10);
-      letter-spacing: 1.5px;
-      min-width: 220px;
-      max-width: 420px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      transition: all 0.2s ease;
+      letter-spacing: 0.5px;
     }
     .navbar-btn:hover {
-      background: linear-gradient(90deg, #c9082a 60%, #ff9800 100%);
+      background: #3b82f6;
       color: #fff;
-      box-shadow: 0 8px 32px #c9082a33;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
     }
     /* Dropdown styles */
     .dropdown {
       position: relative;
-      display: inline-block;
+      display: none;
     }
     .dropdown-content {
       display: none;
       position: absolute;
-      background: #fff;
-      min-width: 350px;
-      box-shadow: 0 16px 48px rgba(25,40,80,0.18);
-      border-radius: 16px;
+      background: #1a1a2e;
+      border: 1px solid #3b82f6;
+      min-width: 200px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      border-radius: 8px;
       z-index: 99999;
       top: 110%;
       left: 0;
-      padding: 1rem 0;
+      padding: 0.5rem 0;
       margin-top: 0.5rem;
-      /* Add a slight transform for "fall down" effect */
-      transition: opacity 0.18s, transform 0.18s;
-      opacity: 0;
-      transform: translateY(-10px);
     }
     .dropdown:hover .dropdown-content,
     .dropdown:focus-within .dropdown-content {
       display: block;
-      opacity: 1;
-      transform: translateY(0);
     }
     .dropdown-link {
-      color: #222;
-      padding: 1.2rem 2.5rem;
+      color: #e0e0e0;
+      padding: 0.8rem 1.2rem;
       text-decoration: none;
       display: block;
-      font-size: 2rem;
-      border-radius: 12px;
-      transition: background 0.16s, color 0.16s;
-      font-family: 'Poppins', 'Roboto', Arial, sans-serif;
+      font-size: 0.95rem;
+      border-radius: 0;
+      transition: all 0.2s ease;
+      font-family: 'Poppins', sans-serif;
       font-weight: 500;
-      letter-spacing: 1px;
+      letter-spacing: 0.3px;
     }
     .dropdown-link:hover {
-      background: #f2f2f2;
-      color: #111;
+      background: rgba(59, 130, 246, 0.1);
+      color: #3b82f6;
     }
     .hero {
       flex: 1;
@@ -168,147 +163,117 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 70vh;
+      min-height: calc(100vh - 100px);
       text-align: center;
+      width: 100%;
+      box-sizing: border-box;
     }
     .hero-title {
-      font-family: 'Poppins', 'Oswald', Arial, sans-serif;
-      font-size: 6rem;
+      font-family: 'Poppins', sans-serif;
+      font-size: 3.5rem;
       font-weight: 700;
-      letter-spacing: 2px;
-      margin-bottom: 0.7rem;
-      color: #17408b;
-      text-shadow: 0 8px 36px #c9082a22;
-      border-radius: 12px;
-      box-shadow: 0 4px 24px #17408b11;
-      padding: 1rem 5rem;
-      display: inline-block;
-      background: #fff;
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+      color: #fff;
+      text-shadow: 0 4px 20px rgba(59, 130, 246, 0.2);
     }
     .hero-subtitle {
-      font-size: 2.8rem;
-      color: #c9082a;
+      font-size: 1.3rem;
+      color: #a0aec0;
       font-weight: 600;
-      letter-spacing: 1px;
-      margin-bottom: 2.5rem;
-      font-family: 'Poppins', 'Roboto', Arial, sans-serif;
-      text-shadow: 0 4px 18px #c9082a22;
+      letter-spacing: 0.5px;
+      margin-bottom: 3rem;
+      font-family: 'Poppins', sans-serif;
     }
     .dashboard-links {
       display: flex;
-      flex-direction: column;
-      gap: 2.2rem;
+      flex-direction: row;
+      gap: 2rem;
       align-items: center;
       justify-content: center;
-      margin-top: 1.5rem;
       flex-wrap: wrap;
       width: 100%;
-      max-width: 420px;
+      max-width: 900px;
     }
     .dashboard-btn {
-      background: #fff;
-      color: #17408b;
-      font-family: 'Poppins', 'Oswald', Arial, sans-serif;
-      font-size: 1.5rem;
-      font-weight: 700;
-      border: 2.5px solid #17408b;
-      border-radius: 16px;
-      padding: 1.5rem 0;
-      width: 100%;
-      cursor: pointer;
-      box-shadow: 0 8px 32px #17408b22;
-      transition: background 0.18s, color 0.18s, border 0.18s, transform 0.18s, box-shadow 0.18s;
-      text-decoration: none;
-      letter-spacing: 1px;
-      display: inline-block;
-      margin: 0;
-    }
-    .dashboard-btn:hover {
-      background: #ff9800;
+      background: transparent;
       color: #fff;
-      border-color: #c9082a;
-      transform: scale(1.06) translateY(-2px);
-      box-shadow: 0 16px 48px #c9082a33;
-    }
-    .analytics-btn {
-      font-size: 2.2rem !important;
-      padding: 2.1rem 0 !important;
-      margin-bottom: 1.1rem !important;
-      width: 100% !important;
-      background: #222 !important;
-      color: #fff !important;
-      border: 2.5px solid #222 !important;
-      box-shadow: 0 12px 36px rgba(0,0,0,0.18) !important;
-      border-radius: 22px !important;
-    }
-    .analytics-btn:hover, .analytics-btn:focus {
-      box-shadow: 0 16px 48px #c9082a33, 0 0 24px 4px #ff9800cc;
-      transform: scale(1.07) translateY(-3px) rotate(-1deg);
-      background: linear-gradient(90deg, #ff9800 40%, #c9082a 100%) !important;
-      border-color: #17408b !important;
-    }
-    .dashboard-btn span {
-      background: #ff9800;
-      color: #fff;
-      font-size: 1.1rem;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.2rem;
       font-weight: 700;
-      padding: 0.3em 0.9em;
+      border: 2px solid;
       border-radius: 12px;
-      box-shadow: 0 2px 8px #c9082a22;
+      padding: 1.5rem 2.5rem;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+      text-decoration: none;
       letter-spacing: 0.5px;
-      margin-left: 0.7em;
+      display: inline-block;
+      flex: 1;
+      min-width: 280px;
+      max-width: 400px;
     }
-    @media (max-width: 700px) {
-      .navbar {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 0.7rem 1rem;
-      }
+    /* NBA Button - Blue theme */
+    .dashboard-btn.nba {
+      border-color: #3b82f6;
+      color: #e0e0e0;
+    }
+    .dashboard-btn.nba:hover {
+      background: #3b82f6;
+      color: #fff;
+      transform: translateY(-3px);
+      box-shadow: 0 12px 36px rgba(59, 130, 246, 0.4);
+    }
+    /* CRM Button - Purple theme */
+    .dashboard-btn.crm {
+      border-color: #8b5cf6;
+      color: #e0e0e0;
+    }
+    .dashboard-btn.crm:hover {
+      background: #8b5cf6;
+      color: #fff;
+      transform: translateY(-3px);
+      box-shadow: 0 12px 36px rgba(139, 92, 246, 0.4);
+    }
+    @media (max-width: 768px) {
       .hero-title {
-        font-size: 2.2rem;
-        padding: 0.3rem 1.2rem;
+        font-size: 2.5rem;
       }
       .hero-subtitle {
-        font-size: 1.3rem;
+        font-size: 1rem;
+        margin-bottom: 2rem;
       }
       .dashboard-links {
-        gap: 1.1rem;
+        flex-direction: column;
+        gap: 1.5rem;
         max-width: 100%;
+        padding: 0 1rem;
       }
       .dashboard-btn {
-        width: 100%;
-        padding: 1.2rem 0;
-        font-size: 1.1rem;
+        min-width: 200px;
+        max-width: 100%;
       }
-      .analytics-btn {
-        font-size: 1.3rem !important;
-        padding: 1.1rem 0 !important;
-      }
-      .navbar-btn {
-        font-size: 1.2rem !important;
-        max-width: 140px !important;
-      }
-      .navbar-right {
-        max-width: 140px !important;
-      }
-    }
-    @media (max-width: 900px) {
       .navbar {
+        padding: 1rem;
         flex-direction: column;
-        align-items: flex-start;
-        padding: 0.7rem 1rem;
-        gap: 0.7rem;
-        border-radius: 0;
-        margin-bottom: 0;
+        gap: 1rem;
       }
       .navbar-left, .navbar-right {
-        gap: 1.2rem;
+        width: 100%;
+        justify-content: center;
       }
-      .navbar-btn {
-        min-width: 120px;
-        max-width: 100vw;
-        font-size: 1.2rem !important;
-      }
+    }
+    html, body {
+      height: 100%;
+      min-height: 100vh;
+      width: 100vw;
+      overflow-x: hidden;
+    }
+    body {
+      box-sizing: border-box;
+      padding: 0;
+      margin: 0;
     }
   </style>
 </head>
@@ -321,110 +286,26 @@
   </div>
   <nav class="navbar">
     <div class="navbar-left">
-      <a href="index.html" class="navbar-link active">NBA</a>
-      <div class="dropdown">
-        <a href="#" class="navbar-link">CRM-Tools</a>
-        <div class="dropdown-content">
-          <a href="document-classificatie.html" class="dropdown-link">Document Classificatie</a>
-        </div>
-      </div>
+      <a href="index.html" class="navbar-link active">Mauro's Toolbox</a>
     </div>
     <div class="navbar-right">
-      <a href="index.html"><button class="navbar-btn">Mauro's Toolbox</button></a>
+      <!-- Placeholder for future functionality -->
     </div>
   </nav>
-  <main class="hero" style="min-height:calc(100vh - 140px);height:calc(100vh - 140px);justify-content:center;">
-    <div class="hero-title">NBA</div>
-    <div class="hero-subtitle">Games Dashboard</div>
-    <div class="dashboard-links" style="width:100%;max-width:520px;gap:2.2rem;">
-      <a href="analytics-dashboard.html" class="dashboard-btn analytics-btn" style="font-size:2.2rem;padding:2.1rem 0;margin-bottom:1.1rem;width:100%;background:#222;color:#fff;border:2.5px solid #222;box-shadow:0 12px 36px rgba(0,0,0,0.18);border-radius:22px;">
-        Analytics Dashboard
+  <main class="hero">
+    <div class="hero-title">Mauro's Toolbox</div>
+    <div class="hero-subtitle">Analytics & Utilities Platform</div>
+    <div class="dashboard-links">
+      <a href="analytics-dashboard.html" class="dashboard-btn nba">
+        NBA Analytics
       </a>
-      <div style="position:relative;width:100%;">
-        <a href="dashboardNBA.html" class="dashboard-btn" style="font-size:1.5rem;padding:1.2rem 0;width:100%;">
-          Top 10 Players
-          <span style="position:absolute;top:10px;right:18px;background:#ff9800;color:#fff;font-size:1.1rem;font-weight:700;padding:0.3em 0.9em;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.10);letter-spacing:0.5px;">Work in Progress</span>
-        </a>
+      <a href="crm-menu.html" class="dashboard-btn crm">
+        CRM Tools
+      </a>
+      <div class="dashboard-btn" style="opacity: 0.6; cursor: not-allowed; border-color: #6b7280; color: #9ca3af;">
+        SQL Matrix Helper
       </div>
     </div>
   </main>
-  <style>
-    html, body {
-      height: 100%;
-      min-height: 100vh;
-      width: 100vw;
-      overflow-x: hidden;
-      /* Remove: overflow-y: hidden; */
-    }
-    body {
-      box-sizing: border-box;
-      min-height: 100vh;
-      min-width: 100vw;
-      max-width: 100vw;
-      max-height: 100vh;
-      padding: 0;
-      margin: 0;
-    }
-    .navbar {
-      width: 100vw;
-      max-width: 100vw;
-      overflow-x: hidden;
-      box-sizing: border-box;
-    }
-    .navbar-right {
-      flex-shrink: 0;
-      max-width: 260px;
-    }
-    .navbar-btn {
-      max-width: 260px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .hero {
-      min-height: calc(100vh - 140px);
-      height: calc(100vh - 140px);
-      width: 100vw;
-      box-sizing: border-box;
-      overflow: visible;
-      justify-content: center;
-      align-items: center;
-      padding-bottom: 0;
-    }
-    .dashboard-links {
-      width: 100%;
-      max-width: 520px;
-      gap: 2.2rem;
-      margin-top: 2.2rem;
-    }
-    .analytics-btn {
-      font-size: 2.2rem !important;
-      padding: 2.1rem 0 !important;
-      margin-bottom: 1.1rem !important;
-      width: 100% !important;
-      background: #222 !important;
-      color: #fff !important;
-      border: 2.5px solid #222 !important;
-      box-shadow: 0 12px 36px rgba(0,0,0,0.18) !important;
-      border-radius: 22px !important;
-    }
-    @media (max-width: 700px) {
-      .dashboard-links {
-        max-width: 100%;
-        gap: 1.1rem;
-      }
-      .analytics-btn {
-        font-size: 1.3rem !important;
-        padding: 1.1rem 0 !important;
-      }
-      .navbar-btn {
-        font-size: 1.2rem !important;
-        max-width: 140px !important;
-      }
-      .navbar-right {
-        max-width: 140px !important;
-      }
-    }
-  </style>
 </body>
 </html>

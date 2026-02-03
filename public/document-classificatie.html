@@ -4,52 +4,83 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Document Classificatie | CRM-Tools</title>
-  <link href="https://fonts.googleapis.com/css?family=Oswald:700|Roboto:400&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
+    * {
+      font-family: 'Poppins', sans-serif;
+    }
+
     body {
-      background: linear-gradient(135deg, #f7f7f7 60%, #e3e9f7 100%);
-      color: #111;
-      font-family: 'Poppins', 'Roboto', Arial, sans-serif;
+      background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+      color: #e0e0e0;
+      font-family: 'Poppins', sans-serif;
       margin: 0;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       position: relative;
-      overflow: hidden;
+      overflow-x: hidden;
     }
     .navbar {
       width: 100vw;
-      background: #fff;
-      box-shadow: 0 2px 12px rgba(25,40,80,0.09);
+      background: #1a1a2e;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1.5rem 4rem;
+      padding: 1.2rem 2rem;
       position: sticky;
       top: 0;
       z-index: 10;
+      box-sizing: border-box;
+    }
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .navbar-right {
+      flex-shrink: 0;
+      display: flex;
+      justify-content: flex-end;
     }
     .navbar-link {
-      font-family: 'Poppins', 'Roboto', Arial, sans-serif;
-      font-size: 2.8rem;
-      color: #17408b;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.3rem;
+      color: #e0e0e0;
       text-decoration: none;
-      padding: 1.2rem 3.5rem;
-      border-radius: 18px;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
       font-weight: 600;
-      transition: background 0.18s, color 0.18s;
-      position: relative;
-      letter-spacing: 1.5px;
-    }
-    .navbar-link.active, .navbar-link:focus {
-      background: #c9082a;
-      color: #fff;
-      font-weight: 700;
-      box-shadow: 0 2px 12px #c9082a22;
+      transition: all 0.2s ease;
+      letter-spacing: 0.5px;
     }
     .navbar-link:hover {
-      background: #17408b;
       color: #fff;
+      background: rgba(139, 92, 246, 0.1);
+    }
+    .navbar-link.active {
+      color: #8b5cf6;
+      border-bottom: 2px solid #8b5cf6;
+    }
+    .navbar-btn {
+      background: transparent;
+      color: #e0e0e0;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border: 1.5px solid #8b5cf6;
+      border-radius: 8px;
+      padding: 0.6rem 1.2rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      letter-spacing: 0.5px;
+    }
+    .navbar-btn:hover {
+      background: #8b5cf6;
+      color: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
     }
     .main-content {
       flex: 1;
@@ -57,33 +88,36 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 70vh;
+      min-height: calc(100vh - 100px);
       text-align: center;
+      width: 100%;
+      box-sizing: border-box;
     }
     .title {
-      font-family: 'Poppins', 'Oswald', Arial, sans-serif;
-      font-size: 4rem;
+      font-family: 'Poppins', sans-serif;
+      font-size: 2.5rem;
       font-weight: 700;
-      color: #17408b;
-      margin-bottom: 1.2rem;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 24px #17408b11;
-      padding: 1rem 4rem;
+      color: #fff;
+      margin-bottom: 1rem;
+      background: transparent;
+      border-radius: 0;
+      box-shadow: none;
+      padding: 0;
       display: inline-block;
+      text-shadow: 0 4px 20px rgba(139, 92, 246, 0.2);
     }
     .subtitle {
-      font-size: 2rem;
-      color: #c9082a;
+      font-size: 1.3rem;
+      color: #a0aec0;
       font-weight: 600;
       margin-bottom: 2.5rem;
-      font-family: 'Poppins', 'Roboto', Arial, sans-serif;
-      text-shadow: 0 4px 18px #c9082a22;
+      font-family: 'Poppins', sans-serif;
+      letter-spacing: 0.5px;
     }
     .upload-box {
-      background: #fff;
-      border-radius: 18px;
-      box-shadow: 0 8px 32px #17408b22;
+      background: transparent;
+      border-radius: 12px;
+      box-shadow: none;
       padding: 2.5rem 3rem;
       max-width: 420px;
       width: 100%;
@@ -92,79 +126,161 @@
       flex-direction: column;
       align-items: center;
       gap: 1.5rem;
+      border: 1.5px solid #8b5cf6;
+    }
+    .upload-box input[type="file"] {
+      color: #e0e0e0;
+      padding: 0.8rem;
+      border: 1px solid #8b5cf644;
+      border-radius: 8px;
+      background: #0f0f1a;
+      cursor: pointer;
+      width: 100%;
+      font-family: 'Poppins', sans-serif;
+    }
+    .upload-box input[type="file"]::file-selector-button {
+      background: #8b5cf6;
+      color: #fff;
+      border: none;
+      padding: 0.6rem 1.5rem;
+      border-radius: 6px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-right: 1rem;
+    }
+    .upload-box input[type="file"]::file-selector-button:hover {
+      background: #7c3aed;
+      transform: translateY(-1px);
     }
     .upload-btn {
-      background: linear-gradient(90deg, #17408b 60%, #c9082a 100%);
+      background: #8b5cf6;
       color: #fff;
-      font-family: 'Poppins', 'Oswald', Arial, sans-serif;
-      font-size: 1.5rem;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.2rem;
       font-weight: 700;
       border: none;
-      border-radius: 16px;
-      padding: 1.2rem 2.5rem;
+      border-radius: 8px;
+      padding: 0.8rem 2rem;
       cursor: pointer;
-      transition: background 0.18s, color 0.18s, box-shadow 0.18s;
-      box-shadow: 0 2px 8px rgba(25,40,80,0.10);
-      letter-spacing: 1px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+      letter-spacing: 0.5px;
+      width: 100%;
     }
     .upload-btn:hover {
-      background: linear-gradient(90deg, #c9082a 60%, #ff9800 100%);
+      background: #7c3aed;
       color: #fff;
-      box-shadow: 0 8px 32px #c9082a33;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(139, 92, 246, 0.3);
     }
     .feedback {
-      font-size: 1.2rem;
-      color: #17408b;
-      background: #e3e9f7;
-      border-radius: 12px;
-      padding: 0.7rem 1.2rem;
+      font-size: 1rem;
+      color: #86efac;
+      background: rgba(34, 197, 94, 0.1);
+      border-radius: 8px;
+      padding: 0.8rem 1.2rem;
       margin-top: 1rem;
-      box-shadow: 0 2px 8px #17408b22;
+      box-shadow: 0 2px 8px rgba(34, 197, 94, 0.1);
       display: none;
+      border: 1px solid #22c55e44;
     }
     .ai-placeholder {
       margin-top: 2rem;
-      font-size: 1.1rem;
-      color: #222;
-      background: #fff7e6;
-      border-radius: 12px;
+      font-size: 1rem;
+      color: #a0aec0;
+      background: rgba(139, 92, 246, 0.05);
+      border-radius: 8px;
       padding: 1.2rem 1.5rem;
-      box-shadow: 0 2px 8px #ff980022;
-      font-family: 'Roboto', Arial, sans-serif;
+      box-shadow: none;
+      font-family: 'Poppins', sans-serif;
+      border: 1px solid #8b5cf644;
     }
-    @media (max-width: 700px) {
-      .title { font-size: 2rem; padding: 0.5rem 1rem; }
-      .subtitle { font-size: 1.1rem; }
-      .upload-box { padding: 1rem 0.5rem; }
-      .upload-btn { font-size: 1rem; padding: 0.7rem 1.2rem; }
+    @media (max-width: 768px) {
+      .title {
+        font-size: 2rem;
+      }
+      .subtitle {
+        font-size: 1rem;
+      }
+      .upload-box {
+        padding: 1.5rem 1rem;
+      }
+      .upload-btn {
+        font-size: 1rem;
+      }
+      .navbar {
+        padding: 1rem;
+      }
     }
   </style>
 </head>
 <body>
   <nav class="navbar">
-    <a href="index.html" class="navbar-link">NBA</a>
-    <a href="document-classificatie.html" class="navbar-link active">CRM-Tools</a>
+    <div class="navbar-left">
+      <a href="crm-menu.html" class="navbar-link active">Document Classificatie</a>
+    </div>
+    <div class="navbar-right">
+      <a href="index.html"><button class="navbar-btn">Mauro's Toolbox</button></a>
+    </div>
   </nav>
   <main class="main-content">
     <div class="title">Document Classificatie</div>
-    <div class="subtitle">Upload een document en ontvang AI-gebaseerde classificatie</div>
+    <div class="subtitle">Upload a document for AI-based classification</div>
     <form class="upload-box" id="uploadForm">
       <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.txt" required />
       <button type="submit" class="upload-btn">Upload Document</button>
-      <div class="feedback" id="feedbackMsg">Upload geslaagd! Je document is klaar voor classificatie.</div>
+      <div class="feedback" id="feedbackMsg">Upload successful! Your document is ready for classification.</div>
     </form>
     <div class="ai-placeholder">
-      <strong>AI Integratie:</strong> Hier komt de koppeling met Azure AI Foundry voor automatische documentclassificatie.<br>
-      <em>(Deze functionaliteit volgt later.)</em>
+      <strong>AI Integration:</strong> Integration with Azure AI Foundry for automatic document classification.<br>
+      <em>(This functionality will be added later.)</em>
     </div>
   </main>
   <script>
     const form = document.getElementById('uploadForm');
     const feedback = document.getElementById('feedbackMsg');
-    form.addEventListener('submit', function(e) {
+    const fileInput = document.getElementById('fileInput');
+
+    // Azure AI Foundry endpoint and key (replace with your actual values)
+    const AZURE_ENDPOINT = 'https://<your-foundry-endpoint>/document-classify';
+    const AZURE_API_KEY = '<your-api-key>';
+
+    form.addEventListener('submit', async function(e) {
       e.preventDefault();
-      // Simuleer upload feedback
+      const file = fileInput.files[0];
+      if (!file) return;
+
+      feedback.textContent = 'Uploaden en classificeren...';
       feedback.style.display = 'block';
-      setTimeout(() => { feedback.style.display = 'none'; }, 3500);
-      // Hier kan later de Azure AI Foundry integratie komen
+
+      try {
+        // Prepare form data for Azure Foundry
+        const formData = new FormData();
+        formData.append('file', file);
+
+        // Send file to Azure Foundry API
+        const response = await fetch(AZURE_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Ocp-Apim-Subscription-Key': AZURE_API_KEY
+          },
+          body: formData
+        });
+
+        if (!response.ok) throw new Error('Classificatie mislukt');
+
+        const result = await response.json();
+        // Show classification result
+        feedback.textContent = `Classificatie: ${result.classification || 'Onbekend'}`;
+      } catch (err) {
+        feedback.textContent = 'Fout bij classificatie: ' + err.message;
+      }
+
+      setTimeout(() => { feedback.style.display = 'none'; }, 5000);
     });
+  </script>
+</body>
+</html>

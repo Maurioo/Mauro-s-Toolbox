@@ -14,9 +14,9 @@
         }
 
         body {
-            background: linear-gradient(135deg, #f7f7f7 60%, #e3e9f7 100%);
-            color: #222;
-            font-family: 'Nunito', 'Poppins', 'Roboto', Arial, sans-serif;
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+            color: #e0e0e0;
+            font-family: 'Poppins', sans-serif;
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
@@ -32,77 +32,100 @@
         .basketball-circle {
             position: absolute;
             border-radius: 50%;
-            opacity: 0.13;
-            background: radial-gradient(circle at 60% 40%, #ff9800 60%, #c9082a 100%);
-            box-shadow: 0 8px 48px 0 #c9082a33;
+            opacity: 0.08;
+            background: radial-gradient(circle at 60% 40%, #3b82f6 60%, #8b5cf6 100%);
+            box-shadow: 0 8px 48px 0 #3b82f633;
         }
         .basketball-circle.big {
             width: 420px; height: 420px; left: -120px; top: 60px;
         }
         .basketball-circle.mid {
             width: 220px; height: 220px; right: -80px; top: 180px;
-            background: radial-gradient(circle at 40% 60%, #17408b 60%, #c9082a 100%);
+            background: radial-gradient(circle at 40% 60%, #6366f1 60%, #8b5cf6 100%);
         }
         .basketball-circle.small {
             width: 110px; height: 110px; left: 60vw; top: 70vh;
-            background: radial-gradient(circle at 60% 40%, #ff9800 70%, #17408b 100%);
+            background: radial-gradient(circle at 60% 40%, #3b82f6 70%, #6366f1 100%);
         }
         .basketball-stripes {
             position: absolute;
             width: 180px; height: 180px; left: 10vw; top: 60vh;
             border-radius: 50%;
-            border: 4px solid #c9082a44;
-            border-right: 8px solid #ff9800aa;
-            opacity: 0.10;
+            border: 4px solid #8b5cf644;
+            border-right: 8px solid #3b82f6aa;
+            opacity: 0.08;
             transform: rotate(-18deg);
         }
         .header {
-            background: #fff;
-            padding: 2.5rem 4rem;
-            box-shadow: 0 2px 12px rgba(25,40,80,0.09);
+            width: 100vw;
+            background: #1a1a2e;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.3);
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            border-radius: 0 0 24px 24px;
+            justify-content: space-between;
+            padding: 1.2rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-sizing: border-box;
+            border-radius: 0;
         }
-        .header h1 {
-            font-family: 'Poppins', 'Oswald', Arial, sans-serif;
-            color: #17408b;
-            font-size: 4rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-shadow: 0 4px 18px #c9082a22;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px #17408b11;
-            padding: 0.5rem 2.5rem;
-            display: inline-block;
-            background: #fff;
+        .navbar-left {
+            display: flex;
+            align-items: center;
+            gap: 0;
+        }
+        .navbar-link {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.3rem;
+            color: #e0e0e0;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            letter-spacing: 0.5px;
+        }
+        .navbar-link:hover {
+            color: #fff;
+            background: rgba(139, 92, 246, 0.1);
+        }
+        .navbar-link.active {
+            color: #3b82f6;
+            border-bottom: 2px solid #3b82f6;
+        }
+        .navbar-right {
+            flex-shrink: 0;
+            display: flex;
+            justify-content: flex-end;
         }
         .back-btn {
-            background: linear-gradient(90deg, #17408b 85%, #c9082a 100%);
-            color: #fff;
-            border: none;
-            padding: 1.2rem 3.5rem;
-            border-radius: 20px;
+            background: transparent;
+            color: #e0e0e0;
+            border: 1.5px solid #8b5cf6;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
             cursor: pointer;
-            font-family: 'Nunito', 'Poppins', 'Roboto', Arial, sans-serif;
-            font-size: 2.2rem;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            box-shadow: 0 2px 8px rgba(25,40,80,0.10);
-            transition: background 0.18s, color 0.18s, transform 0.18s, box-shadow 0.18s;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            box-shadow: none;
+            transition: all 0.2s ease;
+            text-decoration: none;
         }
         .back-btn:hover {
-            background: linear-gradient(90deg, #c9082a 60%, #ff9800 100%);
+            background: #8b5cf6;
             color: #fff;
-            transform: scale(1.06) translateY(-2px);
-            box-shadow: 0 8px 32px #c9082a33;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
         }
 
         .container {
-            max-width: calc(100vw - 100px);
-            margin: 2rem 50px;
+            max-width: 100%;
+            margin: 2rem 1rem;
             padding: 0;
+            overflow: hidden;
         }
 
         .dashboard-grid {
@@ -113,21 +136,24 @@
         }
 
         .sidebar {
-            background: #fff;
-            border-radius: 16px;
+            background: #1a1a2e;
+            border-radius: 12px;
             padding: 2rem;
-            box-shadow: 0 4px 18px rgba(0,0,0,0.07);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             overflow-y: auto;
             min-width: 340px;
+            border: 1px solid #2d2d44;
         }
 
         .main-content {
-            background: #fff;
-            border-radius: 16px;
-            padding: 2.5rem;
-            box-shadow: 0 4px 18px rgba(0,0,0,0.07);
-            overflow-x: auto;
+            background: #1a1a2e;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            overflow-y: auto;
+            overflow-x: hidden;
             min-width: 0;
+            border: 1px solid #2d2d44;
         }
 
         .section {
@@ -135,10 +161,10 @@
         }
 
         .section h3 {
-            font-family: 'Nunito', 'Poppins', 'Roboto', Arial, sans-serif;
-            color: #111;
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
             margin-bottom: 1rem;
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: 700;
         }
 
@@ -150,21 +176,21 @@
         }
 
         .template-btn {
-            background: #f8f9fa;
-            border: 1.5px solid #222;
-            padding: 1.3rem 2.2rem;
-            border-radius: 16px;
+            background: transparent;
+            border: 1.5px solid #3b82f6;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
             cursor: pointer;
             text-align: center;
-            transition: background 0.18s, color 0.18s, border 0.18s, transform 0.18s, box-shadow 0.18s;
-            font-family: 'Nunito', 'Poppins', 'Roboto', Arial, sans-serif;
-            font-size: 1.18rem;
+            transition: all 0.2s ease;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
             font-weight: 600;
             letter-spacing: 0.5px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+            box-shadow: none;
             margin: 0;
             width: 100%;
-            max-width: 420px;
+            max-width: 340px;
             min-width: 220px;
             line-height: 1.4;
             display: flex;
@@ -172,27 +198,28 @@
             align-items: center;
             justify-content: center;
             word-break: break-word;
+            color: #e0e0e0;
         }
         .template-btn:hover, .template-btn.active {
-            background: #222;
+            background: #3b82f6;
             color: #fff;
-            border-color: #222;
-            transform: scale(1.06) translateY(-2px);
-            box-shadow: 0 16px 48px rgba(0,0,0,0.22);
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
         }
 
         .section label,
         .section b,
         .section .custom-query label,
         .section .visualization-controls label {
-            color: #111 !important;
+            color: #e0e0e0 !important;
         }
         #stat-category-dropdown-container label {
-            color: #111 !important;
+            color: #e0e0e0 !important;
         }
         .results-section h3,
         .main-content h3 {
-            color: #111 !important;
+            color: #fff !important;
         }
 
         .custom-query {
@@ -202,35 +229,42 @@
         .custom-query textarea {
             width: 100%;
             height: 100px;
-            padding: 0.5rem;
-            border: 1px solid #dee2e6;
-            border-radius: 5px;
-            font-family: 'Nunito', 'Poppins', 'Roboto', Arial, sans-serif;
+            padding: 0.8rem;
+            border: 1px solid #3b82f644;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
             font-size: 0.9rem;
             resize: vertical;
+            background: #0f0f1a;
+            color: #e0e0e0;
+        }
+        .custom-query textarea:focus {
+            border: 1px solid #3b82f6;
+            outline: none;
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.3);
         }
 
         .execute-btn {
-            background: #444;
+            background: #3b82f6;
             color: #fff;
             border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
             cursor: pointer;
             margin-top: 0.5rem;
             width: 100%;
-            font-family: 'Nunito', 'Poppins', 'Roboto', Arial, sans-serif;
-            font-size: 1.1rem;
-            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
             letter-spacing: 0.5px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            transition: background 0.18s, color 0.18s, transform 0.18s, box-shadow 0.18s;
+            box-shadow: none;
+            transition: all 0.2s ease;
         }
         .execute-btn:hover {
-            background: #222;
+            background: #2563eb;
             color: #fff;
-            transform: scale(1.04) translateY(-1px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
         .results-section {
@@ -239,37 +273,40 @@
 
         .chart-container {
             margin-top: 1rem;
-            height: 600px;
-            min-width: 700px;
+            height: 500px;
+            width: 100%;
             position: relative;
+            display: flex;
+            flex-direction: column;
         }
 
         .data-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 1rem;
-            background: white;
-            border-radius: 5px;
-            overflow: auto;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            font-size: 1.08rem;
+            background: #0f0f1a;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            font-size: 0.95rem;
         }
 
         .data-table th,
         .data-table td {
             padding: 0.75rem;
             text-align: left;
-            border-bottom: 1px solid #dee2e6;
+            border-bottom: 1px solid #2d2d44;
             max-width: 140px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            color: #e0e0e0;
         }
 
         .data-table th {
-            background: #444;
-            color: white;
-            font-weight: bold;
+            background: #2d2d44;
+            color: #fff;
+            font-weight: 700;
         }
 
         .data-table th.percent-col, .data-table td.percent-col {
@@ -278,7 +315,7 @@
         }
 
         .data-table tr:hover {
-            background: #f8f9fa;
+            background: #1e1e33;
         }
 
         .visualization-controls {
@@ -295,122 +332,145 @@
         }
 
         .control-group label {
-            font-weight: bold;
+            font-weight: 600;
             font-size: 0.9rem;
+            color: #e0e0e0;
         }
 
         .control-group select,
         .control-group input {
-            padding: 0.5rem;
-            border: 1px solid #dee2e6;
-            border-radius: 5px;
+            padding: 0.6rem;
+            border: 1px solid #3b82f644;
+            border-radius: 6px;
+            background: #0f0f1a;
+            color: #e0e0e0;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+        }
+
+        .control-group select:focus,
+        .control-group input:focus {
+            border: 1px solid #3b82f6;
+            outline: none;
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.3);
         }
 
         .ml-section {
-            background: #f8f9fa;
-            padding: 1rem;
-            border-radius: 5px;
+            background: rgba(59, 130, 246, 0.05);
+            padding: 1.5rem;
+            border-radius: 8px;
             margin-top: 1rem;
+            border: 1px solid #3b82f644;
         }
 
         .ml-section h4 {
-            color: #667eea;
+            color: #3b82f6;
             margin-bottom: 0.5rem;
+            font-family: 'Poppins', sans-serif;
         }
 
         .prediction-result {
-            background: #d4edda;
-            border: 1px solid #c3e6cb;
-            color: #155724;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid #22c55e44;
+            color: #86efac;
             padding: 1rem;
-            border-radius: 5px;
+            border-radius: 8px;
             margin-top: 1rem;
         }
 
         .loading {
             text-align: center;
             padding: 2rem;
-            color: #111;
+            color: #e0e0e0;
         }
 
         .error {
-            background: #f8d7da;
-            border: 1px solid #f5c6cb;
-            color: #721c24;
+            background: rgba(244, 63, 94, 0.1);
+            border: 1px solid #f43f5e44;
+            color: #fca5a5;
             padding: 1rem;
-            border-radius: 5px;
+            border-radius: 8px;
             margin-top: 1rem;
         }
 
         .refresh-chart-btn {
-            background: #444;
+            background: #3b82f6;
             color: #fff;
             border: none;
-            padding: 0.8rem 2.2rem;
-            border-radius: 10px;
-            font-family: 'Nunito', 'Poppins', 'Roboto', Arial, sans-serif;
-            font-size: 1.2rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
             font-weight: 700;
             letter-spacing: 0.5px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            transition: background 0.18s, color 0.18s, transform 0.18s, box-shadow 0.18s;
+            box-shadow: none;
+            transition: all 0.2s ease;
             margin: 1.2rem 0 1.2rem 0;
             cursor: pointer;
             display: block;
         }
         .refresh-chart-btn:hover {
-            background: #222;
+            background: #2563eb;
             color: #fff;
-            transform: scale(1.04) translateY(-1px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
         /* --- AI Predictie spelerfilter styling --- */
         #pred-player-filter {
-            background: #f8f9fa;
-            border: 1.5px solid #bbb;
-            border-radius: 8px;
-            padding: 0.7em 1em;
-            font-size: 1.08rem;
-            margin-bottom: 0.5em;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            background: #0f0f1a;
+            border: 1px solid #3b82f644;
+            border-radius: 6px;
+            padding: 0.7rem 1rem;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            box-shadow: none;
             width: 100%;
             max-width: 400px;
-            transition: border 0.18s, box-shadow 0.18s;
+            transition: border 0.2s ease, box-shadow 0.2s ease;
+            color: #e0e0e0;
+            font-family: 'Poppins', sans-serif;
         }
         #pred-player-filter:focus {
-            border: 1.5px solid #667eea;
+            border: 1px solid #3b82f6;
             outline: none;
-            box-shadow: 0 4px 16px rgba(102,126,234,0.13);
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.3);
+        }
+        #pred-player-filter::placeholder {
+            color: #6b7280;
         }
         #pred-player-select {
-            background: #fff;
-            border: 1.5px solid #bbb;
-            border-radius: 8px;
-            padding: 0.5em 0.7em;
-            font-size: 1.08rem;
-            margin-bottom: 0.5em;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            background: #0f0f1a;
+            border: 1px solid #3b82f644;
+            border-radius: 6px;
+            padding: 0.6rem 1rem;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            box-shadow: none;
             width: 100%;
             max-width: 400px;
-            min-height: 2.5em;
-            transition: border 0.18s, box-shadow 0.18s;
+            min-height: 2.5rem;
+            transition: border 0.2s ease, box-shadow 0.2s ease;
+            color: #e0e0e0;
+            font-family: 'Poppins', sans-serif;
         }
         #pred-player-select:focus {
-            border: 1.5px solid #667eea;
+            border: 1px solid #3b82f6;
             outline: none;
-            box-shadow: 0 4px 16px rgba(102,126,234,0.13);
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.3);
         }
         #pred-player-select option {
-            padding: 0.4em 0.7em;
+            padding: 0.4rem 0.7rem;
             border-radius: 6px;
+            background: #1a1a2e;
+            color: #e0e0e0;
         }
         #pred-player-select option:checked {
-            background: #667eea;
+            background: #3b82f6;
             color: #fff;
         }
         #pred-player-filter + #pred-player-select {
-            margin-top: 0.2em;
+            margin-top: 0.2rem;
         }
 
         @media (max-width: 1200px) {
@@ -441,8 +501,13 @@
         <div class="basketball-stripes"></div>
     </div>
     <div class="header">
-        <h1>NBA - Analytics Dashboard</h1>
-        <button class="back-btn" onclick="window.location.href='index.html'">Terug naar Home</button>
+        <div class="navbar-left">
+            <a href="index.html" class="navbar-link">Mauro's Toolbox</a>
+            <a href="analytics-dashboard.html" class="navbar-link active">NBA - Analytics Dashboard</a>
+        </div>
+        <div class="navbar-right">
+            <a href="index.html" class="back-btn">← Back to Home</a>
+        </div>
     </div>
 
     <div class="container">
@@ -1210,7 +1275,9 @@
                         datasets: [{
                             label: `${yAxis} vs ${xAxis}`,
                             data: chartData,
-                            backgroundColor: 'rgba(100,100,100,0.8)'
+                            backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 1
                         }]
                     },
                     options: {
@@ -1219,14 +1286,22 @@
                         plugins: {
                             title: {
                                 display: true,
-                                text: `${yAxis} vs ${xAxis}`
+                                text: `${yAxis} vs ${xAxis}`,
+                                color: '#e0e0e0',
+                                font: { size: 14, weight: 'bold' }
                             },
                             legend: {
                                 labels: {
-                                    color: '#444'
+                                    color: '#e0e0e0',
+                                    font: { size: 13 }
                                 }
                             },
                             tooltip: {
+                                backgroundColor: 'rgba(0,0,0,0.8)',
+                                titleColor: '#e0e0e0',
+                                bodyColor: '#e0e0e0',
+                                borderColor: '#3b82f6',
+                                borderWidth: 1,
                                 callbacks: {
                                     label: function(context) {
                                         const d = context.raw;
@@ -1244,8 +1319,8 @@
                             }
                         },
                         scales: {
-                            x: { title: { display: true, text: xAxis } },
-                            y: { title: { display: true, text: yAxis }, beginAtZero: true }
+                            x: { title: { display: true, text: xAxis, color: '#e0e0e0' }, ticks: { color: '#b0b0b0' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                            y: { title: { display: true, text: yAxis, color: '#e0e0e0' }, ticks: { color: '#b0b0b0' }, grid: { color: 'rgba(255,255,255,0.1)' }, beginAtZero: true }
                         }
                     }
                 });
@@ -1263,8 +1338,8 @@
                         datasets: [{
                             label: yAxis,
                             data: values,
-                            backgroundColor: 'rgba(100,100,100,0.8)',
-                            borderColor: 'rgba(100,100,100,1)',
+                            backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
                             borderWidth: 1
                         }]
                     },
@@ -1274,16 +1349,20 @@
                         plugins: {
                             title: {
                                 display: true,
-                                text: `${yAxis} vs ${xAxis}`
+                                text: `${yAxis} vs ${xAxis}`,
+                                color: '#e0e0e0',
+                                font: { size: 14, weight: 'bold' }
                             },
                             legend: {
                                 labels: {
-                                    color: '#444'
+                                    color: '#e0e0e0',
+                                    font: { size: 13 }
                                 }
                             }
                         },
                         scales: {
-                            y: { beginAtZero: true }
+                            x: { title: { display: true, text: xAxis, color: '#e0e0e0' }, ticks: { color: '#b0b0b0' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                            y: { title: { display: true, text: yAxis, color: '#e0e0e0' }, ticks: { color: '#b0b0b0' }, grid: { color: 'rgba(255,255,255,0.1)' }, beginAtZero: true }
                         }
                     }
                 });
@@ -1432,8 +1511,12 @@
                 playerMap[p] = {
                         data: arr,
                     label: p,
-                        borderColor: `hsl(${i * 36},70%,40%)`,
+                        borderColor: `hsl(${i * 36},70%,50%)`,
+                        backgroundColor: `hsl(${i * 36},70%,50%)`,
+                        fill: false,
                         pointRadius: 0,
+                        pointBackgroundColor: `hsl(${i * 36},70%,50%)`,
+                        pointBorderColor: `hsl(${i * 36},70%,50%)`,
                     tension: 0.2,
                         spanGaps: true
                 };
@@ -1457,13 +1540,26 @@
                     plugins: {
                         title: {
                             display: true,
-                            text: `Cumulatief verloop van ${stat} voor top 10 spelers (gesorteerd op ${sortColumn || 'Total Points'})`
+                            text: `Cumulatief verloop van ${stat} voor top 10 spelers (gesorteerd op ${sortColumn || 'Total Points'})`,
+                            color: '#e0e0e0',
+                            font: { size: 14, weight: 'bold' },
+                            padding: { bottom: 20 }
                         },
                         legend: {
+                            position: 'top',
+                            align: 'start',
                             labels: {
-                                color: '#444',
-                                font: { size: 13 }
-                            }
+                                color: '#e0e0e0',
+                                font: { size: 13 },
+                                usePointStyle: true,
+                                pointStyle: 'rect',
+                                padding: 25,
+                                boxWidth: 16,
+                                boxHeight: 10
+                            },
+                            fullWidth: false,
+                            maxHeight: 60,
+                            padding: { bottom: 60 }
                         },
                         tooltip: {
                             mode: 'index',
@@ -1506,11 +1602,14 @@
                     },
                     scales: {
                         x: {
-                            title: { display: true, text: 'Datum' },
-                            ticks: { color: '#444', maxTicksLimit: 12 }
+                            title: { display: true, text: 'Datum', color: '#e0e0e0' },
+                            ticks: { color: '#b0b0b0', maxTicksLimit: 12 },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
                         },
                         y: {
-                            title: { display: true, text: `Cumulatief ${stat}` },
+                            title: { display: true, text: `Cumulatief ${stat}`, color: '#e0e0e0' },
+                            ticks: { color: '#b0b0b0' },
+                            grid: { color: 'rgba(255,255,255,0.1)' },
                             beginAtZero: true
                         }
                     }
@@ -1532,7 +1631,9 @@
                     datasets: [{
                         label: 'ML Performance Score',
                         data: values,
-                        backgroundColor: 'rgba(100,100,255,0.7)'
+                        backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 1
                     }]
                 },
                 options: {
@@ -1541,7 +1642,9 @@
                     plugins: {
                         title: {
                             display: true,
-                            text: 'Top 20 ML Performance Score per Speler'
+                            text: 'Top 20 ML Performance Score per Speler',
+                            color: '#e0e0e0',
+                            font: { size: 14, weight: 'bold' }
                         },
                         legend: {
                             display: false
@@ -1549,11 +1652,14 @@
                     },
                     scales: {
                         x: {
-                            title: { display: true, text: 'Speler' },
-                            ticks: { color: '#444', maxTicksLimit: 20 }
+                            title: { display: true, text: 'Speler', color: '#e0e0e0' },
+                            ticks: { color: '#b0b0b0', maxTicksLimit: 20 },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
                         },
                         y: {
-                            title: { display: true, text: 'ML Performance Score' },
+                            title: { display: true, text: 'ML Performance Score', color: '#e0e0e0' },
+                            ticks: { color: '#b0b0b0' },
+                            grid: { color: 'rgba(255,255,255,0.1)' },
                             beginAtZero: true
                         }
                     }
@@ -1627,7 +1733,9 @@
                     datasets: [{
                         label: 'ML Performance Score',
                         data: chartData,
-                        backgroundColor: 'rgba(100,100,255,0.7)'
+                        backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 1
                     }]
                 },
                 options: {
@@ -1636,9 +1744,22 @@
                     plugins: {
                         title: {
                             display: true,
-                            text: 'Top 50 Beste Wedstrijden (ML-score)'
+                            text: 'Top 50 Beste Wedstrijden (ML-score)',
+                            color: '#e0e0e0',
+                            font: { size: 14, weight: 'bold' }
+                        },
+                        legend: {
+                            labels: {
+                                color: '#e0e0e0',
+                                font: { size: 13 }
+                            }
                         },
                         tooltip: {
+                            backgroundColor: 'rgba(0,0,0,0.8)',
+                            titleColor: '#e0e0e0',
+                            bodyColor: '#e0e0e0',
+                            borderColor: '#3b82f6',
+                            borderWidth: 1,
                             callbacks: {
                                 label: function(context) {
                                     const d = context.raw;
@@ -1649,12 +1770,15 @@
                     },
                     scales: {
                         x: {
-                            title: { display: true, text: 'Speler - Datum' },
+                            title: { display: true, text: 'Speler - Datum', color: '#e0e0e0' },
                             type: 'category',
-                            ticks: { color: '#444', maxTicksLimit: 20 }
+                            ticks: { color: '#b0b0b0', maxTicksLimit: 20 },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
                         },
                         y: {
-                            title: { display: true, text: 'ML Performance Score' },
+                            title: { display: true, text: 'ML Performance Score', color: '#e0e0e0' },
+                            ticks: { color: '#b0b0b0' },
+                            grid: { color: 'rgba(255,255,255,0.1)' },
                             beginAtZero: true
                         }
                     }
@@ -1736,8 +1860,10 @@
                     datasets: [{
                         label: 'Voorspelde PTS',
                         data: player.predictions.map(r => r.PTS),
-                        borderColor: 'rgba(100,100,255,0.8)',
-                        backgroundColor: 'rgba(100,100,255,0.2)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                        pointBorderColor: 'rgba(59, 130, 246, 1)',
                         tension: 0.2
                     }]
                 },
@@ -1745,11 +1871,31 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        title: { display: true, text: `Voorspelde punten (PTS) komende 10 wedstrijden voor ${playerName}` }
+                        title: { 
+                            display: true, 
+                            text: `Voorspelde punten (PTS) komende 10 wedstrijden voor ${playerName}`,
+                            color: '#e0e0e0',
+                            font: { size: 14, weight: 'bold' }
+                        },
+                        legend: {
+                            labels: {
+                                color: '#e0e0e0',
+                                font: { size: 13 }
+                            }
+                        }
                     },
                     scales: {
-                        x: { title: { display: true, text: 'Wedstrijd' } },
-                        y: { title: { display: true, text: 'PTS' }, beginAtZero: true }
+                        x: { 
+                            title: { display: true, text: 'Wedstrijd', color: '#e0e0e0' },
+                            ticks: { color: '#b0b0b0' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        },
+                        y: { 
+                            title: { display: true, text: 'PTS', color: '#e0e0e0' }, 
+                            ticks: { color: '#b0b0b0' },
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            beginAtZero: true 
+                        }
                     }
                 }
             });
@@ -1805,26 +1951,36 @@
                     plugins: {
                         title: {
                             display: true,
-                            text: 'Jeremy Lin Games: Uitschieters vs Seizoensgemiddelde'
+                            text: 'Jeremy Lin Games: Uitschieters vs Seizoensgemiddelde',
+                            color: '#e0e0e0',
+                            font: { size: 14, weight: 'bold' }
                         },
                         legend: {
-                            labels: { color: '#444', font: { size: 13 } }
+                            labels: { color: '#e0e0e0', font: { size: 13 } }
                         },
                         tooltip: {
+                            backgroundColor: 'rgba(0,0,0,0.8)',
+                            titleColor: '#e0e0e0',
+                            bodyColor: '#e0e0e0',
+                            borderColor: '#3b82f6',
+                            borderWidth: 1,
                             mode: 'index',
                             intersect: false
                         }
                     },
                     scales: {
                         x: {
-                            title: { display: true, text: 'Speler' },
+                            title: { display: true, text: 'Speler', color: '#e0e0e0' },
                             stacked: false,
-                            ticks: { color: '#444' }
+                            ticks: { color: '#b0b0b0' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
                         },
                         y: {
-                            title: { display: true, text: 'Waarde' },
+                            title: { display: true, text: 'Waarde', color: '#e0e0e0' },
                             beginAtZero: true,
-                            stacked: false
+                            stacked: false,
+                            ticks: { color: '#b0b0b0' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
                         }
                     }
                 }
